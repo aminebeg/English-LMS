@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +22,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
         'is_approved',
         'gemini_api_key',
         'cerebras_api_key',
@@ -67,6 +67,19 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_approved' => 'boolean',
         ];
+    }
+
+
+    public function hasRole(string $role): bool
+    {
+        // If roles are loaded, avoid extra query:
+        if ($this->relationLoaded('roles')) {
+            return $this->roles->contains('name', $role);
+        }
+
+        // Otherwise, query
+        return $this->roles()->where('name', $role)->exists();
     }
 }

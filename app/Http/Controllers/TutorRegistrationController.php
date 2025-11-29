@@ -28,9 +28,11 @@ class TutorRegistrationController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'tutor',
             'is_approved' => false,
         ]);
+
+        // Assign the tutor role using Spatie Permission
+        $user->assignRole('tutor');
 
         event(new Registered($user));
 

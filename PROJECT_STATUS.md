@@ -82,27 +82,6 @@
    - ⏸️ Enrollment approval workflow - Auto-approved for now
 
 ### 4. **Student Dashboard**
-   - ✅ View enrolled courses
-   - ✅ Track progress
-   - ✅ Access course materials
-   - ✅ View test scores
-
-### 5. **Lesson Content Display** ✅ COMPLETED
-   - ✅ Student view for lessons
-   - ✅ Material viewing/downloading
-   - ✅ Progress tracking
-   - ✅ Sequential lesson access
-
-### 6. **AI Integration Enhancement**
-   - ✅ AI-generated test questions
-   - [ ] AI-powered feedback on short answers
-   - [ ] Content suggestions for tutors
-   - [ ] Personalized learning paths
-
-### 7. **Additional Features**
-   - ✅ Search and filter courses
-   - [ ] Reviews and ratings
-   - [ ] Discussion forums
    - ✅ Certificates upon completion
    - [ ] Email notifications
    - [ ] Mobile responsiveness testing

@@ -12,7 +12,8 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-bold mb-2">Welcome back, {{ auth()->user()->name }}!</h3>
                     <p class="text-gray-600 dark:text-gray-400">
-                        You're logged in as a <strong>{{ ucfirst(auth()->user()->roles->first()->name ?? 'user') }}</strong>
+                        You're logged in as a 
+                        <strong>{{ ucfirst(auth()->user()->roles?->first()?->name ?? 'user') }}</strong>
                     </p>
                 </div>
             </div>

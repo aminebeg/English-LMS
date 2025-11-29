@@ -39,9 +39,11 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'student',
             'is_approved' => true,
         ]);
+
+        // Assign the student role using Spatie Permission
+        $user->assignRole('student');
 
         event(new Registered($user));
 

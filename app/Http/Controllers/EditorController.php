@@ -10,7 +10,7 @@ class EditorController extends Controller
 {
     public function index()
     {
-        $pendingTutors = User::where('role', 'tutor')->where('is_approved', false)->get();
+        $pendingTutors = User::role('tutor')->where('is_approved', false)->get();
         return view('editor.dashboard', compact('pendingTutors'));
     }
 

@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Course::class, 'course');
+    }
+
     public function index()
     {
         $courses = auth()->user()->teachingCourses()->with('lessons')->get();
@@ -35,21 +40,17 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        $this->authorize('view', $course);
         $course->load('lessons.materials', 'tests');
         return view('courses.show', compact('course'));
     }
 
     public function edit(Course $course)
     {
-        $this->authorize('update', $course);
         return view('courses.edit', compact('course'));
     }
 
     public function update(Request $request, Course $course)
     {
-        $this->authorize('update', $course);
-
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -66,7 +67,6 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
-        $this->authorize('delete', $course);
         $course->delete();
 
         return redirect()->route('courses.index')->with('status', 'Course deleted!');

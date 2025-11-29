@@ -19,9 +19,12 @@ class CoursePolicy
     /**
      * Determine whether the user can view the model.
      */
+    /**
+     * Determine whether the user can view the model.
+     */
     public function view(User $user, Course $course): bool
     {
-        return $user->id === $course->tutor_id || $user->role === 'editor';
+        return $user->id === $course->tutor_id || $user->hasRole('editor');
     }
 
     /**
@@ -29,7 +32,7 @@ class CoursePolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'tutor' && $user->is_approved;
+        return $user->hasRole('tutor') && $user->is_approved;
     }
 
     /**

@@ -12,12 +12,13 @@ class EditorSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::create([
+        $editor = \App\Models\User::create([
             'name' => 'Editor',
             'email' => 'editor@example.com',
             'password' => \Illuminate\Support\Facades\Hash::make('password'),
-            'role' => 'editor',
             'is_approved' => true,
         ]);
+        
+        $editor->assignRole('editor');
     }
 }
