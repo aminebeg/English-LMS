@@ -14,7 +14,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('tests.submit', $test) }}" id="testForm">
+                    <form method="POST" action="{{ route('tests.submit', $test) }}" id="testForm" onsubmit="return confirm('Are you sure you want to submit your answers?')">
                         @csrf
                         
                         <div class="space-y-8">
@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="mt-8 flex justify-end">
-                            <x-primary-button class="px-6 py-3 text-lg" onclick="return confirm('Are you sure you want to submit your answers?')">
+                            <x-primary-button type="submit" class="px-6 py-3 text-lg">
                                 {{ __('Submit Test') }}
                             </x-primary-button>
                         </div>

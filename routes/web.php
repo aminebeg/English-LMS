@@ -31,15 +31,6 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::post('/editor/approve/{user}', [EditorController::class, 'approve'])->name('editor.approve');
     });
 
-    Route::middleware('role:tutor')->group(function () {
-        Route::resource('courses', CourseController::class);
-        Route::resource('lessons', LessonController::class)->except(['index']);
-        Route::resource('materials', MaterialController::class)->except(['index']);
-        Route::resource('tests', TestController::class)->except(['index']);
-        Route::get('/tests/{test}/results', [TestController::class, 'results'])->name('tests.results');
-        Route::resource('questions', QuestionController::class)->except(['index', 'show']);
-    });
-
     // Student routes for course browsing and enrollment
     Route::middleware('role:student')->group(function () {
         Route::get('/courses/browse', [EnrollmentController::class, 'browse'])->name('courses.browse');
@@ -59,6 +50,15 @@ Route::middleware(['auth', 'approved'])->group(function () {
         
         // Certificate
         Route::get('/courses/{course}/certificate', [\App\Http\Controllers\CertificateController::class, 'download'])->name('certificates.download');
+    });
+
+    Route::middleware('role:tutor')->group(function () {
+        Route::resource('courses', CourseController::class);
+        Route::resource('lessons', LessonController::class)->except(['index']);
+        Route::resource('materials', MaterialController::class)->except(['index']);
+        Route::resource('tests', TestController::class)->except(['index']);
+        Route::get('/tests/{test}/results', [TestController::class, 'results'])->name('tests.results');
+        Route::resource('questions', QuestionController::class)->except(['index', 'show']);
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

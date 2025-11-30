@@ -86,6 +86,61 @@
    - [ ] Email notifications
    - [ ] Mobile responsiveness testing
 
+## 🐛 Bugs Found During Testing
+
+### 1. **Controller Base Class Issue** ✅ FIXED
+   - **Issue**: `CourseController` couldn't use `authorizeResource()` because base `Controller` didn't extend `\Illuminate\Routing\Controller`
+   - **Fix**: Updated `app/Http/Controllers/Controller.php` to extend `\Illuminate\Routing\Controller`
+   - **Impact**: Tutors can now create courses without 500 errors
+
+### 2. **Route Order Issue** ✅ FIXED
+   - **Issue**: Student routes were defined after tutor routes, causing `/courses/browse` to be shadowed by tutor's resource route
+   - **Fix**: Moved student routes before tutor routes in `routes/web.php`
+   - **Impact**: Students can now browse courses
+
+### 3. **Test Submission Form Not Working** ⚠️ IN PROGRESS
+   - **Issue**: Test submission form doesn't submit - page stays on `/tests/{id}/start` after clicking Submit
+   - **Attempted Fix**: Moved confirmation dialog from button `onclick` to form `onsubmit`, added explicit `type="submit"` to button
+   - **Status**: Still not working - investigating further
+   - **Impact**: Students cannot submit tests, no TestResults are created, course progress doesn't update
+
+### 4. **Tutor Registration Not Creating Users** ⚠️ NOT FIXED
+   - **Issue**: `/become-tutor` form submission doesn't create user accounts
+   - **Status**: Needs investigation
+   - **Workaround**: Created `TestUsersSeeder` to manually create test users
+
+### 5. **Test Users Seeder Password Issue** ✅ FIXED
+   - **Issue**: Initially used `Hash::make()` in seeder, but User model has 'hashed' cast
+   - **Fix**: Changed seeder to use plain password strings, let model handle hashing
+   - **Impact**: Test users can now log in successfully
+
+## ✅ Features Successfully Tested
+
+### Tutor Workflow
+- ✅ Login as tutor (tutor@test.com)
+- ✅ Create course (Math 101)
+- ✅ Create test for course (Math Quiz)
+- ✅ Add questions to test (multiple choice: "What is 2+2?")
+- ✅ Course creation with all fields (title, description, type, level, price)
+
+### Student Workflow
+- ✅ Login as student (student@test.com)
+- ✅ Browse published courses
+- ✅ Enroll in course (Math 101)
+- ✅ View enrolled course in "My Courses"
+- ⚠️ Take test - form loads but submission fails
+- ⚠️ View test results - cannot test due to submission issue
+- ⚠️ Course progress tracking - stuck at 0% due to test submission issue
+- ⚠️ Certificate generation - cannot test due to progress issue
+
+## 🔧 Test Data Created
+- **Editor**: editor@example.com (password: password)
+- **Tutor**: tutor@test.com (password: password)  
+- **Student**: student@test.com (password: password)
+- **Course**: Math 101 (ID: 3, published)
+- **Test**: Math Quiz (ID: 1, passing score: 50%)
+- **Question**: "What is 2+2?" (multiple choice, correct answer: "4")
+
 ## 📁 File Structure
     └── AIService.php ✅
 

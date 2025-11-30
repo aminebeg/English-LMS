@@ -20,6 +20,12 @@
                         </div>
 
                         <div class="mb-4">
+                            <x-input-label for="content" :value="__('Lesson Content')" />
+                            <textarea id="content" name="content" rows="10" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{ old('content') }}</textarea>
+                            <x-input-error :messages="$errors->get('content')" class="mt-2" />
+                        </div>
+
+                        <div class="mb-4">
                             <x-input-label for="order" :value="__('Order')" />
                             <x-text-input id="order" class="block mt-1 w-full" type="number" name="order" :value="old('order', $course->lessons->count() + 1)" required />
                             <x-input-error :messages="$errors->get('order')" class="mt-2" />

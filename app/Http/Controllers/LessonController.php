@@ -22,6 +22,7 @@ class LessonController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
             'order' => 'required|integer|min:0',
             'is_free' => 'boolean',
         ]);
@@ -50,6 +51,7 @@ class LessonController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'content' => 'nullable|string',
             'order' => 'required|integer|min:0',
             'is_free' => 'boolean',
         ]);
