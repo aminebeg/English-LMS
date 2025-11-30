@@ -27,6 +27,10 @@ class EnrollmentController extends Controller
             $query->where('level', $request->input('level'));
         }
 
+        if ($request->has('type') && $request->input('type') !== '') {
+            $query->where('type', $request->input('type'));
+        }
+
         $courses = $query->latest()->paginate(12)->withQueryString();
 
         return view('courses.browse', compact('courses'));

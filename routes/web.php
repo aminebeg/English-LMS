@@ -21,6 +21,9 @@ Route::get('/', function () {
 Route::get('/become-tutor', [TutorRegistrationController::class, 'create'])->name('tutor.register.form');
 Route::post('/become-tutor', [TutorRegistrationController::class, 'store'])->name('tutor.register');
 
+// Public course preview
+Route::get('/courses/{course}/preview', [\App\Http\Controllers\CoursePreviewController::class, 'show'])->name('courses.preview');
+
 Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');

@@ -1,27 +1,50 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Add Question to') }} {{ $test->title }}
-        </h2>
-    </x-slot>
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="mb-8">
+                <a href="{{ route('tests.show', $test) }}" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 mb-4 transition-colors">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Back to Test
+                </a>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Add Question</h1>
+                <p class="text-gray-600 dark:text-gray-400">Add a new question to <span class="font-semibold text-indigo-600 dark:text-indigo-400">{{ $test->title }}</span></p>
+            </div>
 
-    <div class="py-12">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="POST" action="{{ route('questions.store') }}" id="questionForm">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
+                <!-- Gradient Top Border -->
+                <div class="h-2 bg-gradient-to-r from-green-500 via-teal-500 to-blue-500"></div>
+
+                <div class="p-8">
+                    <form method="POST" action="{{ route('questions.store') }}" id="questionForm" class="space-y-6">
                         @csrf
                         <input type="hidden" name="test_id" value="{{ $test->id }}">
 
-                        <div class="mb-4">
-                            <x-input-label for="content" :value="__('Question')" />
-                            <textarea id="content" name="content" rows="3" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>{{ old('content') }}</textarea>
+                        <!-- Question Content with AI -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Question Text</label>
+                                <button type="button" id="generate-question" 
+                                    class="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    </svg>
+                                    Generate with AI
+                                </button>
+                            </div>
+                            <textarea id="content" name="content" rows="3" required
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow shadow-sm"
+                                placeholder="e.g., What is the past tense of 'run'?">{{ old('content') }}</textarea>
                             <x-input-error :messages="$errors->get('content')" class="mt-2" />
                         </div>
 
-                        <div class="mb-4">
-                            <x-input-label for="type" :value="__('Question Type')" />
-                            <select id="type" name="type" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required onchange="updateQuestionType()">
+                        <!-- Question Type -->
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Question Type</label>
+                            <select id="type" name="type" required onchange="updateQuestionType()"
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow shadow-sm">
                                 <option value="multiple_choice" {{ old('type') === 'multiple_choice' ? 'selected' : '' }}>Multiple Choice</option>
                                 <option value="true_false" {{ old('type') === 'true_false' ? 'selected' : '' }}>True/False</option>
                                 <option value="short_answer" {{ old('type') === 'short_answer' ? 'selected' : '' }}>Short Answer</option>
@@ -30,48 +53,60 @@
                         </div>
 
                         <!-- Multiple Choice Options -->
-                        <div id="multipleChoiceSection" class="mb-4">
-                            <x-input-label :value="__('Answer Options')" />
-                            <div id="optionsContainer" class="space-y-2 mt-2">
+                        <div id="multipleChoiceSection" class="space-y-4">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Answer Options</label>
+                            <div id="optionsContainer" class="space-y-3">
                                 @for($i = 0; $i < 4; $i++)
-                                    <x-text-input type="text" name="options[]" :value="old('options.' . $i)" placeholder="Option {{ $i + 1 }}" class="block w-full" />
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-sm font-bold text-gray-400 w-6">{{ chr(65 + $i) }}.</span>
+                                        <input type="text" name="options[]" value="{{ old('options.' . $i) }}" placeholder="Option {{ $i + 1 }}"
+                                            class="flex-1 rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow shadow-sm">
+                                    </div>
                                 @endfor
                             </div>
-                            <button type="button" onclick="addOption()" class="mt-2 text-sm text-indigo-600 hover:text-indigo-800">
-                                + Add Another Option
+                            <button type="button" onclick="addOption()" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                Add Another Option
                             </button>
                         </div>
 
                         <!-- True/False Section -->
-                        <div id="trueFalseSection" class="mb-4" style="display: none;">
-                            <x-input-label for="tf_answer" :value="__('Correct Answer')" />
-                            <select id="tf_answer" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                        <div id="trueFalseSection" class="hidden">
+                            <label for="tf_answer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Correct Answer</label>
+                            <select id="tf_answer" 
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow shadow-sm">
                                 <option value="True">True</option>
                                 <option value="False">False</option>
                             </select>
                         </div>
 
-                        <!-- Correct Answer -->
-                        <div class="mb-4">
-                            <x-input-label for="correct_answer" :value="__('Correct Answer')" />
-                            <x-text-input id="correct_answer" class="block mt-1 w-full" type="text" name="correct_answer" :value="old('correct_answer')" required />
-                            <p class="text-xs text-gray-500 mt-1" id="answerHint">For multiple choice, enter the exact text of the correct option.</p>
+                        <!-- Correct Answer Field -->
+                        <div>
+                            <label for="correct_answer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Correct Answer</label>
+                            <input type="text" id="correct_answer" name="correct_answer" value="{{ old('correct_answer') }}" required
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow shadow-sm">
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400" id="answerHint">For multiple choice, enter the exact text of the correct option.</p>
                             <x-input-error :messages="$errors->get('correct_answer')" class="mt-2" />
                         </div>
 
-                        <div class="mb-4">
-                            <x-input-label for="order" :value="__('Order')" />
-                            <x-text-input id="order" class="block mt-1 w-full" type="number" name="order" :value="old('order', $test->questions->count() + 1)" required />
+                        <!-- Order -->
+                        <div>
+                            <label for="order" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Order</label>
+                            <input type="number" id="order" name="order" value="{{ old('order', $test->questions->count() + 1) }}" required
+                                class="w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow shadow-sm">
                             <x-input-error :messages="$errors->get('order')" class="mt-2" />
                         </div>
 
-                        <div class="flex items-center justify-end mt-4">
-                            <a href="{{ route('tests.show', $test) }}" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                        <!-- Actions -->
+                        <div class="flex items-center justify-end gap-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                            <a href="{{ route('tests.show', $test) }}" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
                                 Cancel
                             </a>
-                            <x-primary-button class="ms-4">
-                                {{ __('Add Question') }}
-                            </x-primary-button>
+                            <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-green-600 to-teal-600 text-white font-semibold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-200">
+                                Add Question
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -90,41 +125,80 @@
             // Hide all sections first
             multipleChoiceSection.style.display = 'none';
             trueFalseSection.style.display = 'none';
+            trueFalseSection.classList.add('hidden');
 
             // Show relevant section and update hint
             if (type === 'multiple_choice') {
                 multipleChoiceSection.style.display = 'block';
                 answerHint.textContent = 'Enter the exact text of the correct option.';
+                correctAnswerInput.readOnly = false;
             } else if (type === 'true_false') {
                 trueFalseSection.style.display = 'block';
-                answerHint.textContent = 'Enter "True" or "False".';
+                trueFalseSection.classList.remove('hidden');
+                answerHint.textContent = 'Select True or False above.';
                 correctAnswerInput.value = document.getElementById('tf_answer').value;
+                correctAnswerInput.readOnly = true;
             } else {
                 answerHint.textContent = 'Enter the expected answer for this question.';
+                correctAnswerInput.readOnly = false;
+                correctAnswerInput.value = '';
             }
         }
 
         function addOption() {
             const container = document.getElementById('optionsContainer');
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.name = 'options[]';
-            input.placeholder = 'Option ' + (container.children.length + 1);
-            input.className = 'border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm block w-full';
-            container.appendChild(input);
+            const index = container.children.length;
+            const letter = String.fromCharCode(65 + index);
+            
+            const div = document.createElement('div');
+            div.className = 'flex items-center gap-3';
+            div.innerHTML = `
+                <span class="text-sm font-bold text-gray-400 w-6">${letter}.</span>
+                <input type="text" name="options[]" placeholder="Option ${index + 1}"
+                    class="flex-1 rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow shadow-sm">
+            `;
+            container.appendChild(div);
         }
 
         // Update True/False answer when dropdown changes
-        document.addEventListener('DOMContentLoaded', function() {
-            const tfAnswer = document.getElementById('tf_answer');
-            if (tfAnswer) {
-                tfAnswer.addEventListener('change', function() {
-                    document.getElementById('correct_answer').value = this.value;
-                });
-            }
-            
-            // Initialize the form based on selected type
-            updateQuestionType();
+        document.getElementById('tf_answer').addEventListener('change', function() {
+            document.getElementById('correct_answer').value = this.value;
         });
+        
+        // AI Generation
+        document.getElementById('generate-question').addEventListener('click', function() {
+            const type = document.getElementById('type').value;
+            const prompt = `Generate a ${type} question for an English test. Return ONLY the question text.`;
+            
+            const button = this;
+            const originalContent = button.innerHTML;
+            button.innerHTML = '<svg class="animate-spin w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Generating...';
+            button.disabled = true;
+
+            fetch('{{ route('ai.generate') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ prompt: prompt, provider: 'gemini' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.content) {
+                    document.getElementById('content').value = data.content;
+                } else {
+                    alert('Error generating question');
+                }
+            })
+            .catch(error => console.error('Error:', error))
+            .finally(() => {
+                button.innerHTML = originalContent;
+                button.disabled = false;
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', updateQuestionType);
     </script>
 </x-app-layout>

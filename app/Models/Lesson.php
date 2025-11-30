@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Lesson extends Model
 {
-    protected $fillable = ['course_id', 'title', 'content', 'order', 'is_free'];
+    protected $fillable = ['course_id', 'title', 'content', 'order', 'is_preview'];
+
+    protected $casts = [
+        'is_preview' => 'boolean',
+    ];
 
     public function course()
     {

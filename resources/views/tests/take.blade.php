@@ -18,6 +18,8 @@
                         @csrf
                         
                         <div class="space-y-8">
+                            <x-input-error :messages="$errors->get('answers')" class="mb-4" />
+                            
                             @foreach($questions as $index => $question)
                                 <div class="border-b dark:border-gray-700 pb-6 last:border-0">
                                     <div class="flex items-start gap-3 mb-4">
@@ -71,6 +73,7 @@
                                                           required></textarea>
                                             </div>
                                         @endif
+                                        <x-input-error :messages="$errors->get('answers.'.$question->id)" class="mt-2" />
                                     </div>
                                 </div>
                             @endforeach

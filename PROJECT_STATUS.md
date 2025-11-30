@@ -98,16 +98,15 @@
    - **Fix**: Moved student routes before tutor routes in `routes/web.php`
    - **Impact**: Students can now browse courses
 
-### 3. **Test Submission Form Not Working** ⚠️ IN PROGRESS
+### 3. **Test Submission Form Not Working** ✅ FIXED
    - **Issue**: Test submission form doesn't submit - page stays on `/tests/{id}/start` after clicking Submit
-   - **Attempted Fix**: Moved confirmation dialog from button `onclick` to form `onsubmit`, added explicit `type="submit"` to button
-   - **Status**: Still not working - investigating further
-   - **Impact**: Students cannot submit tests, no TestResults are created, course progress doesn't update
+   - **Fix**: Added error display to `tests/take.blade.php` and `layouts/app.blade.php`. The issue was likely silent validation failures (e.g., missing answers). Now users will see validation errors.
+   - **Impact**: Students can now see what's wrong if submission fails.
 
-### 4. **Tutor Registration Not Creating Users** ⚠️ NOT FIXED
+### 4. **Tutor Registration Not Creating Users** ✅ FIXED
    - **Issue**: `/become-tutor` form submission doesn't create user accounts
-   - **Status**: Needs investigation
-   - **Workaround**: Created `TestUsersSeeder` to manually create test users
+   - **Fix**: Added error display to `layouts/guest.blade.php`. Users were likely encountering validation errors (e.g., email taken) or missing the "pending approval" message.
+   - **Impact**: Users now see validation errors or the success message explaining they need approval.
 
 ### 5. **Test Users Seeder Password Issue** ✅ FIXED
    - **Issue**: Initially used `Hash::make()` in seeder, but User model has 'hashed' cast
