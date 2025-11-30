@@ -1,60 +1,242 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ $lesson->title }}
-            </h2>
-            <div class="flex gap-2">
-                <a href="{{ route('lessons.edit', $lesson) }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
-                    Edit
-                </a>
-                <form method="POST" action="{{ route('lessons.destroy', $lesson) }}" onsubmit="return confirm('Are you sure?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700">
-                        Delete
-                    </button>
-                </form>
-            </div>
-        </div>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <p class="mb-2"><strong>Course:</strong> <a href="{{ route('courses.show', $lesson->course) }}" class="text-indigo-600 hover:text-indigo-800">{{ $lesson->course->title }}</a></p>
-                    <p class="mb-2"><strong>Order:</strong> {{ $lesson->order }}</p>
-                    <p class="mb-2"><strong>Free Preview:</strong> {{ $lesson->is_free ? 'Yes' : 'No' }}</p>
-                </div>
-            </div>
-
-            <!-- Materials -->
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold">Materials</h3>
-                        <a href="{{ route('materials.create', ['lesson' => $lesson->id]) }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
-                            Add Material
+    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumb -->
+            <nav class="flex mb-8" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                    <li class="inline-flex items-center">
+                        <a href="{{ route('courses.index') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                            Courses
                         </a>
-                    </div>
-                    @if($lesson->materials->isEmpty())
-                        <p>No materials yet.</p>
-                    @else
-                        <ul class="space-y-2">
-                            @foreach($lesson->materials as $material)
-                                <li class="border-b dark:border-gray-700 pb-2">
-                                    <div class="flex justify-between items-center">
-                                        <div>
-                                            <span class="font-semibold">{{ $material->title }}</span>
-                                            <span class="text-sm text-gray-500">({{ ucfirst($material->type) }})</span>
-                                        </div>
-                                        <a href="{{ route('materials.show', $material) }}" class="text-indigo-600 hover:text-indigo-800">View</a>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                            </svg>
+                            <a href="{{ route('courses.show', $lesson->course) }}" class="ml-1 text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">{{ $lesson->course->title }}</a>
+                        </div>
+                    </li>
+                    <li aria-current="page">
+                        <div class="flex items-center">
+                            <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                            </svg>
+                            <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">{{ $lesson->title }}</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Main Content Column -->
+                <div class="lg:col-span-2 space-y-8">
+                    
+                    <!-- Video Player (if available) -->
+                    @if($lesson->video_url)
+                        <div class="bg-black rounded-2xl overflow-hidden shadow-xl aspect-video">
+                            <iframe src="{{ str_replace('watch?v=', 'embed/', $lesson->video_url) }}" 
+                                class="w-full h-full" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                            </iframe>
+                        </div>
                     @endif
+
+                    <!-- Lesson Content -->
+                    <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden">
+                        <div class="p-8">
+                            <div class="flex justify-between items-start mb-6">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs font-bold rounded-full">
+                                            Lesson {{ $lesson->order }}
+                                        </span>
+                                        @if($lesson->difficulty)
+                                            <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-bold rounded-full">
+                                                {{ ucfirst($lesson->difficulty) }}
+                                            </span>
+                                        @endif
+                                        @if($lesson->duration_minutes)
+                                            <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs font-bold rounded-full flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                </svg>
+                                                {{ $lesson->formatted_duration }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ $lesson->title }}</h1>
+                                </div>
+                                
+                                @can('update', $lesson->course)
+                                    <div class="flex gap-2">
+                                        <a href="{{ route('lessons.edit', $lesson) }}" class="p-2 text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                        </a>
+                                        <form method="POST" action="{{ route('lessons.destroy', $lesson) }}" onsubmit="return confirm('Delete this lesson?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endcan
+                            </div>
+
+                            @if($lesson->summary)
+                                <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl mb-8 text-gray-700 dark:text-gray-300 italic border-l-4 border-indigo-500">
+                                    {{ $lesson->summary }}
+                                </div>
+                            @endif
+
+                            <div class="prose dark:prose-invert max-w-none">
+                                {!! Str::markdown($lesson->content) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Elements -->
+                    @if(($lesson->vocabulary && count($lesson->vocabulary) > 0) || ($lesson->exercises && count($lesson->exercises) > 0))
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            @if($lesson->vocabulary && count($lesson->vocabulary) > 0)
+                                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden">
+                                    <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-purple-50 dark:bg-purple-900/20">
+                                        <h3 class="text-xl font-bold text-purple-900 dark:text-purple-300 flex items-center gap-2">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                            </svg>
+                                            Vocabulary
+                                        </h3>
+                                    </div>
+                                    <div class="p-6 space-y-4">
+                                        @foreach($lesson->vocabulary as $item)
+                                            <div class="pb-4 border-b border-gray-100 dark:border-gray-700 last:border-0 last:pb-0">
+                                                <div class="font-bold text-gray-900 dark:text-white mb-1">{{ $item['word'] }}</div>
+                                                <div class="text-sm text-gray-600 dark:text-gray-400">{{ $item['definition'] }}</div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($lesson->exercises && count($lesson->exercises) > 0)
+                                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-xl overflow-hidden">
+                                    <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-orange-50 dark:bg-orange-900/20">
+                                        <h3 class="text-xl font-bold text-orange-900 dark:text-orange-300 flex items-center gap-2">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                                            </svg>
+                                            Practice
+                                        </h3>
+                                    </div>
+                                    <div class="p-6 space-y-4">
+                                        @foreach($lesson->exercises as $index => $exercise)
+                                            <div class="flex gap-3">
+                                                <span class="flex-shrink-0 w-6 h-6 bg-orange-100 dark:bg-orange-900 text-orange-600 dark:text-orange-300 rounded-full flex items-center justify-center text-xs font-bold">
+                                                    {{ $index + 1 }}
+                                                </span>
+                                                <span class="text-gray-700 dark:text-gray-300">{{ $exercise }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Key Points -->
+                    @if($lesson->key_points && count($lesson->key_points) > 0)
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                Key Points
+                            </h3>
+                            <ul class="space-y-3">
+                                @foreach($lesson->key_points as $point)
+                                    <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <svg class="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                        {{ $point }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <!-- Objectives -->
+                    @if($lesson->objectives && count($lesson->objectives) > 0)
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                </svg>
+                                Learning Objectives
+                            </h3>
+                            <ul class="space-y-3">
+                                @foreach($lesson->objectives as $objective)
+                                    <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
+                                        <span class="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></span>
+                                        {{ $objective }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <!-- Resources -->
+                    @if($lesson->resources && count($lesson->resources) > 0)
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                </svg>
+                                Resources
+                            </h3>
+                            <div class="space-y-3">
+                                @foreach($lesson->resources as $resource)
+                                    <a href="{{ $resource['url'] }}" target="_blank" class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group">
+                                        <div class="w-8 h-8 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                            <img src="https://www.google.com/s2/favicons?domain={{ parse_url($resource['url'], PHP_URL_HOST) }}" alt="" class="w-4 h-4">
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $resource['title'] }}</div>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ parse_url($resource['url'], PHP_URL_HOST) }}</div>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Teacher Notes (Only visible to tutors) -->
+                    @can('update', $lesson->course)
+                        @if($lesson->notes)
+                            <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-2xl shadow-lg p-6">
+                                <h3 class="text-lg font-bold text-yellow-800 dark:text-yellow-200 mb-4 flex items-center gap-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                                    </svg>
+                                    Teacher's Notes
+                                </h3>
+                                <p class="text-sm text-yellow-800 dark:text-yellow-200 italic">
+                                    {{ $lesson->notes }}
+                                </p>
+                            </div>
+                        @endif
+                    @endcan
                 </div>
             </div>
         </div>

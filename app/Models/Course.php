@@ -6,7 +6,61 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    protected $fillable = ['title', 'description', 'level', 'type', 'price', 'tutor_id', 'is_published'];
+    protected $fillable = [
+        'title', 
+        'description', 
+        'level', 
+        'type', 
+        'price', 
+        'tutor_id', 
+        'is_published',
+        'thumbnail',
+        'preview_video',
+        'category',
+        'tags',
+        'duration_weeks',
+        'estimated_hours',
+        'learning_outcomes',
+        'prerequisites',
+        'instructor_bio',
+        'original_price',
+        'discount_percentage',
+        'has_payment_plan',
+        'is_featured',
+        'has_certificate',
+        'certificate_template',
+        'max_students',
+        'language',
+        'difficulty'
+    ];
+
+    protected $casts = [
+        'tags' => 'array',
+        'learning_outcomes' => 'array',
+        'prerequisites' => 'array',
+        'is_published' => 'boolean',
+        'is_featured' => 'boolean',
+        'has_certificate' => 'boolean',
+        'has_payment_plan' => 'boolean',
+        'price' => 'decimal:2',
+        'original_price' => 'decimal:2',
+    ];
+
+    // Get discounted price
+    public function getDiscountedPriceAttribute()
+    {
+        if ($this->discount_percentage > 0 && $this->original_price) {
+            return $this->original_price - ($this->original_price * $this->discount_percentage / 100);
+        }
+        return $this->price;
+    }
+
+    // Get final price (considers discount)
+    public function getFinalPriceAttribute()
+    {
+        return $this->discount_percentage > 0 ? $this->discounted_price : $this->price;
+    }
+
 
     public function tutor()
     {
