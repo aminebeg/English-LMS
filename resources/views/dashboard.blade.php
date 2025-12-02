@@ -1,30 +1,9 @@
 <x-app-layout>
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
         <!-- Header Section -->
-        <div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                            Welcome back, <span class="text-indigo-600 dark:text-indigo-400">{{ auth()->user()->name }}</span>! 👋
-                        </h1>
-                        <p class="text-gray-600 dark:text-gray-400 text-lg">
-                            You're logged in as a 
-                            <span class="font-semibold text-indigo-600 dark:text-indigo-400 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 rounded-full">
-                                {{ ucfirst(auth()->user()->roles?->first()?->name ?? 'user') }}
-                            </span>
-                        </p>
-                    </div>
-                    <div class="hidden md:block">
-                        <svg class="w-32 h-32 opacity-20 text-gray-400 dark:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 -mt-6">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <!-- Student Dashboard (Open edX Style) -->
             @if(auth()->user()->hasRole('student'))
                 <div class="flex flex-col lg:flex-row gap-8">
@@ -253,12 +232,7 @@
                         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                             <h3 class="font-bold text-gray-900 dark:text-white mb-4">Instructor Tools</h3>
                             <ul class="space-y-2 text-sm">
-                                <li>
-                                    <a href="{{ route('courses.create') }}" class="flex items-center text-indigo-600 dark:text-indigo-400 hover:underline">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                                        Create New Course
-                                    </a>
-                                </li>
+
                                 <li>
                                     <a href="#" class="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>

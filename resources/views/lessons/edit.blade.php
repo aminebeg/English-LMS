@@ -120,6 +120,18 @@
                                 </div>
 
                                 <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+                                    <label for="course_section_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Section (Optional)</label>
+                                    <select name="course_section_id" id="course_section_id"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                                        <option value="">No Section</option>
+                                        @foreach($lesson->course->sections as $section)
+                                            <option value="{{ $section->id }}" {{ old('course_section_id', $lesson->course_section_id) == $section->id ? 'selected' : '' }}>{{ $section->title }}</option>
+                                        @endforeach
+                                    </select>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Organize lessons into sections</p>
+                                </div>
+
+                                <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
                                     <label for="order" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order</label>
                                     <input type="number" name="order" id="order" value="{{ old('order', $lesson->order) }}" required min="1"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">

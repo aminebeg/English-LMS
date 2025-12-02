@@ -13,6 +13,7 @@ use App\Http\Controllers\TestAttemptController;
 use App\Http\Controllers\StudentLessonController;
 use App\Http\Controllers\AIController;
 use App\Http\Controllers\CourseSectionController;
+use App\Http\Controllers\CourseStudentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -68,6 +69,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::post('/courses/{course}/sections', [CourseSectionController::class, 'store'])->name('courses.sections.store');
         Route::put('/sections/{section}', [CourseSectionController::class, 'update'])->name('sections.update');
         Route::delete('/sections/{section}', [CourseSectionController::class, 'destroy'])->name('sections.destroy');
+
+        // Students
+        Route::get('/courses/{course}/students', [CourseStudentController::class, 'index'])->name('courses.students.index');
+        Route::delete('/courses/{course}/students/{student}', [CourseStudentController::class, 'destroy'])->name('courses.students.destroy');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
