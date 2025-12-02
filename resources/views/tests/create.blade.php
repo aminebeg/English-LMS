@@ -58,6 +58,50 @@
                         </div>
                     </div>
 
+                    <!-- Test Type & Association -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <!-- Type -->
+                        <div>
+                            <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Test Type
+                            </label>
+                            <select id="type" name="type" class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                                <option value="quiz" {{ old('type') == 'quiz' ? 'selected' : '' }}>Quiz</option>
+                                <option value="final_exam" {{ old('type') == 'final_exam' ? 'selected' : '' }}>Final Exam</option>
+                            </select>
+                        </div>
+
+                        <!-- Section Association -->
+                        <div>
+                            <label for="course_section_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Associate with Section (Optional)
+                            </label>
+                            <select id="course_section_id" name="course_section_id" class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                                <option value="">None (Course Level)</option>
+                                @foreach($course->sections as $section)
+                                    <option value="{{ $section->id }}" {{ old('course_section_id') == $section->id ? 'selected' : '' }}>
+                                        {{ $section->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Lesson Association -->
+                        <div>
+                            <label for="lesson_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Associate with Lesson (Optional)
+                            </label>
+                            <select id="lesson_id" name="lesson_id" class="w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                                <option value="">None</option>
+                                @foreach($course->lessons as $lesson)
+                                    <option value="{{ $lesson->id }}" {{ old('lesson_id') == $lesson->id ? 'selected' : '' }}>
+                                        {{ $lesson->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <!-- Action Buttons -->
                     <div class="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
                         <a href="{{ route('courses.edit', $course) }}" class="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">

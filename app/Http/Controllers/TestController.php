@@ -12,6 +12,7 @@ class TestController extends Controller
     {
         $course = Course::findOrFail($request->query('course'));
         $this->authorize('update', $course);
+        $course->load('sections', 'lessons');
         return view('tests.create', compact('course'));
     }
 
@@ -25,7 +26,15 @@ class TestController extends Controller
             'title' => 'required|string|max:255',
             'passing_score' => 'required|integer|min:0|max:100',
             'order' => 'required|integer',
+            'lesson_id' => 'nullable|exists:lessons,id',
+            'course_section_id' => 'nullable|exists:course_sections,id',
+            'type' => 'nullable|string|in:quiz,final_exam',
         ]);
+
+        // Ensure type is set if not provided
+        if (!isset($validated['type'])) {
+            $validated['type'] = 'quiz';
+        }
 
         $course->tests()->create($validated);
 
@@ -41,6 +50,7 @@ class TestController extends Controller
     public function edit(Test $test)
     {
         $this->authorize('update', $test->course);
+        $test->course->load('sections', 'lessons');
         return view('tests.edit', compact('test'));
     }
 
@@ -52,6 +62,9 @@ class TestController extends Controller
             'title' => 'required|string|max:255',
             'passing_score' => 'required|integer|min:0|max:100',
             'order' => 'required|integer',
+            'lesson_id' => 'nullable|exists:lessons,id',
+            'course_section_id' => 'nullable|exists:course_sections,id',
+            'type' => 'nullable|string|in:quiz,final_exam',
         ]);
 
         $test->update($validated);

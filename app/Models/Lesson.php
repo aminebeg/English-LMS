@@ -55,6 +55,11 @@ class Lesson extends Model
         return $this->hasMany(Material::class);
     }
 
+    public function tests()
+    {
+        return $this->hasMany(Test::class);
+    }
+
     // Get formatted duration
     public function getFormattedDurationAttribute()
     {
