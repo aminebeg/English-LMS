@@ -263,13 +263,22 @@
                                                             </svg>
                                                         </div>
                                                         <div class="flex-1">
-                                                            <div class="flex items-center gap-3">
+                                                            <div class="flex items-center gap-2 flex-wrap">
                                                                 <h4 class="font-medium text-gray-900 dark:text-white">{{ $test->title }}</h4>
                                                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                                                    Passing Score: {{ $test->passing_score }}%
+                                                                    {{ $test->passing_score }}%
                                                                 </span>
+                                                                @if($test->type === 'final_exam')
+                                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                                                                        Final Exam
+                                                                    </span>
+                                                                @else
+                                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                                                        Quiz
+                                                                    </span>
+                                                                @endif
                                                             </div>
-                                                            <div class="mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                                                            <div class="mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 flex-wrap">
                                                                 <span class="flex items-center">
                                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -282,6 +291,28 @@
                                                                     </svg>
                                                                     Order: {{ $test->order }}
                                                                 </span>
+                                                                @if($test->lesson_id)
+                                                                    <span class="flex items-center">
+                                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                                                        </svg>
+                                                                        Lesson: {{ $test->lesson->title }}
+                                                                    </span>
+                                                                @elseif($test->course_section_id)
+                                                                    <span class="flex items-center">
+                                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                                                        </svg>
+                                                                        Section: {{ $test->section->title }}
+                                                                    </span>
+                                                                @else
+                                                                    <span class="flex items-center text-gray-400">
+                                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                                                        </svg>
+                                                                        Course Level
+                                                                    </span>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
@@ -804,6 +835,37 @@
                             <input type="number" name="order" id="test-order" required min="1" value="{{ $course->tests->count() + 1 }}"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
                         </div>
+                    </div>
+
+                    <!-- Test Type -->
+                    <div>
+                        <label for="test-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Test Type</label>
+                        <select id="test-type" name="type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            <option value="quiz" selected>Quiz</option>
+                            <option value="final_exam">Final Exam</option>
+                        </select>
+                    </div>
+
+                    <!-- Section Association -->
+                    <div>
+                        <label for="test-section" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Associate with Section (Optional)</label>
+                        <select id="test-section" name="course_section_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            <option value="">None (Course Level)</option>
+                            @foreach($course->sections as $section)
+                                <option value="{{ $section->id }}">{{ $section->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Lesson Association -->
+                    <div>
+                        <label for="test-lesson" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Associate with Lesson (Optional)</label>
+                        <select id="test-lesson" name="lesson_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            <option value="">None</option>
+                            @foreach($course->lessons as $lesson)
+                                <option value="{{ $lesson->id }}">{{ $lesson->title }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="mt-6 flex justify-end gap-3">
