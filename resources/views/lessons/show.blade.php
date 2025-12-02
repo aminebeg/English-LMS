@@ -96,9 +96,87 @@
                                 </div>
                             @endif
 
-                            <div class="prose dark:prose-invert max-w-none">
-                                {!! Str::markdown($lesson->content) !!}
-                            </div>
+                            <!-- Content Rendering -->
+                            @php
+                                $contentBlocks = json_decode($lesson->content, true);
+                                $isBlockContent = json_last_error() === JSON_ERROR_NONE && is_array($contentBlocks);
+                            @endphp
+
+                            @if($isBlockContent)
+                                <div class="space-y-6 text-gray-900 dark:text-gray-100">
+                                    @foreach($contentBlocks as $block)
+                                        @switch($block['type'])
+                                            @case('heading')
+                                                <{{ $block['data']['level'] ?? 'h2' }} class="font-bold text-gray-900 dark:text-white {{ ($block['data']['level'] ?? 'h2') === 'h2' ? 'text-2xl mt-8 mb-4' : (($block['data']['level'] ?? 'h2') === 'h3' ? 'text-xl mt-6 mb-3' : 'text-lg mt-4 mb-2') }}">
+                                                    {{ $block['data']['content'] ?? '' }}
+                                                </{{ $block['data']['level'] ?? 'h2' }}>
+                                                @break
+
+                                            @case('text')
+                                                <div class="prose dark:prose-invert max-w-none">
+                                                    {!! $block['data']['content'] ?? '' !!}
+                                                </div>
+                                                @break
+
+                                            @case('image')
+                                                <figure class="my-6">
+                                                    <img src="{{ $block['data']['src'] ?? '' }}" alt="{{ $block['data']['caption'] ?? '' }}" class="rounded-lg shadow-sm w-full object-cover max-h-[500px]">
+                                                    @if(!empty($block['data']['caption']))
+                                                        <figcaption class="mt-2 text-center text-sm text-gray-500 dark:text-gray-400 italic">
+                                                            {{ $block['data']['caption'] }}
+                                                        </figcaption>
+                                                    @endif
+                                                </figure>
+                                                @break
+
+                                            @case('video')
+                                                <div class="my-6 aspect-video rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 bg-black">
+                                                    @if(str_contains($block['data']['src'] ?? '', 'youtube.com') || str_contains($block['data']['src'] ?? '', 'youtu.be'))
+                                                        <iframe src="{{ str_replace(['watch?v=', 'youtu.be/'], ['embed/', 'www.youtube.com/embed/'], $block['data']['src'] ?? '') }}" 
+                                                            class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                                                    @elseif(str_contains($block['data']['src'] ?? '', 'vimeo.com'))
+                                                        <iframe src="{{ str_replace('vimeo.com/', 'player.vimeo.com/video/', $block['data']['src'] ?? '') }}" 
+                                                            class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                                                    @else
+                                                        <video src="{{ $block['data']['src'] ?? '' }}" controls class="w-full h-full"></video>
+                                                    @endif
+                                                </div>
+                                                @break
+
+                                            @case('code')
+                                                <div class="my-6 relative group">
+                                                    <div class="absolute top-0 right-0 px-2 py-1 text-xs font-mono text-gray-400 bg-gray-800 rounded-bl-md">
+                                                        {{ $block['data']['language'] ?? 'text' }}
+                                                    </div>
+                                                    <pre><code class="language-{{ $block['data']['language'] ?? 'text' }} rounded-lg text-sm">{{ $block['data']['code'] ?? '' }}</code></pre>
+                                                </div>
+                                                @break
+
+                                            @case('note')
+                                                <div class="my-6 flex gap-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 rounded-r-lg">
+                                                    <div class="flex-shrink-0">
+                                                        <svg class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                    </div>
+                                                    <div class="prose dark:prose-invert max-w-none text-sm">
+                                                        {{ $block['data']['content'] ?? '' }}
+                                                    </div>
+                                                </div>
+                                                @break
+                                        @endswitch
+                                    @endforeach
+                                </div>
+                                
+                                <!-- Syntax Highlighting -->
+                                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+                                <script>hljs.highlightAll();</script>
+                            @else
+                                <div class="prose dark:prose-invert max-w-none">
+                                    {!! Str::markdown($lesson->content) !!}
+                                </div>
+                            @endif
                         </div>
                     </div>
 

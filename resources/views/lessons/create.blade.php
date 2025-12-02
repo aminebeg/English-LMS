@@ -49,17 +49,59 @@
                             </div>
                         </div>
 
-                        <!-- Editor -->
+                        <!-- Block Editor -->
                         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
                             <div class="flex justify-between items-center mb-4">
-                                <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lesson Content <span class="text-red-500">*</span></label>
-                                <button type="button" id="generate-content" class="text-xs text-indigo-600 hover:text-indigo-500 font-medium flex items-center gap-1">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                    Generate with AI
-                                </button>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lesson Content</label>
+                                <div class="flex gap-2">
+                                    <button type="button" id="generate-outline" class="text-xs text-indigo-600 hover:text-indigo-500 font-medium flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                        Generate Outline
+                                    </button>
+                                </div>
                             </div>
-                            <textarea name="content" id="content" rows="20" required placeholder="Write your lesson content here (Markdown supported)..."
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-mono dark:bg-gray-900 dark:border-gray-600 dark:text-white">{{ old('content') }}</textarea>
+
+                            <!-- Block Container -->
+                            <div id="blocks-container" class="space-y-4 min-h-[300px] pb-12">
+                                <!-- Blocks will be injected here -->
+                                <div class="text-center py-10 text-gray-400 dark:text-gray-500 italic" id="empty-state">
+                                    Start by adding a content block below
+                                </div>
+                            </div>
+
+                            <!-- Add Block Toolbar -->
+                            <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">Add Content Block</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <button type="button" onclick="addBlock('heading')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                                        Heading
+                                    </button>
+                                    <button type="button" onclick="addBlock('text')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        Text
+                                    </button>
+                                    <button type="button" onclick="addBlock('image')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        Image
+                                    </button>
+                                    <button type="button" onclick="addBlock('video')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                        Video
+                                    </button>
+                                    <button type="button" onclick="addBlock('code')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                                        Code
+                                    </button>
+                                    <button type="button" onclick="addBlock('note')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        Note
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Hidden input to store JSON content -->
+                            <input type="hidden" name="content" id="content-json">
                         </div>
 
                         <!-- Interactive Elements -->
@@ -209,121 +251,213 @@
         </div>
     </div>
 
+    <!-- Styles -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        .ql-toolbar { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-color: #e5e7eb !important; }
+        .ql-container { border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; border-color: #e5e7eb !important; font-family: inherit !important; }
+        .dark .ql-toolbar { background-color: #374151; border-color: #4b5563 !important; }
+        .dark .ql-container { background-color: #1f2937; border-color: #4b5563 !important; color: white; }
+        .dark .ql-stroke { stroke: #9ca3af !important; }
+        .dark .ql-fill { fill: #9ca3af !important; }
+        .dark .ql-picker { color: #9ca3af !important; }
+        .block-handle { cursor: grab; }
+        .block-handle:active { cursor: grabbing; }
+        .sortable-ghost { opacity: 0.4; background: #f3f4f6; }
+        .dark .sortable-ghost { background: #374151; }
+    </style>
+
+    <!-- Scripts -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
     <script>
-        // Initialize Data
-        let objectives = [];
-        let keyPoints = [];
-        let vocabulary = [];
-        let exercises = [];
-        let resources = [];
+        // Block Editor Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('blocks-container');
+            const emptyState = document.getElementById('empty-state');
+            let blockCount = 0;
+            let editors = {};
 
-        // Helper to create list items
-        function createListItem(text, removeFnIndex, type = 'default') {
-            return `
-                <div class="flex items-start justify-between p-2 bg-gray-50 dark:bg-gray-700/50 rounded-md text-sm group">
-                    <span class="text-gray-700 dark:text-gray-300 break-words">${text}</span>
-                    <button type="button" onclick="${removeFnIndex}" class="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-            `;
-        }
-
-        // Objectives
-        function updateObjectivesDisplay() {
-            document.getElementById('objectives-list').innerHTML = objectives.map((o, i) => createListItem(o, `removeObjective(${i})`)).join('');
-            document.getElementById('objectives-hidden').value = JSON.stringify(objectives);
-        }
-        function removeObjective(i) { objectives.splice(i, 1); updateObjectivesDisplay(); }
-        document.getElementById('add-objective-btn').addEventListener('click', () => {
-            const el = document.getElementById('objective-input');
-            if(el.value.trim()) { objectives.push(el.value.trim()); el.value=''; updateObjectivesDisplay(); }
-        });
-
-        // Key Points
-        function updateKeyPointsDisplay() {
-            document.getElementById('keypoints-list').innerHTML = keyPoints.map((k, i) => createListItem(k, `removeKeyPoint(${i})`)).join('');
-            document.getElementById('keypoints-hidden').value = JSON.stringify(keyPoints);
-        }
-        function removeKeyPoint(i) { keyPoints.splice(i, 1); updateKeyPointsDisplay(); }
-        document.getElementById('add-keypoint-btn').addEventListener('click', () => {
-            const el = document.getElementById('keypoint-input');
-            if(el.value.trim()) { keyPoints.push(el.value.trim()); el.value=''; updateKeyPointsDisplay(); }
-        });
-
-        // Vocabulary
-        function updateVocabularyDisplay() {
-            document.getElementById('vocabulary-list').innerHTML = vocabulary.map((v, i) => `
-                <div class="p-2 bg-gray-50 dark:bg-gray-700/50 rounded-md text-sm group relative">
-                    <div class="font-medium text-gray-900 dark:text-white">${v.word}</div>
-                    <div class="text-gray-500 dark:text-gray-400 text-xs">${v.definition}</div>
-                    <button type="button" onclick="removeVocabulary(${i})" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-            `).join('');
-            document.getElementById('vocabulary-hidden').value = JSON.stringify(vocabulary);
-        }
-        function removeVocabulary(i) { vocabulary.splice(i, 1); updateVocabularyDisplay(); }
-        document.getElementById('add-vocabulary-btn').addEventListener('click', () => {
-            const w = document.getElementById('vocab-word-input');
-            const d = document.getElementById('vocab-definition-input');
-            if(w.value.trim() && d.value.trim()) { vocabulary.push({word: w.value.trim(), definition: d.value.trim()}); w.value=''; d.value=''; updateVocabularyDisplay(); }
-        });
-
-        // Exercises
-        function updateExercisesDisplay() {
-            document.getElementById('exercises-list').innerHTML = exercises.map((e, i) => createListItem(e, `removeExercise(${i})`)).join('');
-            document.getElementById('exercises-hidden').value = JSON.stringify(exercises);
-        }
-        function removeExercise(i) { exercises.splice(i, 1); updateExercisesDisplay(); }
-        document.getElementById('add-exercise-btn').addEventListener('click', () => {
-            const el = document.getElementById('exercise-input');
-            if(el.value.trim()) { exercises.push(el.value.trim()); el.value=''; updateExercisesDisplay(); }
-        });
-
-        // Resources
-        function updateResourcesDisplay() {
-            document.getElementById('resources-list').innerHTML = resources.map((r, i) => `
-                <div class="p-2 bg-gray-50 dark:bg-gray-700/50 rounded-md text-sm group relative">
-                    <a href="${r.url}" target="_blank" class="font-medium text-indigo-600 hover:underline block truncate pr-6">${r.title}</a>
-                    <button type="button" onclick="removeResource(${i})" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
-            `).join('');
-            document.getElementById('resources-hidden').value = JSON.stringify(resources);
-        }
-        function removeResource(i) { resources.splice(i, 1); updateResourcesDisplay(); }
-        document.getElementById('add-resource-btn').addEventListener('click', () => {
-            const t = document.getElementById('resource-title-input');
-            const u = document.getElementById('resource-url-input');
-            if(t.value.trim() && u.value.trim()) { resources.push({title: t.value.trim(), url: u.value.trim()}); t.value=''; u.value=''; updateResourcesDisplay(); }
-        });
-
-        // AI Generation
-        document.getElementById('generate-content').addEventListener('click', function() {
-            const title = document.getElementById('title').value;
-            if (!title) { alert('Please enter a lesson title first.'); return; }
-            
-            const btn = this;
-            const originalText = btn.innerHTML;
-            btn.innerHTML = 'Generating...';
-            btn.disabled = true;
-
-            fetch('{{ route("ai.generate") }}', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                body: JSON.stringify({ prompt: `Write a lesson content for "${title}".`, provider: 'gemini' })
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.content) document.getElementById('content').value = data.content;
-            })
-            .finally(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+            // Initialize Sortable
+            new Sortable(container, {
+                animation: 150,
+                handle: '.block-handle',
+                ghostClass: 'sortable-ghost',
+                onEnd: function() {
+                    // Optional: Auto-save or update order
+                }
             });
+
+            // Block Templates
+            const templates = {
+                heading: (id) => `
+                    <div class="flex items-center gap-4 mb-2">
+                        <select class="block w-32 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" onchange="updateHeadingLevel('${id}', this.value)">
+                            <option value="h2">H2</option>
+                            <option value="h3">H3</option>
+                            <option value="h4">H4</option>
+                        </select>
+                        <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg font-bold dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Heading Text" data-type="content">
+                    </div>
+                `,
+                text: (id) => `
+                    <div class="bg-white dark:bg-gray-800">
+                        <div id="editor-${id}" class="h-48"></div>
+                    </div>
+                `,
+                image: (id) => `
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Image URL" data-type="src">
+                            <button type="button" class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-sm hover:bg-gray-200 dark:hover:bg-gray-600">Upload</button>
+                        </div>
+                        <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Image Caption (Alt Text)" data-type="caption">
+                    </div>
+                `,
+                video: (id) => `
+                    <div class="space-y-3">
+                        <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Video URL (YouTube, Vimeo)" data-type="src">
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Supported: YouTube, Vimeo, MP4 files</div>
+                    </div>
+                `,
+                code: (id) => `
+                    <div class="space-y-2">
+                        <select class="block w-32 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" data-type="language">
+                            <option value="javascript">JavaScript</option>
+                            <option value="php">PHP</option>
+                            <option value="html">HTML</option>
+                            <option value="css">CSS</option>
+                            <option value="python">Python</option>
+                        </select>
+                        <textarea class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-mono dark:bg-gray-700 dark:border-gray-600 dark:text-white" rows="6" placeholder="Paste code here..." data-type="code"></textarea>
+                    </div>
+                `,
+                note: (id) => `
+                    <div class="flex gap-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 rounded-r-md">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="flex-grow">
+                            <textarea class="block w-full bg-transparent border-0 p-0 text-yellow-800 dark:text-yellow-200 placeholder-yellow-500 focus:ring-0 sm:text-sm" rows="2" placeholder="Note content..." data-type="content"></textarea>
+                        </div>
+                    </div>
+                `
+            };
+
+            // Add Block Function
+            window.addBlock = function(type, data = null) {
+                const id = 'block-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+                const block = document.createElement('div');
+                block.className = 'group relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all';
+                block.dataset.id = id;
+                block.dataset.type = type;
+
+                block.innerHTML = `
+                    <div class="absolute left-0 top-0 bottom-0 w-8 flex items-center justify-center cursor-move block-handle opacity-0 group-hover:opacity-100 transition-opacity bg-gray-50 dark:bg-gray-700/50 rounded-l-lg border-r border-gray-200 dark:border-gray-700">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/></svg>
+                    </div>
+                    <div class="pl-6 pr-8">
+                        <div class="mb-2 flex items-center justify-between">
+                            <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">${type}</span>
+                            <button type="button" onclick="removeBlock('${id}')" class="text-gray-400 hover:text-red-500 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                            </button>
+                        </div>
+                        <div class="block-content">
+                            ${templates[type](id)}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(block);
+                emptyState.style.display = 'none';
+
+                // Initialize specific block types
+                if (type === 'text') {
+                    const quill = new Quill(`#editor-${id}`, {
+                        theme: 'snow',
+                        modules: {
+                            toolbar: [
+                                ['bold', 'italic', 'underline', 'strike'],
+                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                [{ 'color': [] }, { 'background': [] }],
+                                ['link', 'clean']
+                            ]
+                        }
+                    });
+                    editors[id] = quill;
+                    
+                    if (data && data.content) {
+                        quill.root.innerHTML = data.content;
+                    }
+                } else if (data) {
+                    // Populate other block types
+                    const inputs = block.querySelectorAll('[data-type]');
+                    inputs.forEach(input => {
+                        const key = input.dataset.type;
+                        if (data[key]) input.value = data[key];
+                    });
+                }
+            };
+
+            // Remove Block Function
+            window.removeBlock = function(id) {
+                const block = document.querySelector(`[data-id="${id}"]`);
+                if (block) {
+                    if (editors[id]) delete editors[id];
+                    block.remove();
+                    if (container.children.length <= 1) emptyState.style.display = 'block';
+                }
+            };
+
+            // Form Submission
+            document.getElementById('lessonForm').addEventListener('submit', function(e) {
+                const blocks = [];
+                const blockElements = container.querySelectorAll('[data-id]');
+
+                blockElements.forEach(el => {
+                    const id = el.dataset.id;
+                    const type = el.dataset.type;
+                    let content = {};
+
+                    if (type === 'text') {
+                        content.content = editors[id].root.innerHTML;
+                    } else {
+                        const inputs = el.querySelectorAll('[data-type]');
+                        inputs.forEach(input => {
+                            content[input.dataset.type] = input.value;
+                        });
+                        
+                        // Special handling for heading level
+                        if (type === 'heading') {
+                            const select = el.querySelector('select');
+                            if (select) content.level = select.value;
+                        }
+                    }
+
+                    blocks.push({ type, data: content });
+                });
+
+                document.getElementById('content-json').value = JSON.stringify(blocks);
+            });
+
+            // Load existing content if any (for edit mode)
+            const existingContent = @json(old('content', isset($lesson) ? $lesson->content : '[]'));
+            try {
+                const parsed = typeof existingContent === 'string' ? JSON.parse(existingContent) : existingContent;
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    parsed.forEach(block => addBlock(block.type, block.data));
+                }
+            } catch (e) {
+                console.log('No structured content found, or legacy content');
+                // Handle legacy content (plain text)
+                if (existingContent && typeof existingContent === 'string' && existingContent.length > 0 && existingContent !== '[]') {
+                    addBlock('text', { content: existingContent });
+                }
+            }
         });
     </script>
 </x-app-layout>
