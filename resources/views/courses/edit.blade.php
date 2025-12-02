@@ -295,9 +295,27 @@
                                             <p class="text-gray-500 dark:text-gray-400">Highlight this course on the homepage.</p>
                                         </div>
                                     </div>
+
+                                    <div class="pt-6 mt-6 border-t border-gray-200 dark:border-gray-700">
+                                        <h4 class="text-sm font-medium text-red-600 dark:text-red-400 mb-4">Danger Zone</h4>
+                                        <div class="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                            <div>
+                                                <h5 class="text-sm font-medium text-red-800 dark:text-red-200">Delete Course</h5>
+                                                <p class="text-xs text-red-600 dark:text-red-300 mt-1">Once deleted, this course cannot be recovered.</p>
+                                            </div>
+                                            <button type="button" onclick="if(confirm('Are you sure you want to delete this course? This action cannot be undone.')) document.getElementById('delete-course-form').submit();" class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                                Delete Course
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </form>
+                    
+                    <form id="delete-course-form" action="{{ route('courses.destroy', $course) }}" method="POST" class="hidden">
+                        @csrf
+                        @method('DELETE')
                     </form>
                 </div>
             </div>
