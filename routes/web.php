@@ -14,6 +14,7 @@ use App\Http\Controllers\StudentLessonController;
 use App\Http\Controllers\AIController;
 use App\Http\Controllers\CourseSectionController;
 use App\Http\Controllers\CourseStudentController;
+use App\Http\Controllers\ClassroomController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,6 +56,12 @@ Route::middleware(['auth', 'approved'])->group(function () {
         
         // Certificate
         Route::get('/courses/{course}/certificate', [\App\Http\Controllers\CertificateController::class, 'download'])->name('certificates.download');
+        
+        // Classrooms (Student)
+        Route::get('/classrooms/browse', [ClassroomController::class, 'browse'])->name('classrooms.browse');
+        Route::get('/classrooms/my', [ClassroomController::class, 'myClassrooms'])->name('classrooms.my');
+        Route::post('/classrooms/join-code', [ClassroomController::class, 'joinByCode'])->name('classrooms.join-code');
+        Route::post('/classrooms/{classroom}/leave', [ClassroomController::class, 'leave'])->name('classrooms.leave');
     });
 
     Route::middleware('role:tutor')->group(function () {
@@ -75,7 +82,15 @@ Route::middleware(['auth', 'approved'])->group(function () {
         // Students
         Route::get('/courses/{course}/students', [CourseStudentController::class, 'index'])->name('courses.students.index');
         Route::delete('/courses/{course}/students/{student}', [CourseStudentController::class, 'destroy'])->name('courses.students.destroy');
+        
+        // Classrooms (Tutor)
+        Route::resource('classrooms', ClassroomController::class);
+        Route::post('/classrooms/{classroom}/start', [ClassroomController::class, 'startSession'])->name('classrooms.start');
+        Route::post('/classrooms/{classroom}/end', [ClassroomController::class, 'endSession'])->name('classrooms.end');
     });
+    
+    // Shared classroom room access (both tutors and students)
+    Route::get('/classrooms/{classroom}/room', [ClassroomController::class, 'room'])->name('classrooms.room');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
