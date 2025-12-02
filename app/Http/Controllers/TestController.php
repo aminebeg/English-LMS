@@ -29,7 +29,7 @@ class TestController extends Controller
 
         $course->tests()->create($validated);
 
-        return redirect()->route('courses.show', $course)->with('status', 'Test created!');
+        return redirect()->route('courses.edit', $course)->with('status', 'Test created! 🎉');
     }
 
     public function show(Test $test)
@@ -56,15 +56,52 @@ class TestController extends Controller
 
         $test->update($validated);
 
-        return redirect()->route('courses.show', $test->course)->with('status', 'Test updated!');
+        return redirect()->route('courses.edit', $test->course)->with('status', 'Test updated! ✅');
     }
 
     public function destroy(Test $test)
     {
         $this->authorize('update', $test->course);
+        $course = $test->course;
         $test->delete();
 
-        return redirect()->route('courses.show', $test->course)->with('status', 'Test deleted!');
+        return redirect()->route('courses.edit', $course)->with('status', 'Test deleted!');
+    }
+
+    public function duplicate(Test $test)
+    {
+        $this->authorize('update', $test->course);
+        
+        // Create a copy of the test
+        $newTest = $test->replicate();
+        $newTest->title = $test->title . ' (Copy)';
+        $newTest->order = $test->course->tests()->max('order') + 1;
+        $newTest->save();
+        
+        // Copy all questions
+        foreach ($test->questions as $question) {
+            $newQuestion = $question->replicate();
+            $newQuestion->test_id = $newTest->id;
+            $newQuestion->save();
+        }
+        
+        return redirect()->route('courses.edit', $test->course)->with('status', 'Test duplicated successfully! 📋');
+    }
+
+    public function reorder(Request $request, Course $course)
+    {
+        $this->authorize('update', $course);
+        
+        $validated = $request->validate([
+            'order' => 'required|array',
+            'order.*' => 'required|exists:tests,id'
+        ]);
+
+        foreach ($validated['order'] as $index => $testId) {
+            $course->tests()->where('id', $testId)->update(['order' => $index + 1]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Tests reordered successfully!']);
     }
 
     public function results(Test $test)

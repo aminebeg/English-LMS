@@ -88,6 +88,7 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
+        $course->load('tests.questions', 'sections.lessons');
         return view('courses.edit', compact('course'));
     }
 

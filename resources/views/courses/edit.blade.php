@@ -31,6 +31,9 @@
                         <a href="#curriculum" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white" onclick="setActiveNav(this)">
                             <span class="truncate">Curriculum</span>
                         </a>
+                        <a href="#tests" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white" onclick="setActiveNav(this)">
+                            <span class="truncate">Tests</span>
+                        </a>
                         <a href="#media" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white" onclick="setActiveNav(this)">
                             <span class="truncate">Media & Tags</span>
                         </a>
@@ -221,6 +224,88 @@
                                                         @method('DELETE')
                                                         <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium">Delete</button>
                                                     </form>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Section: Tests -->
+                        <div id="tests" class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-8 scroll-mt-24">
+                            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">Tests & Assessments</h3>
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Create and manage course tests.</p>
+                                </div>
+                                <button type="button" onclick="document.getElementById('add-test-modal').classList.remove('hidden')" class="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">
+                                    + Add Test
+                                </button>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                @if($course->tests->isEmpty())
+                                    <div class="text-center py-8 text-gray-500 dark:text-gray-400 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        </svg>
+                                        <p class="mt-2">No tests yet. Create a test to assess your students.</p>
+                                    </div>
+                                @else
+                                    <div class="space-y-3" id="tests-list">
+                                        @foreach($course->tests->sortBy('order') as $test)
+                                            <div class="border dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-700/30 group hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors cursor-move" data-test-id="{{ $test->id }}">
+                                                <div class="flex justify-between items-start">
+                                                    <div class="flex items-start gap-3 flex-1">
+                                                        <div class="mt-1 cursor-grab active:cursor-grabbing opacity-40 group-hover:opacity-100 transition-opacity">
+                                                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+                                                            </svg>
+                                                        </div>
+                                                        <div class="flex-1">
+                                                            <div class="flex items-center gap-3">
+                                                                <h4 class="font-medium text-gray-900 dark:text-white">{{ $test->title }}</h4>
+                                                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                                                    Passing Score: {{ $test->passing_score }}%
+                                                                </span>
+                                                            </div>
+                                                            <div class="mt-2 flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                                                                <span class="flex items-center">
+                                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                                    </svg>
+                                                                    {{ $test->questions->count() }} questions
+                                                                </span>
+                                                                <span class="flex items-center">
+                                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                                                    </svg>
+                                                                    Order: {{ $test->order }}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <a href="{{ route('tests.show', $test) }}" class="px-3 py-1 text-xs font-medium text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 rounded-md transition-colors">
+                                                            Manage Questions
+                                                        </a>
+                                                        <form action="{{ route('tests.duplicate', $test) }}" method="POST" class="inline">
+                                                            @csrf
+                                                            <button type="submit" class="px-3 py-1 text-xs font-medium text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-50 dark:bg-purple-900/30 rounded-md transition-colors" title="Duplicate this test">
+                                                                Duplicate
+                                                            </button>
+                                                        </form>
+                                                        <a href="{{ route('tests.edit', $test) }}" class="px-3 py-1 text-xs font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md transition-colors">
+                                                            Edit
+                                                        </a>
+                                                        <form action="{{ route('tests.destroy', $test) }}" method="POST" class="inline" onsubmit="return confirm('Delete this test? All questions will be deleted too.')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="px-3 py-1 text-xs font-medium text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 bg-red-50 dark:bg-red-900/30 rounded-md transition-colors">
+                                                                Delete
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -524,6 +609,87 @@
             document.getElementById('edit-section-form').action = `/sections/${id}`;
             document.getElementById('edit-section-modal').classList.remove('hidden');
         }
+
+        // Test Drag and Drop Reordering
+        const testsList = document.getElementById('tests-list');
+        if (testsList) {
+            let draggedElement = null;
+
+            testsList.addEventListener('dragstart', (e) => {
+                if (e.target.hasAttribute('data-test-id')) {
+                    draggedElement = e.target;
+                    e.target.style.opacity = '0.5';
+                }
+            });
+
+            testsList.addEventListener('dragend', (e) => {
+                if (e.target.hasAttribute('data-test-id')) {
+                    e.target.style.opacity = '1';
+                }
+            });
+
+            testsList.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(testsList, e.clientY);
+                if (afterElement == null) {
+                    testsList.appendChild(draggedElement);
+                } else {
+                    testsList.insertBefore(draggedElement, afterElement);
+                }
+            });
+
+            testsList.addEventListener('drop', (e) => {
+                e.preventDefault();
+                updateTestOrder();
+            });
+
+            // Make elements draggable
+            document.querySelectorAll('[data-test-id]').forEach(el => {
+                el.setAttribute('draggable', 'true');
+            });
+
+            function getDragAfterElement(container, y) {
+                const draggableElements = [...container.querySelectorAll('[data-test-id]:not(.dragging)')];
+
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+
+            function updateTestOrder() {
+                const tests = [...testsList.querySelectorAll('[data-test-id]')];
+                const order = tests.map(el => el.getAttribute('data-test-id'));
+
+                fetch('{{ route('tests.reorder', $course) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ order })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update order numbers in UI
+                        tests.forEach((el, index) => {
+                            const orderSpan = el.querySelector('span:contains("Order:")');
+                            if (orderSpan) {
+                                orderSpan.textContent = `Order: ${index + 1}`;
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.error('Error updating test order:', error));
+            }
+        }
     </script>
 
     <!-- Add Section Modal -->
@@ -600,6 +766,54 @@
                     <button type="submit"
                         class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
                         Update Section
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Test Modal -->
+    <div id="add-test-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Add New Test</h3>
+                <button type="button" onclick="document.getElementById('add-test-modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-500">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <form action="{{ route('tests.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="course_id" value="{{ $course->id }}">
+                <div class="space-y-4">
+                    <div>
+                        <label for="test-title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Test Title <span class="text-red-500">*</span></label>
+                        <input type="text" name="title" id="test-title" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white"
+                            placeholder="e.g., Unit 1 Quiz">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="test-passing-score" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Passing Score (%) <span class="text-red-500">*</span></label>
+                            <input type="number" name="passing_score" id="test-passing-score" required min="0" max="100" value="70"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                        </div>
+                        <div>
+                            <label for="test-order" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order <span class="text-red-500">*</span></label>
+                            <input type="number" name="order" id="test-order" required min="1" value="{{ $course->tests->count() + 1 }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end gap-3">
+                    <button type="button" onclick="document.getElementById('add-test-modal').classList.add('hidden')"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
+                        Create Test
                     </button>
                 </div>
             </form>

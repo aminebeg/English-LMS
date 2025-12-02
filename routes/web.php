@@ -63,6 +63,8 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::resource('materials', MaterialController::class)->except(['index']);
         Route::resource('tests', TestController::class)->except(['index']);
         Route::get('/tests/{test}/results', [TestController::class, 'results'])->name('tests.results');
+        Route::post('/tests/{test}/duplicate', [TestController::class, 'duplicate'])->name('tests.duplicate');
+        Route::post('/courses/{course}/tests/reorder', [TestController::class, 'reorder'])->name('tests.reorder');
         Route::resource('questions', QuestionController::class)->except(['index', 'show']);
         
         // Sections
