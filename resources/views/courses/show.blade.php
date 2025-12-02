@@ -108,34 +108,99 @@
                     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Course Content</h2>
-                            <a href="{{ route('lessons.create', ['course' => $course->id]) }}" 
-                                class="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
-                                + Add Lesson
-                            </a>
+                            @if(auth()->id() === $course->tutor_id)
+                                <a href="{{ route('lessons.create', ['course' => $course->id]) }}" 
+                                    class="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
+                                    + Add Lesson
+                                </a>
+                            @endif
                         </div>
                         
-                        <div class="space-y-2">
-                            @forelse($course->lessons->sortBy('order') as $lesson)
-                                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                    <div class="flex items-center gap-3">
-                                        <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-medium">
-                                            {{ $lesson->order }}
-                                        </span>
-                                        <a href="{{ route('lessons.show', $lesson) }}" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400">
-                                            {{ $lesson->title }}
-                                        </a>
-                                        @if($lesson->is_preview)
-                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">Preview</span>
+                        @if($course->sections->isNotEmpty())
+                            <div class="space-y-4">
+                                @foreach($course->sections as $section)
+                                    <div class="border dark:border-gray-700 rounded-lg overflow-hidden">
+                                        <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 border-b dark:border-gray-700 flex justify-between items-center">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">{{ $section->title }}</h3>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ $section->lessons->count() }} lessons</span>
+                                        </div>
+                                        <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                            @foreach($section->lessons as $lesson)
+                                                <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                                    <div class="flex items-center gap-3">
+                                                        <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-medium">
+                                                            {{ $loop->iteration }}
+                                                        </span>
+                                                        <a href="{{ route('lessons.show', $lesson) }}" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400">
+                                                            {{ $lesson->title }}
+                                                        </a>
+                                                        @if($lesson->is_preview)
+                                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 font-medium bg-indigo-50 dark:bg-indigo-900/20 px-2 py-0.5 rounded">Preview</span>
+                                                        @endif
+                                                    </div>
+                                                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ $lesson->duration_minutes ?? '10' }} min</span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                @php
+                                    $orphanedLessons = $course->lessons->whereNull('course_section_id')->sortBy('order');
+                                @endphp
+                                @if($orphanedLessons->isNotEmpty())
+                                    <div class="border dark:border-gray-700 rounded-lg overflow-hidden">
+                                        <div class="bg-gray-50 dark:bg-gray-700/50 px-4 py-3 border-b dark:border-gray-700">
+                                            <h3 class="font-medium text-gray-900 dark:text-white">General</h3>
+                                        </div>
+                                        <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                            @foreach($orphanedLessons as $lesson)
+                                                <div class="flex items-center justify-between p-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                                    <div class="flex items-center gap-3">
+                                                        <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-medium">
+                                                            {{ $loop->iteration }}
+                                                        </span>
+                                                        <a href="{{ route('lessons.show', $lesson) }}" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400">
+                                                            {{ $lesson->title }}
+                                                        </a>
+                                                        @if($lesson->is_preview)
+                                                            <span class="text-xs text-indigo-600 dark:text-indigo-400 font-medium bg-indigo-50 dark:bg-indigo-900/20 px-2 py-0.5 rounded">Preview</span>
+                                                        @endif
+                                                    </div>
+                                                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ $lesson->duration_minutes ?? '10' }} min</span>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                        @else
+                            <div class="space-y-2">
+                                @forelse($course->lessons->sortBy('order') as $lesson)
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <div class="flex items-center gap-3">
+                                            <span class="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-medium">
+                                                {{ $lesson->order }}
+                                            </span>
+                                            <a href="{{ route('lessons.show', $lesson) }}" class="text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400">
+                                                {{ $lesson->title }}
+                                            </a>
+                                            @if($lesson->is_preview)
+                                                <span class="text-xs text-indigo-600 dark:text-indigo-400 font-medium">Preview</span>
+                                            @endif
+                                        </div>
+                                        <span class="text-sm text-gray-600 dark:text-gray-400">{{ $lesson->duration_minutes ?? '10' }} min</span>
+                                    </div>
+                                @empty
+                                    <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                                        No lessons yet. 
+                                        @if(auth()->id() === $course->tutor_id)
+                                            <a href="{{ route('lessons.create', ['course' => $course->id]) }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">Add your first lesson</a>
                                         @endif
                                     </div>
-                                    <span class="text-sm text-gray-600 dark:text-gray-400">{{ $lesson->duration_minutes ?? '10' }} min</span>
-                                </div>
-                            @empty
-                                <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-                                    No lessons yet. <a href="{{ route('lessons.create', ['course' => $course->id]) }}" class="text-indigo-600 dark:text-indigo-400 hover:underline">Add your first lesson</a>
-                                </div>
-                            @endforelse
-                        </div>
+                                @endforelse
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Tests -->

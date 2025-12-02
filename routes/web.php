@@ -12,6 +12,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\TestAttemptController;
 use App\Http\Controllers\StudentLessonController;
 use App\Http\Controllers\AIController;
+use App\Http\Controllers\CourseSectionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -62,6 +63,11 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::resource('tests', TestController::class)->except(['index']);
         Route::get('/tests/{test}/results', [TestController::class, 'results'])->name('tests.results');
         Route::resource('questions', QuestionController::class)->except(['index', 'show']);
+        
+        // Sections
+        Route::post('/courses/{course}/sections', [CourseSectionController::class, 'store'])->name('courses.sections.store');
+        Route::put('/sections/{section}', [CourseSectionController::class, 'update'])->name('sections.update');
+        Route::delete('/sections/{section}', [CourseSectionController::class, 'destroy'])->name('sections.destroy');
     });
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

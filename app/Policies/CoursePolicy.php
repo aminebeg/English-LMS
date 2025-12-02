@@ -19,12 +19,24 @@ class CoursePolicy
     /**
      * Determine whether the user can view the model.
      */
-    /**
-     * Determine whether the user can view the model.
-     */
     public function view(User $user, Course $course): bool
     {
-        return $user->id === $course->tutor_id || $user->hasRole('editor');
+        // Tutors can view their own courses
+        if ($user->id === $course->tutor_id) {
+            return true;
+        }
+        
+        // Editors can view all courses
+        if ($user->hasRole('editor')) {
+            return true;
+        }
+        
+        // Students can view courses they're enrolled in
+        if ($user->hasRole('student') && $course->isEnrolledBy($user)) {
+            return true;
+        }
+        
+        return false;
     }
 
     /**

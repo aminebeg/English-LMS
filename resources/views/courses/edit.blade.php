@@ -28,6 +28,9 @@
                         <a href="#details" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white" onclick="setActiveNav(this)">
                             <span class="truncate">Course Details</span>
                         </a>
+                        <a href="#curriculum" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white" onclick="setActiveNav(this)">
+                            <span class="truncate">Curriculum</span>
+                        </a>
                         <a href="#media" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white" onclick="setActiveNav(this)">
                             <span class="truncate">Media & Tags</span>
                         </a>
@@ -172,6 +175,48 @@
                                     <textarea id="instructor_bio" name="instructor_bio" rows="3"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">{{ old('instructor_bio', $course->instructor_bio) }}</textarea>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: Curriculum -->
+                        <div id="curriculum" class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden mb-8 scroll-mt-24">
+                            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 flex justify-between items-center">
+                                <div>
+                                    <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">Curriculum</h3>
+                                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage sections and structure.</p>
+                                </div>
+                                <button type="button" onclick="document.getElementById('add-section-modal').classList.remove('hidden')" class="px-3 py-1.5 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 transition-colors">
+                                    + Add Section
+                                </button>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                @if($course->sections->isEmpty())
+                                    <div class="text-center py-8 text-gray-500 dark:text-gray-400 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg">
+                                        <p>No sections yet. Create a section to organize your lessons.</p>
+                                    </div>
+                                @else
+                                    <div class="space-y-4">
+                                        @foreach($course->sections as $section)
+                                            <div class="border dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-700/30 flex justify-between items-center group hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors">
+                                                <div>
+                                                    <h4 class="font-medium text-gray-900 dark:text-white">{{ $section->title }}</h4>
+                                                    @if($section->description)
+                                                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $section->description }}</p>
+                                                    @endif
+                                                    <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 block">{{ $section->lessons->count() }} lessons</span>
+                                                </div>
+                                                <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <button type="button" onclick="editSection({{ $section->id }}, '{{ addslashes($section->title) }}', '{{ addslashes($section->description) }}')" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 text-sm font-medium">Edit</button>
+                                                    <form action="{{ route('sections.destroy', $section) }}" method="POST" class="inline" onsubmit="return confirm('Delete this section? Lessons will be kept but unassigned.')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
