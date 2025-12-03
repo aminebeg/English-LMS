@@ -108,6 +108,9 @@
                 <x-responsive-nav-link :href="route('enrollments.index')" :active="request()->routeIs('enrollments.*')">
                     {{ __('My Courses') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('classrooms.browse')" :active="request()->routeIs('classrooms.browse')">
+                    {{ __('Classrooms') }}
+                </x-responsive-nav-link>
             @endif
 
             @if(Auth::user()->hasRole('tutor'))
@@ -116,6 +119,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('courses.create')" :active="request()->routeIs('courses.create')">
                     {{ __('Create Course') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('classrooms.index')" :active="request()->routeIs('classrooms.*')">
+                    {{ __('Classrooms') }}
                 </x-responsive-nav-link>
             @endif
 

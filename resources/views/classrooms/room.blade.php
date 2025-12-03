@@ -5,168 +5,287 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $classroom->title }} - Live Room</title>
-    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    <script src="https://8x8.vc/vpaas-magic-cookie-9c575dcad3cc43679f065eb4d0fd1bed/external_api.js"></script>
-    
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
+        body { background-color: #111827; color: white; overflow: hidden; }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+        .video-container {
+            position: relative;
+            background: #1f2937;
+            border-radius: 0.5rem;
             overflow: hidden;
+            aspect-ratio: 16/9;
         }
-        
-        #meet-container {
-            height: 100vh;
-            width: 100vw;
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
-        
-        #classroom-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(17, 24, 39, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(75, 85, 99, 0.3);
-            padding: 1rem 1.5rem;
-            z-index: 50;
+        .participant-label {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+        .controls-bar {
+            height: 80px;
+            background: #1f2937;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            border-top: 1px solid #374151;
         }
-        
-        #meet {
-            height: calc(100vh - 70px);
-            margin-top: 70px;
+        .control-btn {
+            padding: 0.75rem;
+            border-radius: 50%;
+            background: #374151;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s;
         }
+        .control-btn:hover { background: #4b5563; }
+        .control-btn.active { background: #ef4444; }
     </style>
 </head>
-<body class="bg-gray-900">
-    {{-- Header --}}
-    <div id="classroom-header">
-        <div class="flex items-center gap-4">
-            <div>
-                <h1 class="text-white font-semibold text-lg">{{ $classroom->title }}</h1>
-                <p class="text-gray-400 text-xs">
-                    Join Code: <span class="text-white font-mono">{{ $classroom->join_code }}</span>
-                    @if($classroom->course)
-                        <span class="ml-3">📚 {{ $classroom->course->title }}</span>
-                    @endif
-                </p>
-            </div>
-            
-            @if($classroom->status === 'live')
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500 text-white animate-pulse">
-                    <span class="mr-1">🔴</span> LIVE
-                </span>
-            @endif
+<body>
+
+    <div class="video-grid" id="video-grid">
+        <!-- Local Video -->
+        <div class="video-container">
+            <video id="local-video" autoplay muted playsinline></video>
+            <div class="participant-label">You ({{ auth()->user()->name }})</div>
         </div>
-        
-        <div class="flex items-center gap-3">
-            @if($classroom->isTeacher(auth()->user()))
-                {{-- Teacher Controls --}}
-                @if($classroom->status !== 'live')
-                    <form action="{{ route('classrooms.start', $classroom) }}" method="POST" class="inline">
-                        @csrf
-                        <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors">
-                            Start Session
-                        </button>
-                    </form>
-                @else
-                    <form action="{{ route('classrooms.end', $classroom) }}" method="POST" class="inline" onsubmit="return confirm('End this session? All participants will be disconnected.')">
-                        @csrf
-                        <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors">
-                            End Session
-                        </button>
-                    </form>
-                @endif
-            @else
-                {{-- Student Controls --}}
-                <form action="{{ route('classrooms.leave', $classroom) }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium rounded-md transition-colors">
-                        Leave Room
-                    </button>
-                </form>
-            @endif
-            
-            <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-md transition-colors">
-                Exit
-            </a>
-        </div>
+        <!-- Remote videos will be added here -->
     </div>
 
-    {{-- Jitsi Meet Container --}}
-    <div id="meet"></div>
+    <div class="controls-bar">
+        <button class="control-btn" id="btn-mic" onclick="toggleAudio()">
+            🎤
+        </button>
+        <button class="control-btn" id="btn-cam" onclick="toggleVideo()">
+            📷
+        </button>
+        <form action="{{ route('classrooms.leave', $classroom) }}" method="POST">
+            @csrf
+            <button type="submit" class="control-btn" style="background: #ef4444; border-radius: 8px; padding: 0.75rem 1.5rem;">
+                Leave Room
+            </button>
+        </form>
+    </div>
 
     <script>
-        // Jitsi Meet Configuration
-        const domain = '8x8.vc';
-        const options = {
-            roomName: 'vpaas-magic-cookie-9c575dcad3cc43679f065eb4d0fd1bed/{{ $classroom->join_code }}',
-            width: '100%',
-            height: '100%',
-            parentNode: document.querySelector('#meet'),
-            configOverwrite: {
-                startWithAudioMuted: {{ $classroom->isTeacher(auth()->user()) ? 'false' : 'true' }},
-                startWithVideoMuted: {{ $classroom->isTeacher(auth()->user()) ? 'false' : 'true' }},
-                prejoinPageEnabled: false,
-                disableDeepLinking: true,
-            },
-            interfaceConfigOverwrite: {
-                TOOLBAR_BUTTONS: [
-                    'microphone',
-                    'camera',
-                    'closedcaptions',
-                    'desktop',
-                    'fullscreen',
-                    'fodeviceselection',
-                    'hangup',
-                    'chat',
-                    'raisehand',
-                    'videoquality',
-                    'filmstrip',
-                    'tileview',
-                    'settings',
-                    'shortcuts',
-                    'stats',
-                ],
-                SHOW_JITSI_WATERMARK: false,
-                SHOW_WATERMARK_FOR_GUESTS: false,
-                DEFAULT_BACKGROUND: '#111827',
-                DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
-            },
-            userInfo: {
-                displayName: '{{ auth()->user()->name }}',
-                email: '{{ auth()->user()->email }}',
-            }
+        const classroomId = {{ $classroom->id }};
+        const currentUserId = {{ auth()->id() }};
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+        
+        const localVideo = document.getElementById('local-video');
+        const videoGrid = document.getElementById('video-grid');
+        
+        let localStream;
+        let peers = {}; // Store RTCPeerConnection objects: { userId: connection }
+        let iceCandidatesQueue = {}; // Store candidates that arrive before remote description
+
+        const rtcConfig = {
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' }
+            ]
         };
 
-        // Initialize Jitsi Meet
-        const api = new JitsiMeetExternalAPI(domain, options);
+        // Initialize
+        async function init() {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideo.srcObject = localStream;
+                
+                // Start polling for signals
+                setInterval(pollSignals, 2000);
+                
+                console.log('WebRTC initialized. Waiting for peers...');
+            } catch (err) {
+                console.error('Error accessing media devices:', err);
+                alert('Could not access camera/microphone. Please allow permissions.');
+            }
+        }
 
-        // Event listeners
-        api.addEventListener('readyToClose', () => {
-            window.location.href = '{{ route('classrooms.show', $classroom) }}';
-        });
+        // Poll for signals from server
+        async function pollSignals() {
+            try {
+                const response = await fetch(`/classrooms/${classroomId}/signal`, {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const data = await response.json();
+                
+                // Handle signals
+                for (const signal of data.signals) {
+                    await handleSignal(signal);
+                }
 
-        api.addEventListener('videoConferenceJoined', (data) => {
-            console.log('Joined conference:', data);
+                // Handle new participants (simple discovery)
+                for (const p of data.participants) {
+                    if (p.id !== currentUserId && !peers[p.id]) {
+                        // Found a new peer we aren't connected to yet.
+                        // To avoid collision, let's say the one with higher ID initiates the offer.
+                        if (currentUserId > p.id) {
+                            createPeer(p.id, p.name, true);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error('Polling error:', err);
+            }
+        }
+
+        // Handle incoming signal
+        async function handleSignal(signal) {
+            console.log('Received signal:', signal.type, 'from', signal.sender_id);
+            const senderId = signal.sender_id;
+            const payload = JSON.parse(signal.payload);
+
+            if (!peers[senderId]) {
+                createPeer(senderId, signal.sender.name, false);
+            }
             
-            @if($classroom->isTeacher(auth()->user()))
-                // Teacher starts with unmuted mic and camera
-                api.executeCommand('toggleAudio');
-                api.executeCommand('toggleVideo');
-            @endif
-        });
+            const pc = peers[senderId];
 
-        // Notify server when user leaves
-        window.addEventListener('beforeunload', () => {
-            // You can send AJAX request here to update participant status
-        });
+            if (signal.type === 'offer') {
+                await pc.setRemoteDescription(new RTCSessionDescription(payload));
+                const answer = await pc.createAnswer();
+                await pc.setLocalDescription(answer);
+                sendSignal(senderId, 'answer', JSON.stringify(answer));
+                
+                // Process queued candidates
+                if (iceCandidatesQueue[senderId]) {
+                    for (const candidate of iceCandidatesQueue[senderId]) {
+                        await pc.addIceCandidate(candidate);
+                    }
+                    delete iceCandidatesQueue[senderId];
+                }
+            } else if (signal.type === 'answer') {
+                await pc.setRemoteDescription(new RTCSessionDescription(payload));
+            } else if (signal.type === 'candidate') {
+                if (pc.remoteDescription) {
+                    await pc.addIceCandidate(new RTCIceCandidate(payload));
+                } else {
+                    if (!iceCandidatesQueue[senderId]) iceCandidatesQueue[senderId] = [];
+                    iceCandidatesQueue[senderId].push(new RTCIceCandidate(payload));
+                }
+            }
+        }
+
+        // Create Peer Connection
+        function createPeer(remoteUserId, remoteUserName, isInitiator) {
+            console.log('Creating peer connection to:', remoteUserId, 'Initiator:', isInitiator);
+            
+            const pc = new RTCPeerConnection(rtcConfig);
+            peers[remoteUserId] = pc;
+
+            // Add local tracks
+            localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+
+            // Handle ICE candidates
+            pc.onicecandidate = (event) => {
+                if (event.candidate) {
+                    sendSignal(remoteUserId, 'candidate', JSON.stringify(event.candidate));
+                }
+            };
+
+            // Handle remote stream
+            pc.ontrack = (event) => {
+                console.log('Received remote track from:', remoteUserId);
+                let videoContainer = document.getElementById(`container-${remoteUserId}`);
+                
+                if (!videoContainer) {
+                    videoContainer = document.createElement('div');
+                    videoContainer.id = `container-${remoteUserId}`;
+                    videoContainer.className = 'video-container';
+                    videoContainer.innerHTML = `
+                        <video id="video-${remoteUserId}" autoplay playsinline></video>
+                        <div class="participant-label">${remoteUserName}</div>
+                    `;
+                    videoGrid.appendChild(videoContainer);
+                }
+                
+                const remoteVideo = document.getElementById(`video-${remoteUserId}`);
+                if (remoteVideo.srcObject !== event.streams[0]) {
+                    remoteVideo.srcObject = event.streams[0];
+                }
+            };
+            
+            // Cleanup on disconnect
+            pc.oniceconnectionstatechange = () => {
+                if (pc.iceConnectionState === 'disconnected' || pc.iceConnectionState === 'closed') {
+                    document.getElementById(`container-${remoteUserId}`)?.remove();
+                    delete peers[remoteUserId];
+                }
+            };
+
+            // If initiator, create offer
+            if (isInitiator) {
+                pc.onnegotiationneeded = async () => {
+                    try {
+                        const offer = await pc.createOffer();
+                        await pc.setLocalDescription(offer);
+                        sendSignal(remoteUserId, 'offer', JSON.stringify(offer));
+                    } catch (err) {
+                        console.error('Error creating offer:', err);
+                    }
+                };
+            }
+            
+            return pc;
+        }
+
+        // Send signal to server
+        async function sendSignal(receiverId, type, payload) {
+            await fetch(`/classrooms/${classroomId}/signal`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    receiver_id: receiverId,
+                    type: type,
+                    payload: payload
+                })
+            });
+        }
+
+        // Controls
+        function toggleAudio() {
+            const audioTrack = localStream.getAudioTracks()[0];
+            if (audioTrack) {
+                audioTrack.enabled = !audioTrack.enabled;
+                document.getElementById('btn-mic').classList.toggle('active');
+                document.getElementById('btn-mic').innerText = audioTrack.enabled ? '🎤' : '🔇';
+            }
+        }
+
+        function toggleVideo() {
+            const videoTrack = localStream.getVideoTracks()[0];
+            if (videoTrack) {
+                videoTrack.enabled = !videoTrack.enabled;
+                document.getElementById('btn-cam').classList.toggle('active');
+                document.getElementById('btn-cam').innerText = videoTrack.enabled ? '📷' : '🚫';
+            }
+        }
+
+        // Start
+        init();
     </script>
 </body>
 </html>

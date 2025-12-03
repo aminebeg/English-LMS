@@ -92,8 +92,25 @@
                         <x-input-error :messages="$errors->get('scheduled_at')" class="mt-2" />
                     </div>
 
-                    {{-- Public/Private --}}
-                    <div class="mb-8">
+                    {{-- Price (for standalone classrooms) --}}
+                    <div class="mb-6">
+                        <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Price (USD)
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-500 sm:text-sm">$</span>
+                            </div>
+                            <input type="number" id="price" name="price" value="{{ old('price', 0) }}" min="0" step="0.01"
+                                class="w-full pl-7 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
+                                placeholder="0.00">
+                        </div>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Set to 0 for free access. Pricing applies to standalone classrooms only.</p>
+                        <x-input-error :messages="$errors->get('price')" class="mt-2" />
+                    </div>
+
+                    {{-- Public/Private & Featured --}}
+                    <div class="mb-8 space-y-4">
                         <div class="flex items-start">
                             <div class="flex items-center h-5">
                                 <input id="is_public" name="is_public" type="checkbox" value="1" {{ old('is_public', true) ? 'checked' : '' }}
@@ -102,6 +119,17 @@
                             <div class="ml-3">
                                 <label for="is_public" class="font-medium text-gray-700 dark:text-gray-300">Public Classroom</label>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">Allow anyone to discover and join this classroom</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <div class="flex items-center h-5">
+                                <input id="is_featured" name="is_featured" type="checkbox" value="1" {{ old('is_featured') ? 'checked' : '' }}
+                                    class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                            </div>
+                            <div class="ml-3">
+                                <label for="is_featured" class="font-medium text-gray-700 dark:text-gray-300">Featured Classroom</label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Display this classroom on the homepage (standalone classrooms only)</p>
                             </div>
                         </div>
                     </div>

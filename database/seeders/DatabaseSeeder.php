@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         // Create roles first
         $this->call(RoleSeeder::class);
         $this->call(EditorSeeder::class);
+        $this->call(TestUsersSeeder::class);
         
         // Create default test user (optional)
         // User::factory(10)->create();

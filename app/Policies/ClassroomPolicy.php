@@ -64,6 +64,11 @@ class ClassroomPolicy
             return true;
         }
 
+        // Allow enrolled students of the linked course
+        if ($classroom->course && $classroom->course->isEnrolledBy($user)) {
+            return true;
+        }
+
         // Private classrooms only by participants
         return $classroom->hasParticipant($user);
     }

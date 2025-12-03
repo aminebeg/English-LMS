@@ -17,6 +17,9 @@ class Classroom extends Model
         'max_participants',
         'is_active',
         'is_public',
+        'price',
+        'is_featured',
+        'is_paid_access',
         'scheduled_at',
         'duration_minutes',
         'status',
@@ -26,6 +29,9 @@ class Classroom extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'is_public' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_paid_access' => 'boolean',
+        'price' => 'decimal:2',
         'scheduled_at' => 'datetime',
         'settings' => 'array',
     ];
@@ -87,6 +93,26 @@ class Classroom extends Model
         return $query->where('status', 'live');
     }
 
+    public function scopeFeatured($query)
+    {
+        return $query->where('is_featured', true);
+    }
+
+    public function scopeStandalone($query)
+    {
+        return $query->whereNull('course_id');
+    }
+
+    public function scopeFree($query)
+    {
+        return $query->where('price', 0);
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->where('price', '>', 0);
+    }
+
     // Helper methods
     public function isTeacher($user)
     {
@@ -113,6 +139,35 @@ class Classroom extends Model
         return $this->is_active && 
                $this->status !== 'ended' && 
                $this->participantsCount() < $this->max_participants;
+    }
+
+    public function isFree()
+    {
+        return $this->price == 0;
+    }
+
+    public function isPaid()
+    {
+        return $this->price > 0;
+    }
+
+    public function isStandalone()
+    {
+        return $this->course_id === null;
+    }
+
+    public function hasAccess($user)
+    {
+        // Free classrooms are accessible to everyone
+        if ($this->isFree()) {
+            return true;
+        }
+
+        // Check if user has paid for access
+        return $this->participants()
+            ->where('user_id', $user->id)
+            ->where('is_paid_access', true)
+            ->exists();
     }
 
     public function startSession()

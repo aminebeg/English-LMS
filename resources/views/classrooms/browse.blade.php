@@ -8,22 +8,7 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400">Join live virtual classrooms and learn from expert teachers</p>
             </div>
 
-            {{-- Join by Code --}}
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-8">
-                <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Have a join code?</h3>
-                <form action="{{ route('classrooms.join-code') }}" method="POST" class="flex gap-3">
-                    @csrf
-                    <input type="text" name="join_code" placeholder="Enter 8-digit code" maxlength="8" required
-                        class="flex-1 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm uppercase"
-                        style="text-transform: uppercase;">
-                    <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-md transition-colors shadow-sm">
-                        Join
-                    </button>
-                </form>
-                @error('join_code')
-                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
-            </div>
+
 
             {{-- Classrooms Grid --}}
             @if($classrooms->isEmpty())
@@ -112,6 +97,26 @@
                     {{ $classrooms->links() }}
                 </div>
             @endif
+
+            {{-- Join by Code (Moved to bottom) --}}
+            <div class="mt-12 border-t border-gray-200 dark:border-gray-700 pt-8">
+                <div class="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                    <h3 class="text-sm font-medium text-gray-900 dark:text-white mb-3">Join a Private Session</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Enter a code if you were invited to a private classroom.</p>
+                    <form action="{{ route('classrooms.join-code') }}" method="POST" class="flex gap-3">
+                        @csrf
+                        <input type="text" name="join_code" placeholder="Enter 8-digit code" maxlength="8" required
+                            class="flex-1 rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm uppercase"
+                            style="text-transform: uppercase;">
+                        <button type="submit" class="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-md transition-colors shadow-sm">
+                            Join
+                        </button>
+                    </form>
+                    @error('join_code')
+                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

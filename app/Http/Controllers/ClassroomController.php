@@ -82,13 +82,17 @@ class ClassroomController extends Controller
             'description' => 'nullable|string',
             'course_id' => 'nullable|exists:courses,id',
             'max_participants' => 'required|integer|min:2|max:500',
+            'price' => 'nullable|numeric|min:0',
             'is_public' => 'boolean',
+            'is_featured' => 'boolean',
             'scheduled_at' => 'nullable|date|after:now',
             'duration_minutes' => 'nullable|integer|min:15|max:480',
         ]);
 
         $validated['teacher_id'] = auth()->id();
         $validated['is_public'] = $request->has('is_public');
+        $validated['is_featured'] = $request->has('is_featured');
+        $validated['price'] = $request->input('price', 0);
 
         $classroom = Classroom::create($validated);
 
@@ -104,8 +108,13 @@ class ClassroomController extends Controller
         $this->authorize('view', $classroom);
 
         $classroom->load(['teacher', 'course', 'participants.user', 'sessions']);
+        
+        // Check if current user is a participant
+        $isParticipant = $classroom->participants()
+            ->where('user_id', auth()->id())
+            ->exists();
 
-        return view('classrooms.show', compact('classroom'));
+        return view('classrooms.show', compact('classroom', 'isParticipant'));
     }
 
     /**
@@ -190,14 +199,18 @@ class ClassroomController extends Controller
             'description' => 'nullable|string',
             'course_id' => 'nullable|exists:courses,id',
             'max_participants' => 'required|integer|min:2|max:500',
+            'price' => 'nullable|numeric|min:0',
             'is_public' => 'boolean',
+            'is_featured' => 'boolean',
             'is_active' => 'boolean',
             'scheduled_at' => 'nullable|date',
             'duration_minutes' => 'nullable|integer|min:15|max:480',
         ]);
 
         $validated['is_public'] = $request->has('is_public');
+        $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
+        $validated['price'] = $request->input('price', 0);
 
         $classroom->update($validated);
 
