@@ -1,11 +1,11 @@
 # English LMS - Learning Management System
 
-A comprehensive, modern Learning Management System designed specifically for English language education. Built with Laravel 11 and featuring live virtual classrooms, comprehensive testing, and a beautiful freemium course marketplace.
+A comprehensive, modern Learning Management System designed specifically for English language education. Built with Laravel 11 and featuring comprehensive testing, and a beautiful freemium course marketplace.
 
 ## ✨ Key Features
 
 - 🎓 **Complete Course Management** - Create structured courses with sections, lessons, and materials
-- 🎥 **Live Virtual Classrooms** - Real-time video conferencing with Jitsi Meet (free)
+
 - 📝 **Flexible Testing System** - Quizzes and exams with multiple question types
 - 💎 **Freemium Course Preview** - Allow students to preview lessons before enrolling
 - 👥 **Role-Based Access** - Separate interfaces for Students, Tutors, and Editors
@@ -86,7 +86,7 @@ For complete feature documentation, see [PLATFORM_FEATURES.md](PLATFORM_FEATURES
 - **User Roles & Authentication** - How the role system works
 - **Course Management** - Creating and managing courses
 - **Testing & Assessments** - Quiz and exam creation
-- **Virtual Classrooms** - Live video conferencing setup
+
 - **Student Experience** - Learning and progress tracking
 - **Freemium System** - Course preview functionality
 
@@ -95,7 +95,7 @@ For complete feature documentation, see [PLATFORM_FEATURES.md](PLATFORM_FEATURES
 - **Backend**: Laravel 11
 - **Frontend**: Tailwind CSS + Alpine.js
 - **Database**: MySQL
-- **Video**: Jitsi Meet (free)
+
 - **Build**: Vite
 
 ## 📋 Main Features Overview
@@ -105,7 +105,7 @@ For complete feature documentation, see [PLATFORM_FEATURES.md](PLATFORM_FEATURES
 - Enroll in free or paid courses
 - Watch lessons and download materials
 - Take quizzes and exams
-- Join live virtual classrooms
+
 - Track learning progress
 - Download completion certificates
 
@@ -114,7 +114,7 @@ For complete feature documentation, see [PLATFORM_FEATURES.md](PLATFORM_FEATURES
 - Design curriculum with sections and lessons
 - Upload learning materials
 - Create tests with various question types
-- Host live virtual classroom sessions
+
 - Manage student enrollments
 - Track student progress
 
@@ -137,16 +137,7 @@ Course
 └── Tests (course-level final exams)
 ```
 
-## 🎥 Virtual Classrooms
 
-Powered by Jitsi Meet, the virtual classrooms include:
-- HD video and audio
-- Screen sharing
-- Real-time chat
-- Hand raising
-- Recording capability
-- Up to 500 participants
-- **100% Free** - No API keys required
 
 ## 📝 Testing System
 

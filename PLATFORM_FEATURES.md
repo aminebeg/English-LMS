@@ -12,22 +12,21 @@
 2. [User Roles & Authentication](#user-roles--authentication)
 3. [Course Management](#course-management)
 4. [Testing & Assessments](#testing--assessments)
-5. [Virtual Classrooms](#virtual-classrooms)
-6. [Student Learning Experience](#student-learning-experience)
-7. [Freemium Preview System](#freemium-preview-system)
-8. [Technical Stack](#technical-stack)
-9. [Test Credentials](#test-credentials)
+5. [Student Learning Experience](#student-learning-experience)
+6. [Freemium Preview System](#freemium-preview-system)
+7. [Technical Stack](#technical-stack)
+8. [Test Credentials](#test-credentials)
 
 ---
 
 ## 🎯 Platform Overview
 
-**English LMS** is a comprehensive Learning Management System designed for English language education. The platform supports three distinct user roles (Students, Tutors, and Editors) and offers a complete suite of features including course creation, live virtual classrooms, assessments, and progress tracking.
+**English LMS** is a comprehensive Learning Management System designed for English language education. The platform supports three distinct user roles (Students, Tutors, and Editors) and offers a complete suite of features including course creation, assessments, and progress tracking.
 
 ### Key Highlights:
 - ✅ **Modern UI/UX** with dark mode support
 - ✅ **Role-based access control** (Student, Tutor, Editor)
-- ✅ **Live video conferencing** with Jitsi Meet (free)
+
 - ✅ **Flexible course structure** with sections and lessons
 - ✅ **Comprehensive testing system** with multiple question types
 - ✅ **Freemium model** with course previews
@@ -51,7 +50,7 @@
 - Take tests and quizzes
 - Track progress
 - Download completion certificates
-- Join virtual classrooms
+
 - View enrolled courses dashboard
 
 ### 2. **Tutors (Teachers)**
@@ -65,10 +64,7 @@
 - Questions
 - Test Results
 - Enrollments
-- Classrooms
-- Classroom Participants
-- Classroom Sessions
-- Classroom Messages (optional)
+
 - Certificates
 
 ---
@@ -128,14 +124,7 @@ Password: password
 - [x] Test results and feedback
 - [x] Progress tracking integration
 
-**Virtual Classrooms**:
-- [x] Classroom creation
-- [x] Session management
-- [x] Jitsi Meet integration
-- [x] Join code system
-- [x] Participant tracking
-- [x] Live room interface
-- [x] Teacher controls
+
 
 **Student Experience**:
 - [x] Course browsing
@@ -172,7 +161,7 @@ Password: password
 - [ ] Student engagement metrics
 - [ ] Course completion rates
 - [ ] Test performance analytics
-- [ ] Classroom attendance reports
+
 
 **Social Features**:
 - [ ] Course reviews and ratings
@@ -211,8 +200,7 @@ Password: password
 4. Mark some lessons as preview
 5. Create tests and questions
 6. Publish course
-7. Create a virtual classroom
-8. Start a live session
+
 
 **As Student**:
 1. Login as student@test.com
@@ -221,7 +209,7 @@ Password: password
 4. Enroll in a course
 5. View lessons
 6. Take a test
-7. Join a virtual classroom
+
 8. Track progress
 9. Download certificate (at 100%)
 

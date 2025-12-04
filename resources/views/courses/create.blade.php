@@ -224,7 +224,7 @@
                 },
                 body: JSON.stringify({ 
                     prompt: `Write a compelling, professional course description for an English learning course titled "${title}". Make it engaging and highlight the key benefits. Keep it to 2-3 paragraphs.`, 
-                    provider: 'gemini' 
+                    provider: 'cerebras' 
                 })
             })
             .then(r => r.json())

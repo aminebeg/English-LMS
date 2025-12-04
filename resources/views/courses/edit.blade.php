@@ -143,7 +143,7 @@
                                 <div>
                                     <div class="flex justify-between items-center mb-1">
                                         <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description <span class="text-red-500">*</span></label>
-                                        <button type="button" id="generate-description" class="text-xs text-indigo-600 hover:text-indigo-500 font-medium">✨ Generate with AI</button>
+                                        <button type="button" id="generate-description" class="text-xs text-indigo-600 hover:text-indigo-500 font-medium">✨ Generate with AI (Cerebras)</button>
                                     </div>
                                     <textarea id="description" name="description" rows="5" required
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">{{ old('description', $course->description) }}</textarea>
@@ -219,11 +219,7 @@
                                                 </div>
                                                 <div class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <button type="button" onclick="editSection({{ $section->id }}, '{{ addslashes($section->title) }}', '{{ addslashes($section->description) }}')" class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 text-sm font-medium">Edit</button>
-                                                    <form action="{{ route('sections.destroy', $section) }}" method="POST" class="inline" onsubmit="return confirm('Delete this section? Lessons will be kept but unassigned.')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium">Delete</button>
-                                                    </form>
+                                                    <button type="button" onclick="deleteSection({{ $section->id }})" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 text-sm font-medium">Delete</button>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -317,25 +313,21 @@
                                                         </div>
                                                     </div>
                                                     <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <a href="{{ route('tests.results', $test) }}" class="px-3 py-1 text-xs font-medium text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 bg-green-50 dark:bg-green-900/30 rounded-md transition-colors">
+                                                            Results
+                                                        </a>
                                                         <a href="{{ route('tests.show', $test) }}" class="px-3 py-1 text-xs font-medium text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 rounded-md transition-colors">
                                                             Manage Questions
                                                         </a>
-                                                        <form action="{{ route('tests.duplicate', $test) }}" method="POST" class="inline">
-                                                            @csrf
-                                                            <button type="submit" class="px-3 py-1 text-xs font-medium text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-50 dark:bg-purple-900/30 rounded-md transition-colors" title="Duplicate this test">
-                                                                Duplicate
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" onclick="duplicateTest({{ $test->id }})" class="px-3 py-1 text-xs font-medium text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 bg-purple-50 dark:bg-purple-900/30 rounded-md transition-colors" title="Duplicate this test">
+                                                            Duplicate
+                                                        </button>
                                                         <a href="{{ route('tests.edit', $test) }}" class="px-3 py-1 text-xs font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md transition-colors">
                                                             Edit
                                                         </a>
-                                                        <form action="{{ route('tests.destroy', $test) }}" method="POST" class="inline" onsubmit="return confirm('Delete this test? All questions will be deleted too.')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="px-3 py-1 text-xs font-medium text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 bg-red-50 dark:bg-red-900/30 rounded-md transition-colors">
-                                                                Delete
-                                                            </button>
-                                                        </form>
+                                                        <button type="button" onclick="deleteTest({{ $test->id }})" class="px-3 py-1 text-xs font-medium text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 bg-red-50 dark:bg-red-900/30 rounded-md transition-colors">
+                                                            Delete
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -487,12 +479,50 @@
                         @csrf
                         @method('DELETE')
                     </form>
+
+                    <!-- Hidden Forms for Actions -->
+                    <form id="delete-section-form" method="POST" class="hidden">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+
+                    <form id="delete-test-form" method="POST" class="hidden">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+
+                    <form id="duplicate-test-form" method="POST" class="hidden">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Action Functions
+        function deleteSection(id) {
+            if (confirm('Delete this section? Lessons will be kept but unassigned.')) {
+                const form = document.getElementById('delete-section-form');
+                form.action = `/sections/${id}`;
+                form.submit();
+            }
+        }
+
+        function deleteTest(id) {
+            if (confirm('Delete this test? All questions will be deleted too.')) {
+                const form = document.getElementById('delete-test-form');
+                form.action = `/tests/${id}`;
+                form.submit();
+            }
+        }
+
+        function duplicateTest(id) {
+            const form = document.getElementById('duplicate-test-form');
+            form.action = `/tests/${id}/duplicate`;
+            form.submit();
+        }
+
         // Navigation Active State
         function setActiveNav(element) {
             document.querySelectorAll('nav a').forEach(el => {
@@ -621,7 +651,10 @@
             fetch('{{ route("ai.generate") }}', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                body: JSON.stringify({ prompt: `Write a course description for "${title}".`, provider: 'gemini' })
+                body: JSON.stringify({ 
+                    prompt: `Write a course description for "${title}".`, 
+                    provider: 'cerebras' 
+                })
             })
             .then(r => r.json())
             .then(data => {
