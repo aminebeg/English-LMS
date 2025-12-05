@@ -77,7 +77,7 @@
                                         <select id="category" name="category" required
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
                                             <option value="">Select Category</option>
-                                            @foreach(['Business English', 'Academic English', 'Conversational English', 'Grammar & Writing', 'Test Preparation', 'Pronunciation', 'Vocabulary', 'Literature', 'Creative Writing', 'Other'] as $cat)
+                                            @foreach(['Language Learning', 'Business & Professional', 'Academic & Research', 'Technology & Programming', 'Arts & Creative', 'Science & Math', 'Test Preparation', 'Personal Development', 'Health & Wellness', 'Other'] as $cat)
                                                 <option value="{{ $cat }}" {{ old('category', $course->category) == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                                             @endforeach
                                         </select>

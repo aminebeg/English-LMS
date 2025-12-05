@@ -106,6 +106,27 @@
                                             @endif
                                             @break
 
+                                        @case('audio')
+                                            @if(!empty($data['src']))
+                                                <div class="my-6">
+                                                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                                                        <div class="flex items-center gap-3 mb-2">
+                                                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                                                            </svg>
+                                                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Audio Content</span>
+                                                        </div>
+                                                        <audio controls class="w-full">
+                                                            <source src="{{ $data['src'] }}" type="audio/mpeg">
+                                                            <source src="{{ $data['src'] }}" type="audio/wav">
+                                                            <source src="{{ $data['src'] }}" type="audio/ogg">
+                                                            Your browser does not support the audio element.
+                                                        </audio>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @break
+
                                         @case('code')
                                             <pre class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code class="language-{{ $data['language'] ?? 'text' }}">{{ $data['code'] ?? '' }}</code></pre>
                                             @break
