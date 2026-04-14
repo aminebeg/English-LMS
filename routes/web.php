@@ -14,8 +14,7 @@ use App\Http\Controllers\StudentLessonController;
 use App\Http\Controllers\AIController;
 use App\Http\Controllers\CourseSectionController;
 use App\Http\Controllers\CourseStudentController;
-use App\Http\Controllers\ClassroomController;
-use App\Http\Controllers\SignalingController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -51,20 +50,13 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::post('/learn/lessons/{lesson}/incomplete', [StudentLessonController::class, 'markIncomplete'])->name('learn.lessons.incomplete');
 
         // Test taking
+        Route::get('/my-test-results', [TestAttemptController::class, 'index'])->name('tests.my-results');
         Route::get('/tests/{test}/start', [TestAttemptController::class, 'start'])->name('tests.start');
         Route::post('/tests/{test}/submit', [TestAttemptController::class, 'submit'])->name('tests.submit');
         Route::get('/test-results/{testResult}', [TestAttemptController::class, 'result'])->name('tests.result');
 
         // Certificate
         Route::get('/courses/{course}/certificate', [\App\Http\Controllers\CertificateController::class, 'download'])->name('certificates.download');
-
-        // Classrooms (Student)
-        Route::get('/classrooms/browse', [ClassroomController::class, 'browse'])->name('classrooms.browse');
-        Route::get('/classrooms/my', [ClassroomController::class, 'myClassrooms'])->name('classrooms.my');
-        Route::post('/classrooms/join-code', [ClassroomController::class, 'joinByCode'])->name('classrooms.join-code');
-        Route::post('/classrooms/{classroom}/signal', [SignalingController::class, 'send'])->name('classrooms.signal.send');
-        Route::get('/classrooms/{classroom}/signal', [SignalingController::class, 'poll'])->name('classrooms.signal.poll');
-        Route::post('/classrooms/{classroom}/leave', [ClassroomController::class, 'leave'])->name('classrooms.leave');
     });
 
     Route::middleware('role:tutor')->group(function () {
@@ -86,15 +78,7 @@ Route::middleware(['auth', 'approved'])->group(function () {
         // Students
         Route::get('/courses/{course}/students', [CourseStudentController::class, 'index'])->name('courses.students.index');
         Route::delete('/courses/{course}/students/{student}', [CourseStudentController::class, 'destroy'])->name('courses.students.destroy');
-
-        // Classrooms (Tutor)
-        Route::resource('classrooms', ClassroomController::class);
-        Route::post('/classrooms/{classroom}/start', [ClassroomController::class, 'startSession'])->name('classrooms.start');
-        Route::post('/classrooms/{classroom}/end', [ClassroomController::class, 'endSession'])->name('classrooms.end');
     });
-
-    // Shared classroom room access (both tutors and students)
-    Route::get('/classrooms/{classroom}/room', [ClassroomController::class, 'room'])->name('classrooms.room');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -102,6 +86,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
 
     Route::post('/ai/generate', [AIController::class, 'generate'])->name('ai.generate');
     Route::post('/ai/generate-questions', [AIController::class, 'generateQuestions'])->name('ai.generate-questions');
+
+    // Media uploads
+    Route::post('/media/upload', [\App\Http\Controllers\MediaController::class, 'upload'])->name('media.upload');
+    Route::delete('/media/delete', [\App\Http\Controllers\MediaController::class, 'delete'])->name('media.delete');
 });
 
 require __DIR__ . '/auth.php';

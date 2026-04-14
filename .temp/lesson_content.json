@@ -1,0 +1,40 @@
+[
+    {
+        "type": "heading",
+        "data": {
+            "level": "h2",
+            "content": "Welcome to the Media Upload Test Lesson"
+        }
+    },
+    {
+        "type": "text",
+        "data": {
+            "content": "<p>This lesson demonstrates various media types including <strong>images</strong>, <em>videos</em>, and audio files.</p>"
+        }
+    },
+    {
+        "type": "image",
+        "data": {
+            "src": "https://picsum.photos/800/400",
+            "caption": "A beautiful test image"
+        }
+    },
+    {
+        "type": "video",
+        "data": {
+            "src": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        }
+    },
+    {
+        "type": "audio",
+        "data": {
+            "src": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        }
+    },
+    {
+        "type": "note",
+        "data": {
+            "content": "This is an important note about the lesson content!"
+        }
+    }
+]

@@ -540,16 +540,42 @@
                 image: (id) => `
                     <div class="space-y-3">
                         <div class="flex items-center gap-3">
-                            <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Image URL" data-type="src">
-                            <button type="button" class="px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-sm hover:bg-gray-200 dark:hover:bg-gray-600">Upload</button>
+                            <input type="text" id="img-url-${id}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Image URL or upload a file" data-type="src">
+                            <input type="file" id="img-file-${id}" accept="image/*" class="hidden" onchange="handleMediaUpload('${id}', 'image', this)">
+                            <button type="button" onclick="document.getElementById('img-file-${id}').click()" class="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700 transition-colors whitespace-nowrap">
+                                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                Upload
+                            </button>
+                        </div>
+                        <div id="img-progress-${id}" class="hidden">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-indigo-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Uploading...</p>
+                        </div>
+                        <div id="img-preview-${id}" class="hidden mt-2">
+                            <img src="" alt="Preview" class="max-h-48 rounded-lg border border-gray-200 dark:border-gray-700">
                         </div>
                         <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Image Caption (Alt Text)" data-type="caption">
                     </div>
                 `,
                 video: (id) => `
                     <div class="space-y-3">
-                        <input type="text" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Video URL (YouTube, Vimeo)" data-type="src">
-                        <div class="text-xs text-gray-500 dark:text-gray-400">Supported: YouTube, Vimeo, MP4 files</div>
+                        <div class="flex items-center gap-3">
+                            <input type="text" id="vid-url-${id}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Video URL (YouTube, Vimeo) or upload MP4" data-type="src">
+                            <input type="file" id="vid-file-${id}" accept="video/*" class="hidden" onchange="handleMediaUpload('${id}', 'video', this)">
+                            <button type="button" onclick="document.getElementById('vid-file-${id}').click()" class="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700 transition-colors whitespace-nowrap">
+                                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                Upload
+                            </button>
+                        </div>
+                        <div id="vid-progress-${id}" class="hidden">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-indigo-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Uploading...</p>
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Supported: YouTube, Vimeo, or upload MP4/WebM files</div>
                     </div>
                 `,
                 code: (id) => `
@@ -574,6 +600,30 @@
                         <div class="flex-grow">
                             <textarea class="block w-full bg-transparent border-0 p-0 text-yellow-800 dark:text-yellow-200 placeholder-yellow-500 focus:ring-0 sm:text-sm" rows="2" placeholder="Note content..." data-type="content"></textarea>
                         </div>
+                    </div>
+                `,
+                audio: (id) => `
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3">
+                            <input type="text" id="aud-url-${id}" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Audio URL or upload a file" data-type="src">
+                            <input type="file" id="aud-file-${id}" accept="audio/*" class="hidden" onchange="handleMediaUpload('${id}', 'audio', this)">
+                            <button type="button" onclick="document.getElementById('aud-file-${id}').click()" class="px-3 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700 transition-colors whitespace-nowrap">
+                                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                                Upload
+                            </button>
+                        </div>
+                        <div id="aud-progress-${id}" class="hidden">
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-indigo-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Uploading...</p>
+                        </div>
+                        <div id="aud-player-${id}" class="hidden mt-2">
+                            <audio controls class="w-full">
+                                <source src="" type="audio/mpeg">
+                            </audio>
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400">Supported: MP3, WAV, OGG formats</div>
                     </div>
                 `
             };
@@ -644,8 +694,8 @@
                 }
             };
 
-            // Form Submission
-            document.getElementById('lessonForm').addEventListener('submit', function (e) {
+            // Function to collect content blocks into JSON
+            window.collectContentBlocks = function() {
                 const blocks = [];
                 const blockElements = container.querySelectorAll('[data-id]');
 
@@ -672,6 +722,21 @@
                     blocks.push({ type, data: content });
                 });
 
+                return blocks;
+            };
+
+            // Form Submission Handler
+            document.getElementById('lessonForm').addEventListener('submit', function(e) {
+                const blocks = collectContentBlocks();
+                
+                // VALIDATION: Prevent empty lesson submissions
+                if (blocks.length === 0) {
+                    e.preventDefault();
+                    alert('❌ Please add at least one content block to your lesson!\n\nYour lesson needs content for students to learn from.');
+                    return false;
+                }
+
+                // Set the JSON value
                 document.getElementById('content-json').value = JSON.stringify(blocks);
             });
 
@@ -688,6 +753,107 @@
                 if (existingContent && typeof existingContent === 'string' && existingContent.length > 0 && existingContent !== '[]') {
                     addBlock('text', { content: existingContent });
                 }
+            }
+
+            // Media Upload Handler
+            window.handleMediaUpload = async function(blockId, mediaType, fileInput) {
+                const file = fileInput.files[0];
+                if (!file) return;
+
+                // Get prefix based on media type
+                const prefix = mediaType === 'image' ? 'img' : mediaType === 'video' ? 'vid' : 'aud';
+                const urlInput = document.getElementById(`${prefix}-url-${blockId}`);
+                const progressDiv = document.getElementById(`${prefix}-progress-${blockId}`);
+                const progressBar = progressDiv?.querySelector('div > div');
+
+                // Show progress
+                if (progressDiv) {
+                    progressDiv.classList.remove('hidden');
+                    if (progressBar) progressBar.style.width = '10%';
+                }
+
+                try {
+                    // Create FormData
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('type', mediaType);
+
+                    // Upload file
+                    const response = await fetch('{{ route("media.upload") }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: formData
+                    });
+
+                    if (progressBar) progressBar.style.width = '90%';
+
+                    const data = await response.json();
+
+                    if (data.success && data.url) {
+                        // Set the URL in the input
+                        urlInput.value = data.url;
+
+                        // Show preview for images
+                        if (mediaType === 'image') {
+                            const preview = document.getElementById(`${prefix}-preview-${blockId}`);
+                            if (preview) {
+                                const img = preview.querySelector('img');
+                                if (img) {
+                                    img.src = data.url;
+                                    preview.classList.remove('hidden');
+                                }
+                            }
+                        }
+
+                        // Show player for audio
+                        if (mediaType === 'audio') {
+                            const player = document.getElementById(`${prefix}-player-${blockId}`);
+                            if (player) {
+                                const source = player.querySelector('source');
+                                if (source) {
+                                    source.src = data.url;
+                                    player.querySelector('audio').load();
+                                    player.classList.remove('hidden');
+                                }
+                            }
+                        }
+
+                        if (progressBar) progressBar.style.width = '100%';
+
+                        // Hide progress after a delay
+                        setTimeout(() => {
+                            if (progressDiv) progressDiv.classList.add('hidden');
+                        }, 1000);
+
+                        // Show success message
+                        showNotification('File uploaded successfully!', 'success');
+                    } else {
+                        throw new Error(data.error || 'Upload failed');
+                    }
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    showNotification('Upload failed: ' + error.message, 'error');
+                    if (progressDiv) progressDiv.classList.add('hidden');
+                }
+
+                // Reset file input
+                fileInput.value = '';
+            };
+
+            // Simple notification function
+            function showNotification(message, type = 'info') {
+                const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+                const notification = document.createElement('div');
+                notification.className = `fixed bottom-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-opacity duration-300`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
             }
         });
     </script>

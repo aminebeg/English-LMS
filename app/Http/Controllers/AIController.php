@@ -36,51 +36,56 @@ class AIController extends Controller
         $request->validate([
             'test_id' => 'required|exists:tests,id',
             'topic' => 'required|string',
-            'count' => 'integer|min:1|max:10|default:5',
+            'count' => 'nullable|integer|min:1|max:10',
             'provider' => 'nullable|string|in:gemini,cerebras',
         ]);
 
         $count = $request->input('count', 5);
         $topic = $request->input('topic');
         $testId = $request->input('test_id');
+        $provider = $request->input('provider', 'cerebras'); // Default to cerebras
 
-        $prompt = "Generate {$count} multiple choice questions about '{$topic}' for an English learning test. 
-        Return ONLY a raw JSON array (no markdown formatting, no code blocks). 
-        Each object in the array must have:
-        - 'content' (the question text)
-        - 'type' (must be 'multiple_choice')
-        - 'options' (array of 4 strings)
-        - 'correct_answer' (one of the strings from options)
-        - 'explanation' (brief explanation of why it's correct)
-        
-        Example format:
-        [
-            {
-                \"content\": \"What is the past tense of 'go'?\",
-                \"type\": \"multiple_choice\",
-                \"options\": [\"goed\", \"gone\", \"went\", \"going\"],
-                \"correct_answer\": \"went\",
-                \"explanation\": \"'Go' is an irregular verb.\"
-            }
-        ]";
+        $prompt = "Generate exactly {$count} multiple choice questions about '{$topic}' for an English learning test.
+
+IMPORTANT: Return ONLY a valid JSON array with no additional text, no markdown, no code blocks.
+
+Each question object must have these exact fields:
+- \"content\": the question text (string)
+- \"type\": \"multiple_choice\" (string)
+- \"options\": array of exactly 4 answer choices (array of strings)
+- \"correct_answer\": the correct answer which must be one of the options (string)
+
+Example of the EXACT format needed:
+[{\"content\":\"What is the past tense of go?\",\"type\":\"multiple_choice\",\"options\":[\"goed\",\"gone\",\"went\",\"going\"],\"correct_answer\":\"went\"}]
+
+Generate {$count} questions now:";
 
         try {
-            $content = $this->aiService->generateContent(
-                $prompt,
-                $request->input('provider', 'gemini')
-            );
+            $content = $this->aiService->generateContent($prompt, $provider);
 
-            // Clean up the response if it contains markdown code blocks
-            $content = preg_replace('/^```json\s*|\s*```$/', '', trim($content));
+            // Log the raw response for debugging
+            \Log::info('AI Response for questions:', ['response' => $content]);
+
+            // Clean up the response - remove markdown code blocks
+            $content = trim($content);
+            $content = preg_replace('/^```(?:json)?\s*/i', '', $content);
+            $content = preg_replace('/\s*```$/', '', $content);
+            $content = trim($content);
             
+            // Try to extract JSON array if there's extra text
+            if (preg_match('/\[[\s\S]*\]/', $content, $matches)) {
+                $content = $matches[0];
+            }
+
             $questionsData = json_decode($content, true);
 
             if (json_last_error() !== JSON_ERROR_NONE) {
-                throw new \Exception('Failed to parse AI response: ' . json_last_error_msg());
+                \Log::error('JSON parse error:', ['error' => json_last_error_msg(), 'content' => $content]);
+                throw new \Exception('Failed to parse AI response. Please try again.');
             }
 
-            if (!is_array($questionsData)) {
-                throw new \Exception('AI response is not an array.');
+            if (!is_array($questionsData) || empty($questionsData)) {
+                throw new \Exception('AI returned empty or invalid data. Please try again.');
             }
 
             $createdQuestions = [];
@@ -90,23 +95,33 @@ class AIController extends Controller
             $currentOrder = $test->questions()->max('order') ?? 0;
 
             foreach ($questionsData as $qData) {
+                // Validate required fields
+                if (empty($qData['content']) || empty($qData['options']) || empty($qData['correct_answer'])) {
+                    continue; // Skip invalid questions
+                }
+                
                 $currentOrder++;
                 $question = $test->questions()->create([
                     'content' => $qData['content'],
-                    'type' => 'multiple_choice', // Enforcing multiple choice for now as per prompt
-                    'options' => $qData['options'],
+                    'type' => 'multiple_choice',
+                    'options' => is_array($qData['options']) ? $qData['options'] : [],
                     'correct_answer' => $qData['correct_answer'],
                     'order' => $currentOrder,
                 ]);
                 $createdQuestions[] = $question;
             }
 
+            if (empty($createdQuestions)) {
+                throw new \Exception('No valid questions were generated. Please try again.');
+            }
+
             return response()->json([
-                'message' => "Successfully generated " . count($createdQuestions) . " questions.",
+                'message' => "Successfully generated " . count($createdQuestions) . " questions!",
                 'questions' => $createdQuestions
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('AI Question Generation Error:', ['error' => $e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }

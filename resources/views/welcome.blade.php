@@ -143,9 +143,8 @@
                     </span>
                 </h1>
                 
-                <p class="text-xl md:text-2xl mb-12 text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
-                    Transform your English skills with personalized courses, live virtual classrooms, and interactive learning experiences.
-                </p>
+                    Transform your English skills with personalized courses and interactive learning experiences.
+
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
                     <a href="#courses" class="group px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold rounded-xl shadow-2xl hover:shadow-indigo-500/50 transform hover:-translate-y-1 transition-all duration-200 text-lg shine">
@@ -345,153 +344,7 @@
         </div>
     </section>
 
-    {{-- Featured Virtual Classrooms --}}
-    @php
-        $featuredClassrooms = \App\Models\Classroom::featured()
-            ->standalone()
-            ->active()
-            ->with(['teacher', 'participants'])
-            ->withCount('participants')
-            ->latest()
-            ->take(6)
-            ->get();
-    @endphp
 
-    @if($featuredClassrooms->isNotEmpty())
-        <section id="classrooms" class="py-20 bg-gray-50 dark:bg-gray-800">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-16">
-                    <span class="inline-block px-4 py-2 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full text-sm font-semibold mb-4">
-                        LIVE SESSIONS
-                    </span>
-                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-                        Featured Virtual Classrooms
-                    </h2>
-                    <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                        Join live interactive sessions with expert tutors
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach($featuredClassrooms as $classroom)
-                        <div class="group bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover-lift">
-                            {{-- Classroom Header --}}
-                            <div class="relative aspect-video bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-600 flex items-center justify-center overflow-hidden">
-                                <svg class="w-24 h-24 text-white opacity-30 group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                </svg>
-                                
-                                {{-- Status Badge --}}
-                                <div class="absolute top-3 left-3">
-                                    @if($classroom->status === 'live')
-                                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-500 text-white shadow-lg" style="animation: pulse-glow 2s infinite;">
-                                            <span class="animate-pulse mr-2">●</span> LIVE NOW
-                                        </span>
-                                    @elseif($classroom->status === 'scheduled')
-                                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-blue-500 text-white shadow-lg">
-                                            📅 Scheduled
-                                        </span>
-                                    @endif
-                                </div>
-                                
-                                {{-- Price Badge --}}
-                                <div class="absolute top-3 right-3">
-                                    @if($classroom->price > 0)
-                                        <span class="px-4 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-bold text-lg rounded-full shadow-lg">
-                                            ${{ number_format($classroom->price, 2) }}
-                                        </span>
-                                    @else
-                                        <span class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-lg rounded-full shadow-lg">
-                                            FREE
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-
-                            {{-- Classroom Content --}}
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                                    {{ $classroom->title }}
-                                </h3>
-
-                                @if($classroom->description)
-                                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
-                                        {{ $classroom->description }}
-                                    </p>
-                                @endif
-
-                                {{-- Teacher Info --}}
-                                <div class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
-                                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
-                                        {{ strtoupper(substr($classroom->teacher->name, 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Instructor</p>
-                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ $classroom->teacher->name }}</p>
-                                    </div>
-                                </div>
-
-                                {{-- Classroom Stats --}}
-                                <div class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-5">
-                                    <span class="flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                        </svg>
-                                        {{ $classroom->participants_count }}/{{ $classroom->max_participants }}
-                                    </span>
-                                    @if($classroom->scheduled_at && $classroom->status === 'scheduled')
-                                        <span class="text-xs font-medium">
-                                            {{ $classroom->scheduled_at->format('M d, h:i A') }}
-                                        </span>
-                                    @endif
-                                </div>
-
-                                {{-- Action Button --}}
-                                @auth
-                                    @if($classroom->status === 'live')
-                                        <a href="{{ route('classrooms.room', $classroom) }}" class="block w-full text-center px-6 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg">
-                                            Join Live Session
-                                        </a>
-                                    @elseif($classroom->isPaid() && !$classroom->hasAccess(auth()->user()))
-                                        <a href="{{ route('classrooms.show', $classroom) }}" class="block w-full text-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg">
-                                            Get Access - ${{ number_format($classroom->price, 2) }}
-                                        </a>
-                                    @else
-                                        <a href="{{ route('classrooms.show', $classroom) }}" class="block w-full text-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg">
-                                            View Details
-                                        </a>
-                                    @endif
-                                @else
-                                    <a href="{{ route('register') }}" class="block w-full text-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all shadow-md hover:shadow-lg">
-                                        Sign Up to Join
-                                    </a>
-                                @endauth
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
-                {{-- View All Button --}}
-                <div class="text-center mt-12">
-                    @auth
-                        <a href="{{ route('classrooms.browse') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl hover:shadow-xl transition-all">
-                            View All Classrooms
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                            </svg>
-                        </a>
-                    @else
-                        <a href="{{ route('register') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl hover:shadow-xl transition-all">
-                            Sign Up to Browse All Classrooms
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                            </svg>
-                        </a>
-                    @endauth
-                </div>
-            </div>
-        </section>
-    @endif
 
     {{-- Features Section --}}
     <section class="py-20 bg-white dark:bg-gray-900">
@@ -522,11 +375,11 @@
                 <div class="group p-8 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl hover:shadow-xl transition-all hover-lift">
                     <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Live Classes</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Join interactive virtual classrooms with video, audio, and real-time collaboration tools.</p>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Interactive Learning</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Engage with dynamic lessons, quizzes, and multimedia content to master English effectively.</p>
                 </div>
 
                 <div class="group p-8 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl hover:shadow-xl transition-all hover-lift">

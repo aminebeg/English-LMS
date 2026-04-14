@@ -7,24 +7,20 @@ use Exception;
 
 class AIService
 {
-    public function generateContent(string $prompt, string $provider = 'gemini')
+    public function generateContent(string $prompt, string $provider = 'cerebras')
     {
-        $user = auth()->user();
-
-        if (!$user) {
-            throw new Exception('User not authenticated.');
-        }
-
         if ($provider === 'gemini') {
-            $apiKey = $user->gemini_api_key;
+            // Try env key first, then fallback to user key
+            $apiKey = config('services.gemini.api_key') ?: (auth()->user()?->gemini_api_key);
             if (!$apiKey) {
-                throw new Exception('Gemini API Key not configured.');
+                throw new Exception('Gemini API Key not configured. Please set GEMINI_API_KEY in .env');
             }
             return $this->callGemini($prompt, $apiKey);
         } elseif ($provider === 'cerebras') {
-            $apiKey = $user->cerebras_api_key;
+            // Try env key first, then fallback to user key
+            $apiKey = config('services.cerebras.api_key') ?: (auth()->user()?->cerebras_api_key);
             if (!$apiKey) {
-                throw new Exception('Cerebras API Key not configured.');
+                throw new Exception('Cerebras API Key not configured. Please set CEREBRAS_API_KEY in .env');
             }
             return $this->callCerebras($prompt, $apiKey);
         }
@@ -57,13 +53,16 @@ class AIService
 
     protected function callCerebras(string $prompt, string $apiKey)
     {
-        // Placeholder for Cerebras API call
-        // Assuming OpenAI-compatible interface
         $url = "https://api.cerebras.ai/v1/chat/completions";
 
         $response = Http::withToken($apiKey)->post($url, [
-            'model' => 'llama3-8b-8192',
+            'model' => 'llama-3.3-70b', 
+            'stream' => false,
+            'max_tokens' => 40960,
+            'temperature' => 0.6,
+            'top_p' => 0.95,
             'messages' => [
+                ['role' => 'system', 'content' => 'You are a helpful assistant.'],
                 ['role' => 'user', 'content' => $prompt]
             ]
         ]);

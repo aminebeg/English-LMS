@@ -276,7 +276,7 @@
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({ prompt: prompt, provider: 'gemini' })
+                body: JSON.stringify({ prompt: prompt, provider: 'cerebras' })
             })
             .then(response => response.json())
             .then(data => {

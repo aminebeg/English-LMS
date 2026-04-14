@@ -71,6 +71,39 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Category -->
+                            <div>
+                                <label for="category" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
+                                    Category <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <select 
+                                        name="category" 
+                                        id="category" 
+                                        required
+                                        class="block w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 sm:text-base dark:bg-gray-900 dark:text-white appearance-none transition-all duration-200"
+                                    >
+                                        <option value="">Select Category</option>
+                                        <option value="Language Learning" {{ old('category') == 'Language Learning' ? 'selected' : '' }}>📚 Language Learning</option>
+                                        <option value="Business & Professional" {{ old('category') == 'Business & Professional' ? 'selected' : '' }}>💼 Business & Professional</option>
+                                        <option value="Academic & Research" {{ old('category') == 'Academic & Research' ? 'selected' : '' }}>🎓 Academic & Research</option>
+                                        <option value="Technology & Programming" {{ old('category') == 'Technology & Programming' ? 'selected' : '' }}>💻 Technology & Programming</option>
+                                        <option value="Arts & Creative" {{ old('category') == 'Arts & Creative' ? 'selected' : '' }}>🎨 Arts & Creative</option>
+                                        <option value="Science & Math" {{ old('category') == 'Science & Math' ? 'selected' : '' }}>🔬 Science & Math</option>
+                                        <option value="Test Preparation" {{ old('category') == 'Test Preparation' ? 'selected' : '' }}>✍️ Test Preparation</option>
+                                        <option value="Personal Development" {{ old('category') == 'Personal Development' ? 'selected' : '' }}>🌟 Personal Development</option>
+                                        <option value="Health & Wellness" {{ old('category') == 'Health & Wellness' ? 'selected' : '' }}>🏥 Health & Wellness</option>
+                                        <option value="Other" {{ old('category') == 'Other' ? 'selected' : '' }}>📌 Other</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <x-input-error :messages="$errors->get('category')" class="mt-2" />
+                            </div>
+
                             <!-- Target Audience -->
                             <div>
                                 <label for="type" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
@@ -96,11 +129,13 @@
                                 </div>
                                 <x-input-error :messages="$errors->get('type')" class="mt-2" />
                             </div>
+                        </div>
 
-                            <!-- Level -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Difficulty Level -->
                             <div>
                                 <label for="level" class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">
-                                    English Level
+                                    Difficulty Level
                                 </label>
                                 <div class="relative">
                                     <select 
@@ -109,12 +144,20 @@
                                         class="block w-full px-4 py-3 rounded-xl border-2 border-gray-300 dark:border-gray-600 shadow-sm focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 sm:text-base dark:bg-gray-900 dark:text-white appearance-none transition-all duration-200"
                                     >
                                         <option value="">Select Level (Optional)</option>
-                                        <option value="A1" {{ old('level') == 'A1' ? 'selected' : '' }}>A1 - Beginner</option>
-                                        <option value="A2" {{ old('level') == 'A2' ? 'selected' : '' }}>A2 - Elementary</option>
-                                        <option value="B1" {{ old('level') == 'B1' ? 'selected' : '' }}>B1 - Intermediate</option>
-                                        <option value="B2" {{ old('level') == 'B2' ? 'selected' : '' }}>B2 - Upper Intermediate</option>
-                                        <option value="C1" {{ old('level') == 'C1' ? 'selected' : '' }}>C1 - Advanced</option>
-                                        <option value="C2" {{ old('level') == 'C2' ? 'selected' : '' }}>C2 - Proficiency</option>
+                                        <optgroup label="CEFR (Language)">
+                                            <option value="A1" {{ old('level') == 'A1' ? 'selected' : '' }}>A1 - Beginner</option>
+                                            <option value="A2" {{ old('level') == 'A2' ? 'selected' : '' }}>A2 - Elementary</option>
+                                            <option value="B1" {{ old('level') == 'B1' ? 'selected' : '' }}>B1 - Intermediate</option>
+                                            <option value="B2" {{ old('level') == 'B2' ? 'selected' : '' }}>B2 - Upper Intermediate</option>
+                                            <option value="C1" {{ old('level') == 'C1' ? 'selected' : '' }}>C1 - Advanced</option>
+                                            <option value="C2" {{ old('level') == 'C2' ? 'selected' : '' }}>C2 - Proficiency</option>
+                                        </optgroup>
+                                        <optgroup label="General">
+                                            <option value="Beginner" {{ old('level') == 'Beginner' ? 'selected' : '' }}>Beginner</option>
+                                            <option value="Intermediate" {{ old('level') == 'Intermediate' ? 'selected' : '' }}>Intermediate</option>
+                                            <option value="Advanced" {{ old('level') == 'Advanced' ? 'selected' : '' }}>Advanced</option>
+                                            <option value="Expert" {{ old('level') == 'Expert' ? 'selected' : '' }}>Expert</option>
+                                        </optgroup>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -122,7 +165,13 @@
                                         </svg>
                                     </div>
                                 </div>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Use CEFR levels for language courses, or general levels for other subjects</p>
                                 <x-input-error :messages="$errors->get('level')" class="mt-2" />
+                            </div>
+
+                            <!-- Placeholder for future field -->
+                            <div>
+                                <!-- Reserved for additional field if needed -->
                             </div>
                         </div>
                     </div>
@@ -224,7 +273,7 @@
                 },
                 body: JSON.stringify({ 
                     prompt: `Write a compelling, professional course description for an English learning course titled "${title}". Make it engaging and highlight the key benefits. Keep it to 2-3 paragraphs.`, 
-                    provider: 'gemini' 
+                    provider: 'cerebras' 
                 })
             })
             .then(r => r.json())

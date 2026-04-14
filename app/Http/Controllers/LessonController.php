@@ -22,7 +22,7 @@ class LessonController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'nullable|string',
             'order' => 'required|integer|min:0',
             'course_section_id' => 'nullable|exists:course_sections,id',
             'is_preview' => 'boolean',
@@ -50,7 +50,10 @@ class LessonController extends Controller
         // Handle booleans
         $validated['is_preview'] = $request->has('is_preview');
         $validated['is_published'] = $request->has('is_published');
-
+        // Ensure content has a default value
+        if (empty($validated['content'])) {
+            $validated['content'] = '[]';
+        }
         if ($validated['is_published']) {
             $validated['published_at'] = now();
         }
@@ -80,7 +83,7 @@ class LessonController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'nullable|string',
             'order' => 'required|integer|min:0',
             'course_section_id' => 'nullable|exists:course_sections,id',
             'is_preview' => 'boolean',

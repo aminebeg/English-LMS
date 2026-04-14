@@ -10,6 +10,17 @@ use Illuminate\Support\Facades\Auth;
 
 class TestAttemptController extends Controller
 {
+    // Show all test results for the student
+    public function index()
+    {
+        $results = Auth::user()->testResults()
+            ->with(['test.course'])
+            ->latest()
+            ->paginate(10);
+
+        return view('tests.my-results', compact('results'));
+    }
+
     // Show test-taking interface
     public function start(Test $test)
     {

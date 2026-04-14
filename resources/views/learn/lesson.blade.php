@@ -23,7 +23,135 @@
                     <!-- Lesson Content -->
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
                         <div class="p-8 text-gray-900 dark:text-gray-100 prose dark:prose-invert max-w-none">
-                            {!! nl2br(e($lesson->content)) !!}
+                            @php
+                                $content = $lesson->content;
+                                $blocks = [];
+                                
+                                // Try to decode as JSON
+                                if (is_string($content)) {
+                                    $decoded = json_decode($content, true);
+                                    if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                                        $blocks = $decoded;
+                                    }
+                                }
+                            @endphp
+
+                            @if(count($blocks) > 0)
+                                @foreach($blocks as $block)
+                                    @php
+                                        $type = $block['type'] ?? 'text';
+                                        $data = $block['data'] ?? [];
+                                    @endphp
+
+                                    @switch($type)
+                                        @case('heading')
+                                            @php
+                                                $level = $data['level'] ?? 'h2';
+                                                $text = $data['content'] ?? '';
+                                            @endphp
+                                            @if($level === 'h2')
+                                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-6 mb-4">{{ $text }}</h2>
+                                            @elseif($level === 'h3')
+                                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-4 mb-3">{{ $text }}</h3>
+                                            @else
+                                                <h4 class="text-lg font-bold text-gray-900 dark:text-white mt-3 mb-2">{{ $text }}</h4>
+                                            @endif
+                                            @break
+
+                                        @case('text')
+                                            <div class="prose dark:prose-invert max-w-none mb-4">
+                                                {!! $data['content'] ?? '' !!}
+                                            </div>
+                                            @break
+
+                                        @case('image')
+                                            @if(!empty($data['src']))
+                                                <figure class="my-6">
+                                                    <img src="{{ $data['src'] }}" alt="{{ $data['caption'] ?? '' }}" class="rounded-lg shadow-md w-full">
+                                                    @if(!empty($data['caption']))
+                                                        <figcaption class="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center">{{ $data['caption'] }}</figcaption>
+                                                    @endif
+                                                </figure>
+                                            @endif
+                                            @break
+
+                                        @case('video')
+                                            @if(!empty($data['src']))
+                                                <div class="my-6">
+                                                    @php
+                                                        $videoUrl = $data['src'];
+                                                        $embedUrl = null;
+                                                        
+                                                        // YouTube
+                                                        if (preg_match('/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/', $videoUrl, $matches)) {
+                                                            $embedUrl = "https://www.youtube.com/embed/{$matches[1]}";
+                                                        }
+                                                        // Vimeo
+                                                        elseif (preg_match('/vimeo\.com\/(?:video\/)?(\d+)/', $videoUrl, $matches)) {
+                                                            $embedUrl = "https://player.vimeo.com/video/{$matches[1]}";
+                                                        }
+                                                    @endphp
+                                                    
+                                                    @if($embedUrl)
+                                                        <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden">
+                                                            <iframe src="{{ $embedUrl }}" class="w-full h-96 rounded-lg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                        </div>
+                                                    @else
+                                                        <video controls class="w-full rounded-lg">
+                                                            <source src="{{ $videoUrl }}" type="video/mp4">
+                                                            Your browser does not support the video tag.
+                                                        </video>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                            @break
+
+                                        @case('audio')
+                                            @if(!empty($data['src']))
+                                                <div class="my-6">
+                                                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                                                        <div class="flex items-center gap-3 mb-2">
+                                                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                                                            </svg>
+                                                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Audio Content</span>
+                                                        </div>
+                                                        <audio controls class="w-full">
+                                                            <source src="{{ $data['src'] }}" type="audio/mpeg">
+                                                            <source src="{{ $data['src'] }}" type="audio/wav">
+                                                            <source src="{{ $data['src'] }}" type="audio/ogg">
+                                                            Your browser does not support the audio element.
+                                                        </audio>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            @break
+
+                                        @case('code')
+                                            <pre class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code class="language-{{ $data['language'] ?? 'text' }}">{{ $data['code'] ?? '' }}</code></pre>
+                                            @break
+
+                                        @case('note')
+                                            <div class="flex gap-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 rounded-r-md my-4">
+                                                <div class="flex-shrink-0">
+                                                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                                <div class="text-yellow-800 dark:text-yellow-200">
+                                                    {{ $data['content'] ?? '' }}
+                                                </div>
+                                            </div>
+                                            @break
+
+                                        @default
+                                            <p>{{ $data['content'] ?? '' }}</p>
+                                    @endswitch
+                                @endforeach
+                            @else
+                                {{-- Fallback for plain text content --}}
+                                {!! nl2br(e($lesson->content)) !!}
+                            @endif
                         </div>
                     </div>
 

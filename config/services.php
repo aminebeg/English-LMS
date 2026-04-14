@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'cerebras' => [
+        'api_key' => env('CEREBRAS_API_KEY'),
+    ],
+
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ],
+
 ];
