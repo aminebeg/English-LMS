@@ -1,18 +1,21 @@
 <x-app-layout>
     <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
+
             <!-- Page Header -->
             <div class="flex items-center justify-between mb-8">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Lesson</h1>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Editing <span class="font-medium text-indigo-600">{{ $lesson->title }}</span></p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Editing <span
+                            class="font-medium text-indigo-600">{{ $lesson->title }}</span></p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('lessons.show', $lesson) }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors">
+                    <a href="{{ route('lessons.show', $lesson) }}"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors">
                         Cancel
                     </a>
-                    <button type="submit" form="lessonForm" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-sm transition-colors">
+                    <button type="submit" form="lessonForm"
+                        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 shadow-sm transition-colors">
                         Save Changes
                     </button>
                 </div>
@@ -25,37 +28,52 @@
                 <div class="grid grid-cols-12 gap-8">
                     <!-- Left Column: Main Content -->
                     <div class="col-span-12 lg:col-span-8 space-y-6">
-                        
+
                         <!-- Core Content -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <div
+                            class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
                             <div class="space-y-6">
                                 <div>
-                                    <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lesson Title <span class="text-red-500">*</span></label>
-                                    <input type="text" name="title" id="title" value="{{ old('title', $lesson->title) }}" required
+                                    <label for="title"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lesson Title
+                                        <span class="text-red-500">*</span></label>
+                                    <input type="text" name="title" id="title"
+                                        value="{{ old('title', $lesson->title) }}" required
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-lg dark:bg-gray-900 dark:border-gray-600 dark:text-white">
                                 </div>
 
                                 <div>
-                                    <label for="summary" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Summary</label>
+                                    <label for="summary"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Summary</label>
                                     <textarea name="summary" id="summary" rows="2"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">{{ old('summary', $lesson->summary) }}</textarea>
                                 </div>
 
                                 <div>
-                                    <label for="video_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Video URL (Optional)</label>
-                                    <input type="url" name="video_url" id="video_url" value="{{ old('video_url', $lesson->video_url) }}" placeholder="https://youtube.com/..."
+                                    <label for="video_url"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Video URL
+                                        (Optional)</label>
+                                    <input type="url" name="video_url" id="video_url"
+                                        value="{{ old('video_url', $lesson->video_url) }}"
+                                        placeholder="https://youtube.com/..."
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
                                 </div>
                             </div>
                         </div>
 
                         <!-- Block Editor -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <div
+                            class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
                             <div class="flex justify-between items-center mb-4">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lesson Content</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Lesson
+                                    Content</label>
                                 <div class="flex gap-2">
-                                    <button type="button" id="generate-outline" class="text-xs text-indigo-600 hover:text-indigo-500 font-medium flex items-center gap-1">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                    <button type="button" id="generate-outline"
+                                        class="text-xs text-indigo-600 hover:text-indigo-500 font-medium flex items-center gap-1">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
                                         Generate Outline
                                     </button>
                                 </div>
@@ -71,200 +89,413 @@
 
                             <!-- Add Block Toolbar -->
                             <div class="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
-                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">Add Content Block</p>
+                                <p
+                                    class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">
+                                    Add Content Block</p>
                                 <div class="flex flex-wrap gap-2">
-                                    <button type="button" onclick="addBlock('heading')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+                                    <button type="button" onclick="addBlock('heading')"
+                                        class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 6h16M4 12h16M4 18h7" />
+                                        </svg>
                                         Heading
                                     </button>
-                                    <button type="button" onclick="addBlock('text')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                    <button type="button" onclick="addBlock('text')"
+                                        class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
                                         Text
                                     </button>
-                                    <button type="button" onclick="addBlock('image')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    <button type="button" onclick="addBlock('image')"
+                                        class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
                                         Image
                                     </button>
-                                    <button type="button" onclick="addBlock('video')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                                    <button type="button" onclick="addBlock('video')"
+                                        class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
                                         Video
                                     </button>
-                                    <button type="button" onclick="addBlock('code')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                                    <button type="button" onclick="addBlock('code')"
+                                        class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                        </svg>
                                         Code
                                     </button>
-                                    <button type="button" onclick="addBlock('note')" class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
-                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <button type="button" onclick="addBlock('note')"
+                                        class="flex items-center gap-2 px-3 py-2 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-md text-sm text-gray-700 dark:text-gray-200 transition-colors border border-gray-200 dark:border-gray-600">
+                                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
                                         Note
                                     </button>
                                 </div>
                             </div>
-                            
+
                             <!-- Hidden input to store JSON content -->
                             <input type="hidden" name="content" id="content-json">
                         </div>
 
                         <!-- Interactive Elements -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <div
+                            class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Interactive Elements</h3>
-                            
+
                             <!-- Vocabulary -->
                             <div class="mb-6">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vocabulary</label>
+                                <label
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Vocabulary</label>
                                 <div class="space-y-2 mb-2" id="vocabulary-list"></div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                    <input type="text" id="vocab-word-input" placeholder="Word" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
-                                    <input type="text" id="vocab-definition-input" placeholder="Definition" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                                    <input type="text" id="vocab-word-input" placeholder="Word"
+                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                                    <input type="text" id="vocab-definition-input" placeholder="Definition"
+                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
                                 </div>
-                                <button type="button" id="add-vocabulary-btn" class="mt-2 w-full sm:w-auto px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add Word</button>
-                                <input type="hidden" name="vocabulary" id="vocabulary-hidden" value="{{ json_encode($lesson->vocabulary ?? []) }}">
+                                <button type="button" id="add-vocabulary-btn"
+                                    class="mt-2 w-full sm:w-auto px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add
+                                    Word</button>
+                                <input type="hidden" name="vocabulary" id="vocabulary-hidden"
+                                    value="{{ json_encode($lesson->vocabulary ?? []) }}">
                             </div>
 
                             <!-- Exercises -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Practice Exercises</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Practice
+                                    Exercises</label>
                                 <div class="space-y-2 mb-2" id="exercises-list"></div>
-                                <textarea id="exercise-input" rows="2" placeholder="Describe an exercise..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white"></textarea>
-                                <button type="button" id="add-exercise-btn" class="mt-2 w-full sm:w-auto px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add Exercise</button>
-                                <input type="hidden" name="exercises" id="exercises-hidden" value="{{ json_encode($lesson->exercises ?? []) }}">
+                                <textarea id="exercise-input" rows="2" placeholder="Describe an exercise..."
+                                    class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white"></textarea>
+                                <button type="button" id="add-exercise-btn"
+                                    class="mt-2 w-full sm:w-auto px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add
+                                    Exercise</button>
+                                <input type="hidden" name="exercises" id="exercises-hidden"
+                                    value="{{ json_encode($lesson->exercises ?? []) }}">
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Right Column: Sidebar Settings -->
-                    <div class="col-span-12 lg:col-span-4 space-y-6">
-                        
-                        <!-- Publishing & Status -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Publishing</h3>
-                            
+                        <!-- File Attachments -->
+                        <div
+                            class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Lesson Attachments
+                                (Files)</h3>
+
                             <div class="space-y-4">
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5">
-                                        <input id="is_published" name="is_published" type="checkbox" value="1" {{ old('is_published', $lesson->is_published) ? 'checked' : '' }}
-                                            class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                        <label for="is_published" class="font-medium text-gray-700 dark:text-gray-300">Published</label>
-                                        <p class="text-gray-500 dark:text-gray-400">Visible to students</p>
-                                    </div>
+                                <!-- Existing Materials -->
+                                <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                    @foreach($lesson->materials->where('type', 'file') as $material)
+                                        <div class="py-3 flex items-center justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div class="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-blue-600">
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                    </svg>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                                        {{ $material->title }}</p>
+                                                    <p class="text-xs text-gray-500">{{ $material->file_name }}
+                                                        ({{ number_format($material->file_size / 1024, 1) }} KB)</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <a href="{{ route('materials.download', $material) }}"
+                                                    class="p-2 text-gray-400 hover:text-indigo-600 transition-colors"
+                                                    title="Download">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                                    </svg>
+                                                </a>
+                                                <form action="{{ route('materials.destroy', $material) }}" method="POST"
+                                                    onsubmit="return confirm('Remove this attachment?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="p-2 text-gray-400 hover:text-red-500 transition-colors">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                    @if($lesson->materials->where('type', 'file')->isEmpty())
+                                        <p class="py-4 text-center text-sm text-gray-500 dark:text-gray-400 italic">No files
+                                            attached to this lesson.</p>
+                                    @endif
                                 </div>
 
-                                <div class="flex items-start">
-                                    <div class="flex items-center h-5">
-                                        <input id="is_preview" name="is_preview" type="checkbox" value="1" {{ old('is_preview', $lesson->is_preview) ? 'checked' : '' }}
-                                            class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
-                                    </div>
-                                    <div class="ml-3 text-sm">
-                                        <label for="is_preview" class="font-medium text-gray-700 dark:text-gray-300">Free Preview</label>
-                                        <p class="text-gray-500 dark:text-gray-400">Publicly accessible</p>
-                                    </div>
-                                </div>
-
-                                <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
-                                    <label for="course_section_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Section (Optional)</label>
-                                    <select name="course_section_id" id="course_section_id"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
-                                        <option value="">No Section</option>
-                                        @foreach($lesson->course->sections as $section)
-                                            <option value="{{ $section->id }}" {{ old('course_section_id', $lesson->course_section_id) == $section->id ? 'selected' : '' }}>{{ $section->title }}</option>
-                                        @endforeach
-                                    </select>
-                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Organize lessons into sections</p>
-                                </div>
-
-                                <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
-                                    <label for="order" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order</label>
-                                    <input type="number" name="order" id="order" value="{{ old('order', $lesson->order) }}" required min="1"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                                <!-- Add New Attachment -->
+                                <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
+                                    <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Add New
+                                        Attachment</h4>
+                                    <form action="{{ route('materials.store') }}" method="POST"
+                                        enctype="multipart/form-data" class="space-y-3">
+                                        @csrf
+                                        <input type="hidden" name="lesson_id" value="{{ $lesson->id }}">
+                                        <input type="hidden" name="type" value="file">
+                                        <div>
+                                            <input type="text" name="title" placeholder="Display Title" required
+                                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex-grow">
+                                                <input type="file" name="file" required
+                                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                            </div>
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition">
+                                                Upload
+                                            </button>
+                                        </div>
+                                        <p class="text-[10px] text-gray-400">Max size: 10MB. Allowed: PDFs, Documents,
+                                            Images, ZIPs.</p>
+                                    </form>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Lesson Metadata -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Metadata</h3>
-                            
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="duration_minutes" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Duration (Minutes)</label>
-                                    <input type="number" name="duration_minutes" id="duration_minutes" value="{{ old('duration_minutes', $lesson->duration_minutes) }}" min="1"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
-                                </div>
-
-                                <div>
-                                    <label for="difficulty" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Difficulty</label>
-                                    <select id="difficulty" name="difficulty"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
-                                        <option value="">Select Level</option>
-                                        <option value="beginner" {{ old('difficulty', $lesson->difficulty) == 'beginner' ? 'selected' : '' }}>Beginner</option>
-                                        <option value="intermediate" {{ old('difficulty', $lesson->difficulty) == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
-                                        <option value="advanced" {{ old('difficulty', $lesson->difficulty) == 'advanced' ? 'selected' : '' }}>Advanced</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Learning Objectives -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Objectives</h3>
-                            <div class="space-y-2 mb-2" id="objectives-list"></div>
-                            <div class="flex gap-2">
-                                <input type="text" id="objective-input" placeholder="Add objective..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
-                                <button type="button" id="add-objective-btn" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add</button>
-                            </div>
-                            <input type="hidden" name="objectives" id="objectives-hidden" value="{{ json_encode($lesson->objectives ?? []) }}">
-                        </div>
-
-                        <!-- Key Points -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Key Points</h3>
-                            <div class="space-y-2 mb-2" id="keypoints-list"></div>
-                            <div class="flex gap-2">
-                                <input type="text" id="keypoint-input" placeholder="Add key point..." class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
-                                <button type="button" id="add-keypoint-btn" class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add</button>
-                            </div>
-                            <input type="hidden" name="key_points" id="keypoints-hidden" value="{{ json_encode($lesson->key_points ?? []) }}">
-                        </div>
-
-                        <!-- Resources -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Resources</h3>
-                            <div class="space-y-2 mb-2" id="resources-list"></div>
-                            <div class="space-y-2">
-                                <input type="text" id="resource-title-input" placeholder="Title" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
-                                <input type="url" id="resource-url-input" placeholder="URL" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
-                                <button type="button" id="add-resource-btn" class="w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add Resource</button>
-                            </div>
-                            <input type="hidden" name="resources" id="resources-hidden" value="{{ json_encode($lesson->resources ?? []) }}">
-                        </div>
-
-                        <!-- Teacher Notes -->
-                        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                            <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Teacher Notes</h3>
-                            <textarea name="notes" id="notes" rows="4" placeholder="Private notes..."
-                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">{{ old('notes', $lesson->notes) }}</textarea>
                         </div>
                     </div>
                 </div>
-            </form>
+
+                <!-- Right Column: Sidebar Settings -->
+                <div class="col-span-12 lg:col-span-4 space-y-6">
+
+                    <!-- Publishing & Status -->
+                    <div
+                        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+                            Publishing</h3>
+
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="is_published" name="is_published" type="checkbox" value="1" {{ old('is_published', $lesson->is_published) ? 'checked' : '' }}
+                                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="is_published"
+                                        class="font-medium text-gray-700 dark:text-gray-300">Published</label>
+                                    <p class="text-gray-500 dark:text-gray-400">Visible to students</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="is_preview" name="is_preview" type="checkbox" value="1" {{ old('is_preview', $lesson->is_preview) ? 'checked' : '' }}
+                                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="is_preview" class="font-medium text-gray-700 dark:text-gray-300">Free
+                                        Preview</label>
+                                    <p class="text-gray-500 dark:text-gray-400">Publicly accessible</p>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+                                <label for="course_section_id"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Section
+                                    (Optional)</label>
+                                <select name="course_section_id" id="course_section_id"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                                    <option value="">No Section</option>
+                                    @foreach($lesson->course->sections as $section)
+                                        <option value="{{ $section->id }}" {{ old('course_section_id', $lesson->course_section_id) == $section->id ? 'selected' : '' }}>
+                                            {{ $section->title }}</option>
+                                    @endforeach
+                                </select>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Organize lessons into sections
+                                </p>
+                            </div>
+
+                            <div class="pt-4 border-t border-gray-100 dark:border-gray-700">
+                                <label for="order"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Order</label>
+                                <input type="number" name="order" id="order" value="{{ old('order', $lesson->order) }}"
+                                    required min="1"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lesson Metadata -->
+                    <div
+                        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+                            Metadata</h3>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label for="duration_minutes"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Duration
+                                    (Minutes)</label>
+                                <input type="number" name="duration_minutes" id="duration_minutes"
+                                    value="{{ old('duration_minutes', $lesson->duration_minutes) }}" min="1"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            </div>
+
+                            <div>
+                                <label for="difficulty"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Difficulty</label>
+                                <select id="difficulty" name="difficulty"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                                    <option value="">Select Level</option>
+                                    <option value="beginner" {{ old('difficulty', $lesson->difficulty) == 'beginner' ? 'selected' : '' }}>Beginner</option>
+                                    <option value="intermediate" {{ old('difficulty', $lesson->difficulty) == 'intermediate' ? 'selected' : '' }}>Intermediate</option>
+                                    <option value="advanced" {{ old('difficulty', $lesson->difficulty) == 'advanced' ? 'selected' : '' }}>Advanced</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Learning Objectives -->
+                    <div
+                        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+                            Objectives</h3>
+                        <div class="space-y-2 mb-2" id="objectives-list"></div>
+                        <div class="flex gap-2">
+                            <input type="text" id="objective-input" placeholder="Add objective..."
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            <button type="button" id="add-objective-btn"
+                                class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add</button>
+                        </div>
+                        <input type="hidden" name="objectives" id="objectives-hidden"
+                            value="{{ json_encode($lesson->objectives ?? []) }}">
+                    </div>
+
+                    <!-- Key Points -->
+                    <div
+                        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+                            Key Points</h3>
+                        <div class="space-y-2 mb-2" id="keypoints-list"></div>
+                        <div class="flex gap-2">
+                            <input type="text" id="keypoint-input" placeholder="Add key point..."
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            <button type="button" id="add-keypoint-btn"
+                                class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add</button>
+                        </div>
+                        <input type="hidden" name="key_points" id="keypoints-hidden"
+                            value="{{ json_encode($lesson->key_points ?? []) }}">
+                    </div>
+
+                    <!-- Resources -->
+                    <div
+                        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+                            Resources</h3>
+                        <div class="space-y-2 mb-2" id="resources-list"></div>
+                        <div class="space-y-2">
+                            <input type="text" id="resource-title-input" placeholder="Title"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            <input type="url" id="resource-url-input" placeholder="URL"
+                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">
+                            <button type="button" id="add-resource-btn"
+                                class="w-full px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 border border-gray-300 text-sm font-medium">Add
+                                Resource</button>
+                        </div>
+                        <input type="hidden" name="resources" id="resources-hidden"
+                            value="{{ json_encode($lesson->resources ?? []) }}">
+                    </div>
+
+                    <!-- Teacher Notes -->
+                    <div
+                        class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+                            Teacher Notes</h3>
+                        <textarea name="notes" id="notes" rows="4" placeholder="Private notes..."
+                            class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-900 dark:border-gray-600 dark:text-white">{{ old('notes', $lesson->notes) }}</textarea>
+                    </div>
+                </div>
         </div>
+        </form>
+    </div>
     </div>
 
     <!-- Styles -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
-        .ql-toolbar { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; border-color: #e5e7eb !important; }
-        .ql-container { border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; border-color: #e5e7eb !important; font-family: inherit !important; }
-        .dark .ql-toolbar { background-color: #374151; border-color: #4b5563 !important; }
-        .dark .ql-container { background-color: #1f2937; border-color: #4b5563 !important; color: white; }
-        .dark .ql-stroke { stroke: #9ca3af !important; }
-        .dark .ql-fill { fill: #9ca3af !important; }
-        .dark .ql-picker { color: #9ca3af !important; }
-        .block-handle { cursor: grab; }
-        .block-handle:active { cursor: grabbing; }
-        .sortable-ghost { opacity: 0.4; background: #f3f4f6; }
-        .dark .sortable-ghost { background: #374151; }
+        .ql-toolbar {
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            border-color: #e5e7eb !important;
+        }
+
+        .ql-container {
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            border-color: #e5e7eb !important;
+            font-family: inherit !important;
+        }
+
+        .dark .ql-toolbar {
+            background-color: #374151;
+            border-color: #4b5563 !important;
+        }
+
+        .dark .ql-container {
+            background-color: #1f2937;
+            border-color: #4b5563 !important;
+            color: white;
+        }
+
+        .dark .ql-stroke {
+            stroke: #9ca3af !important;
+        }
+
+        .dark .ql-fill {
+            fill: #9ca3af !important;
+        }
+
+        .dark .ql-picker {
+            color: #9ca3af !important;
+        }
+
+        .block-handle {
+            cursor: grab;
+        }
+
+        .block-handle:active {
+            cursor: grabbing;
+        }
+
+        .sortable-ghost {
+            opacity: 0.4;
+            background: #f3f4f6;
+        }
+
+        .dark .sortable-ghost {
+            background: #374151;
+        }
     </style>
 
     <!-- Scripts -->
@@ -273,7 +504,7 @@
 
     <script>
         // Block Editor Logic
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const container = document.getElementById('blocks-container');
             const emptyState = document.getElementById('empty-state');
             let blockCount = 0;
@@ -284,7 +515,7 @@
                 animation: 150,
                 handle: '.block-handle',
                 ghostClass: 'sortable-ghost',
-                onEnd: function() {
+                onEnd: function () {
                     // Optional: Auto-save or update order
                 }
             });
@@ -348,7 +579,7 @@
             };
 
             // Add Block Function
-            window.addBlock = function(type, data = null) {
+            window.addBlock = function (type, data = null) {
                 const id = 'block-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
                 const block = document.createElement('div');
                 block.className = 'group relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 hover:border-indigo-300 dark:hover:border-indigo-700 transition-all';
@@ -382,14 +613,14 @@
                         modules: {
                             toolbar: [
                                 ['bold', 'italic', 'underline', 'strike'],
-                                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                                 [{ 'color': [] }, { 'background': [] }],
                                 ['link', 'clean']
                             ]
                         }
                     });
                     editors[id] = quill;
-                    
+
                     if (data && data.content) {
                         quill.root.innerHTML = data.content;
                     }
@@ -404,7 +635,7 @@
             };
 
             // Remove Block Function
-            window.removeBlock = function(id) {
+            window.removeBlock = function (id) {
                 const block = document.querySelector(`[data-id="${id}"]`);
                 if (block) {
                     if (editors[id]) delete editors[id];
@@ -414,7 +645,7 @@
             };
 
             // Form Submission
-            document.getElementById('lessonForm').addEventListener('submit', function(e) {
+            document.getElementById('lessonForm').addEventListener('submit', function (e) {
                 const blocks = [];
                 const blockElements = container.querySelectorAll('[data-id]');
 
@@ -430,7 +661,7 @@
                         inputs.forEach(input => {
                             content[input.dataset.type] = input.value;
                         });
-                        
+
                         // Special handling for heading level
                         if (type === 'heading') {
                             const select = el.querySelector('select');

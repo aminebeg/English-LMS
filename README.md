@@ -74,9 +74,9 @@ After seeding, you can login with:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Student | student@test.com | password |
-| Tutor | tutor@test.com | password |
-| Editor | editor@test.com | password |
+| Student | student@test.com | password123 |
+| Tutor | tutor@test.com | password123 |
+| Editor | editor@test.com | password123 |
 
 ## 📚 Documentation
 

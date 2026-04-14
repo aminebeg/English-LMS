@@ -44,20 +44,20 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
         Route::get('/my-courses', [EnrollmentController::class, 'index'])->name('enrollments.index');
         Route::get('/my-courses/{course}', [EnrollmentController::class, 'show'])->name('enrollments.show');
-        
+
         // Lesson viewing
         Route::get('/learn/lessons/{lesson}', [StudentLessonController::class, 'show'])->name('learn.lessons.show');
         Route::post('/learn/lessons/{lesson}/complete', [StudentLessonController::class, 'markComplete'])->name('learn.lessons.complete');
         Route::post('/learn/lessons/{lesson}/incomplete', [StudentLessonController::class, 'markIncomplete'])->name('learn.lessons.incomplete');
-        
+
         // Test taking
         Route::get('/tests/{test}/start', [TestAttemptController::class, 'start'])->name('tests.start');
         Route::post('/tests/{test}/submit', [TestAttemptController::class, 'submit'])->name('tests.submit');
         Route::get('/test-results/{testResult}', [TestAttemptController::class, 'result'])->name('tests.result');
-        
+
         // Certificate
         Route::get('/courses/{course}/certificate', [\App\Http\Controllers\CertificateController::class, 'download'])->name('certificates.download');
-        
+
         // Classrooms (Student)
         Route::get('/classrooms/browse', [ClassroomController::class, 'browse'])->name('classrooms.browse');
         Route::get('/classrooms/my', [ClassroomController::class, 'myClassrooms'])->name('classrooms.my');
@@ -71,12 +71,13 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::resource('courses', CourseController::class);
         Route::resource('lessons', LessonController::class)->except(['index']);
         Route::resource('materials', MaterialController::class)->except(['index']);
+        Route::get('/materials/{material}/download', [MaterialController::class, 'download'])->name('materials.download');
         Route::resource('tests', TestController::class)->except(['index']);
         Route::get('/tests/{test}/results', [TestController::class, 'results'])->name('tests.results');
         Route::post('/tests/{test}/duplicate', [TestController::class, 'duplicate'])->name('tests.duplicate');
         Route::post('/courses/{course}/tests/reorder', [TestController::class, 'reorder'])->name('tests.reorder');
         Route::resource('questions', QuestionController::class)->except(['index', 'show']);
-        
+
         // Sections
         Route::post('/courses/{course}/sections', [CourseSectionController::class, 'store'])->name('courses.sections.store');
         Route::put('/sections/{section}', [CourseSectionController::class, 'update'])->name('sections.update');
@@ -85,13 +86,13 @@ Route::middleware(['auth', 'approved'])->group(function () {
         // Students
         Route::get('/courses/{course}/students', [CourseStudentController::class, 'index'])->name('courses.students.index');
         Route::delete('/courses/{course}/students/{student}', [CourseStudentController::class, 'destroy'])->name('courses.students.destroy');
-        
+
         // Classrooms (Tutor)
         Route::resource('classrooms', ClassroomController::class);
         Route::post('/classrooms/{classroom}/start', [ClassroomController::class, 'startSession'])->name('classrooms.start');
         Route::post('/classrooms/{classroom}/end', [ClassroomController::class, 'endSession'])->name('classrooms.end');
     });
-    
+
     // Shared classroom room access (both tutors and students)
     Route::get('/classrooms/{classroom}/room', [ClassroomController::class, 'room'])->name('classrooms.room');
 
@@ -103,4 +104,4 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::post('/ai/generate-questions', [AIController::class, 'generateQuestions'])->name('ai.generate-questions');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

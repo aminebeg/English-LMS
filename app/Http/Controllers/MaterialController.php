@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Material;
 use App\Models\Lesson;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MaterialController extends Controller
 {
@@ -22,13 +23,31 @@ class MaterialController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'type' => 'required|string|in:video,text,audio',
-            'content' => 'required|string',
+            'type' => 'required|string|in:video,text,audio,file',
+            'content' => 'required_if:type,text,video,audio|nullable|string',
+            'file' => 'required_if:type,file|nullable|file|max:10240', // 10MB
         ]);
 
-        $lesson->materials()->create($validated);
+        $materialData = [
+            'lesson_id' => $lesson->id,
+            'title' => $validated['title'],
+            'type' => $validated['type'],
+            'content' => $validated['content'] ?? null,
+        ];
 
-        return redirect()->route('lessons.show', $lesson)->with('status', 'Material created!');
+        if ($request->hasFile('file') && $validated['type'] === 'file') {
+            $file = $request->file('file');
+            $path = $file->store('lesson-materials/' . $lesson->id, 'public');
+
+            $materialData['file_path'] = $path;
+            $materialData['file_name'] = $file->getClientOriginalName();
+            $materialData['file_size'] = $file->getSize();
+            $materialData['mime_type'] = $file->getMimeType();
+        }
+
+        $lesson->materials()->create($materialData);
+
+        return redirect()->route('lessons.edit', $lesson)->with('status', 'Material added successfully!');
     }
 
     public function show(Material $material)
@@ -49,21 +68,38 @@ class MaterialController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'type' => 'required|string|in:video,text,audio',
-            'content' => 'required|string',
+            'type' => 'required|string|in:video,text,audio,file',
+            'content' => 'required_if:type,text,video,audio|nullable|string',
         ]);
 
         $material->update($validated);
 
-        return redirect()->route('materials.show', $material)->with('status', 'Material updated!');
+        return redirect()->route('lessons.edit', $material->lesson)->with('status', 'Material updated!');
     }
 
     public function destroy(Material $material)
     {
         $lesson = $material->lesson;
         $this->authorize('update', $lesson->course);
+
+        if ($material->file_path) {
+            Storage::disk('public')->delete($material->file_path);
+        }
+
         $material->delete();
 
-        return redirect()->route('lessons.show', $lesson)->with('status', 'Material deleted!');
+        return redirect()->route('lessons.edit', $lesson)->with('status', 'Material removed!');
+    }
+
+    public function download(Material $material)
+    {
+        // Students should be able to download if they are enrolled
+        // $this->authorize('view', $material->lesson->course);
+
+        if (!$material->file_path) {
+            abort(404);
+        }
+
+        return Storage::disk('public')->download($material->file_path, $material->file_name);
     }
 }

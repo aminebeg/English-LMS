@@ -34,13 +34,30 @@
                     
                     <!-- Video Player (if available) -->
                     @if($lesson->video_url)
-                        <div class="bg-black rounded-lg overflow-hidden shadow-sm aspect-video border border-gray-200 dark:border-gray-700">
-                            <iframe src="{{ str_replace('watch?v=', 'embed/', $lesson->video_url) }}" 
-                                class="w-full h-full" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                            </iframe>
+                        <div class="bg-black rounded-lg overflow-hidden shadow-2xl aspect-video border border-gray-200 dark:border-gray-700">
+                            @php
+                                $videoUrl = $lesson->video_url;
+                                $embedUrl = '';
+                                if (str_contains($videoUrl, 'youtube.com') || str_contains($videoUrl, 'youtu.be')) {
+                                    $embedUrl = str_replace(['watch?v=', 'youtu.be/'], ['embed/', 'www.youtube.com/embed/'], $videoUrl);
+                                    if (str_contains($embedUrl, '&')) {
+                                        $embedUrl = explode('&', $embedUrl)[0];
+                                    }
+                                } elseif (str_contains($videoUrl, 'vimeo.com')) {
+                                    $embedUrl = str_replace('vimeo.com/', 'player.vimeo.com/video/', $videoUrl);
+                                }
+                            @endphp
+
+                            @if($embedUrl)
+                                <iframe src="{{ $embedUrl }}" 
+                                    class="w-full h-full" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    allowfullscreen>
+                                </iframe>
+                            @else
+                                <video src="{{ asset('storage/' . $videoUrl) }}" controls class="w-full h-full"></video>
+                            @endif
                         </div>
                     @endif
 
@@ -119,8 +136,14 @@
                                                 @break
 
                                             @case('image')
+                                                @php
+                                                    $src = $block['data']['src'] ?? '';
+                                                    if (!filter_var($src, FILTER_VALIDATE_URL) && !empty($src) && !str_starts_with($src, 'data:')) {
+                                                        $src = asset('storage/' . $src);
+                                                    }
+                                                @endphp
                                                 <figure class="my-6">
-                                                    <img src="{{ $block['data']['src'] ?? '' }}" alt="{{ $block['data']['caption'] ?? '' }}" class="rounded-lg shadow-sm w-full object-cover max-h-[500px]">
+                                                    <img src="{{ $src }}" alt="{{ $block['data']['caption'] ?? '' }}" class="rounded-lg shadow-sm w-full object-cover max-h-[500px]">
                                                     @if(!empty($block['data']['caption']))
                                                         <figcaption class="mt-2 text-center text-sm text-gray-500 dark:text-gray-400 italic">
                                                             {{ $block['data']['caption'] }}
@@ -128,17 +151,28 @@
                                                     @endif
                                                 </figure>
                                                 @break
-
+ 
                                             @case('video')
+                                                @php
+                                                    $src = $block['data']['src'] ?? '';
+                                                    $embedUrl = '';
+                                                    if (str_contains($src, 'youtube.com') || str_contains($src, 'youtu.be')) {
+                                                        $embedUrl = str_replace(['watch?v=', 'youtu.be/'], ['embed/', 'www.youtube.com/embed/'], $src);
+                                                        if (str_contains($embedUrl, '&')) {
+                                                            $embedUrl = explode('&', $embedUrl)[0];
+                                                        }
+                                                    } elseif (str_contains($src, 'vimeo.com')) {
+                                                        $embedUrl = str_replace('vimeo.com/', 'player.vimeo.com/video/', $src);
+                                                    } elseif (!filter_var($src, FILTER_VALIDATE_URL) && !empty($src)) {
+                                                        $src = asset('storage/' . $src);
+                                                    }
+                                                @endphp
                                                 <div class="my-6 aspect-video rounded-lg overflow-hidden shadow-sm border border-gray-200 dark:border-gray-700 bg-black">
-                                                    @if(str_contains($block['data']['src'] ?? '', 'youtube.com') || str_contains($block['data']['src'] ?? '', 'youtu.be'))
-                                                        <iframe src="{{ str_replace(['watch?v=', 'youtu.be/'], ['embed/', 'www.youtube.com/embed/'], $block['data']['src'] ?? '') }}" 
-                                                            class="w-full h-full" frameborder="0" allowfullscreen></iframe>
-                                                    @elseif(str_contains($block['data']['src'] ?? '', 'vimeo.com'))
-                                                        <iframe src="{{ str_replace('vimeo.com/', 'player.vimeo.com/video/', $block['data']['src'] ?? '') }}" 
+                                                    @if($embedUrl)
+                                                        <iframe src="{{ $embedUrl }}" 
                                                             class="w-full h-full" frameborder="0" allowfullscreen></iframe>
                                                     @else
-                                                        <video src="{{ $block['data']['src'] ?? '' }}" controls class="w-full h-full"></video>
+                                                        <video src="{{ $src }}" controls class="w-full h-full"></video>
                                                     @endif
                                                 </div>
                                                 @break
@@ -275,6 +309,36 @@
                                     </li>
                                 @endforeach
                             </ul>
+                        </div>
+                    @endif
+
+                    <!-- Lesson Materials (Files) -->
+                    @if($lesson->materials->where('type', 'file')->isNotEmpty())
+                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Lesson Materials
+                            </h3>
+                            <div class="space-y-3">
+                                @foreach($lesson->materials->where('type', 'file') as $material)
+                                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-100 dark:border-gray-600 group hover:border-indigo-300 transition-all">
+                                        <div class="flex items-center gap-3">
+                                            <div class="p-2 bg-indigo-100 dark:bg-indigo-900/40 rounded-lg text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                                            </div>
+                                            <div>
+                                                <div class="text-sm font-bold text-gray-900 dark:text-white">{{ $material->title }}</div>
+                                                <div class="text-xs text-gray-500">{{ strtoupper(pathinfo($material->file_name, PATHINFO_EXTENSION)) }} • {{ number_format($material->file_size / 1024, 1) }} KB</div>
+                                            </div>
+                                        </div>
+                                        <a href="{{ route('materials.download', $material) }}" class="flex items-center justify-center w-8 h-8 rounded-full bg-white dark:bg-gray-800 text-gray-400 hover:text-indigo-600 hover:shadow-sm transition-all">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
 

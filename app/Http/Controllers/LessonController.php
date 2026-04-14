@@ -50,7 +50,7 @@ class LessonController extends Controller
         // Handle booleans
         $validated['is_preview'] = $request->has('is_preview');
         $validated['is_published'] = $request->has('is_published');
-        
+
         if ($validated['is_published']) {
             $validated['published_at'] = now();
         }
@@ -70,6 +70,7 @@ class LessonController extends Controller
     public function edit(Lesson $lesson)
     {
         $this->authorize('update', $lesson->course);
+        $lesson->load('materials');
         return view('lessons.edit', compact('lesson'));
     }
 

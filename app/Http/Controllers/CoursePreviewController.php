@@ -15,15 +15,29 @@ class CoursePreviewController extends Controller
         }
 
         // Load relationships
-        $course->load(['tutor', 'lessons' => function($query) {
-            $query->orderBy('order');
-        }, 'tests' => function($query) {
-            $query->orderBy('order');
-        }]);
+        $course->load([
+            'tutor',
+            'sections' => function ($query) {
+                $query->orderBy('order');
+            },
+            'sections.lessons' => function ($query) {
+                $query->orderBy('order');
+            },
+            'sections.tests' => function ($query) {
+                $query->orderBy('order');
+            },
+            'lessons' => function ($query) {
+                $query->whereNull('course_section_id')->orderBy('order');
+            },
+            'tests' => function ($query) {
+                $query->whereNull('course_section_id')->whereNull('lesson_id')->orderBy('order');
+            }
+        ]);
 
-        // Count preview vs paid lessons
-        $previewLessonsCount = $course->lessons->where('is_preview', true)->count();
-        $totalLessonsCount = $course->lessons->count();
+        // Calculate preview vs paid lessons from all sources
+        $allLessons = $course->sections->flatMap->lessons->concat($course->lessons);
+        $previewLessonsCount = $allLessons->where('is_preview', true)->count();
+        $totalLessonsCount = $allLessons->count();
 
         return view('courses.preview', compact('course', 'previewLessonsCount', 'totalLessonsCount'));
     }
