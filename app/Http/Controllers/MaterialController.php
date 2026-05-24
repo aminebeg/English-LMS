@@ -24,7 +24,7 @@ class MaterialController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'required|string|in:video,text,audio,file',
-            'content' => 'required_if:type,text,video,audio|nullable|string',
+            'content' => 'required_unless:type,file|nullable|string',
             'file' => 'required_if:type,file|nullable|file|max:10240', // 10MB
         ]);
 
@@ -70,9 +70,34 @@ class MaterialController extends Controller
             'title' => 'required|string|max:255',
             'type' => 'required|string|in:video,text,audio,file',
             'content' => 'required_if:type,text,video,audio|nullable|string',
+            'file' => 'nullable|file|max:10240', // 10MB
         ]);
 
-        $material->update($validated);
+        $materialData = [
+            'title' => $validated['title'],
+            'type' => $validated['type'],
+            'content' => $validated['content'] ?? null,
+        ];
+
+        // Handle file upload if provided
+        if ($request->hasFile('file') && $validated['type'] === 'file') {
+            $file = $request->file('file');
+
+            // Delete old file if it exists
+            if ($material->file_path) {
+                Storage::disk('public')->delete($material->file_path);
+            }
+
+            // Store new file
+            $path = $file->store('lesson-materials/' . $material->lesson->id, 'public');
+
+            $materialData['file_path'] = $path;
+            $materialData['file_name'] = $file->getClientOriginalName();
+            $materialData['file_size'] = $file->getSize();
+            $materialData['mime_type'] = $file->getMimeType();
+        }
+
+        $material->update($materialData);
 
         return redirect()->route('lessons.edit', $material->lesson)->with('status', 'Material updated!');
     }
