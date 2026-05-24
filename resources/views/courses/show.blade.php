@@ -1,14 +1,14 @@
 <x-app-layout>
-    <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+    <div class="min-h-screen bg-gray-50 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- Page Header -->
             <div class="mb-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{{ $course->title }}
+                        <h1 class="text-2xl md:text-3xl font-bold text-gray-900">{{ $course->title }}
                         </h1>
-                        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        <p class="mt-1 text-sm text-gray-600">
                             by {{ $course->tutor->name }}
                             @if($course->category)
                                 • {{ $course->category }}
@@ -40,14 +40,14 @@
                 <div class="flex gap-2 mt-4">
                     @if($course->is_featured)
                         <span
-                            class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 text-xs font-medium rounded">Featured</span>
+                            class="px-2 py-1 bg-yellow-100 bg-yellow-900/30 text-yellow-800 text-yellow-300 text-xs font-medium rounded">Featured</span>
                     @endif
                     @if($course->is_published)
                         <span
-                            class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 text-xs font-medium rounded">Published</span>
+                            class="px-2 py-1 bg-green-100 bg-green-900/30 text-green-800 text-green-300 text-xs font-medium rounded">Published</span>
                     @else
                         <span
-                            class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300 text-xs font-medium rounded">Draft</span>
+                            class="px-2 py-1 bg-gray-100 bg-gray-700 text-gray-800 text-gray-300 text-xs font-medium rounded">Draft</span>
                     @endif
                 </div>
             </div>
@@ -59,44 +59,44 @@
 
                     <!-- Course Info -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                        class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                                <div class="text-2xl font-bold text-gray-900">
                                     @if($course->price == 0)
                                         FREE
                                     @else
                                         ${{ number_format($course->final_price, 2) }}
                                     @endif
                                 </div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400">Price</div>
+                                <div class="text-sm text-gray-600">Price</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                                <div class="text-2xl font-bold text-gray-900">
                                     {{ $course->lessons->count() }}
                                 </div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400">Lessons</div>
+                                <div class="text-sm text-gray-600">Lessons</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                                <div class="text-2xl font-bold text-gray-900">
                                     {{ $course->students->count() }}
                                 </div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400">Students</div>
+                                <div class="text-sm text-gray-600">Students</div>
                             </div>
                             <div class="text-center">
-                                <div class="text-2xl font-bold text-gray-900 dark:text-white">
+                                <div class="text-2xl font-bold text-gray-900">
                                     {{ $course->level ?? 'All' }}
                                 </div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400">Level</div>
+                                <div class="text-sm text-gray-600">Level</div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Description -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">About This Course</h2>
-                        <div class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-4">About This Course</h2>
+                        <div class="text-gray-700 leading-relaxed">
                             {!! nl2br(e($course->description)) !!}
                         </div>
                     </div>
@@ -104,8 +104,8 @@
                     <!-- Learning Outcomes -->
                     @if($course->learning_outcomes && count($course->learning_outcomes) > 0)
                         <div
-                            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">What You'll Learn</h2>
+                            class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                            <h2 class="text-lg font-semibold text-gray-900 mb-4">What You'll Learn</h2>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 @foreach($course->learning_outcomes as $outcome)
                                     <div class="flex items-start gap-2">
@@ -114,7 +114,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M5 13l4 4L19 7" />
                                         </svg>
-                                        <span class="text-sm text-gray-700 dark:text-gray-300">{{ $outcome }}</span>
+                                        <span class="text-sm text-gray-700">{{ $outcome }}</span>
                                     </div>
                                 @endforeach
                             </div>
@@ -123,10 +123,10 @@
 
                     <!-- Course Content -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                         <div
-                            class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 flex items-center justify-between">
-                            <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            class="px-6 py-4 border-b border-gray-200 bg-gray-50/50 bg-gray-800/50 flex items-center justify-between">
+                            <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
                                 <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -138,12 +138,12 @@
                                 <div class="flex gap-2">
                                     <button
                                         onclick="document.getElementById('add-section-modal').classList.remove('hidden')"
-                                        class="text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                        class="text-sm font-medium text-indigo-600 hover:text-indigo-700 text-indigo-400 hover:text-indigo-300">
                                         + Section
                                     </button>
                                     <span class="text-gray-300">|</span>
                                     <a href="{{ route('lessons.create', ['course' => $course->id]) }}"
-                                        class="text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">
+                                        class="text-sm font-medium text-indigo-600 hover:text-indigo-700 text-indigo-400 hover:text-indigo-300">
                                         + Lesson
                                     </a>
                                 </div>
@@ -152,22 +152,22 @@
 
                         <div class="p-0">
                             @if($course->sections->isNotEmpty())
-                                <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                                <div class="divide-y divide-gray-200 divide-gray-700">
                                     @foreach($course->sections as $section)
-                                        <div class="bg-white dark:bg-gray-800">
+                                        <div class="bg-white">
                                             <!-- Section Toggle -->
                                             <div
-                                                class="px-6 py-4 bg-gray-50/30 dark:bg-gray-700/20 flex items-center justify-between border-b dark:border-gray-700">
+                                                class="px-6 py-4 bg-gray-50/30 bg-gray-700/20 flex items-center justify-between border-b border-gray-700">
                                                 <div class="flex items-center gap-3">
                                                     <span
-                                                        class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-sm">
+                                                        class="w-8 h-8 rounded-lg bg-indigo-100 bg-indigo-900/30 flex items-center justify-center text-indigo-600 text-indigo-400 font-bold text-sm">
                                                         {{ $loop->iteration }}
                                                     </span>
                                                     <div>
-                                                        <h3 class="font-bold text-gray-900 dark:text-white">
+                                                        <h3 class="font-bold text-gray-900">
                                                             {{ $section->title }}
                                                         </h3>
-                                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                        <p class="text-xs text-gray-500">
                                                             {{ $section->lessons->count() }} lessons •
                                                             {{ $section->tests->count() }} tests
                                                         </p>
@@ -183,10 +183,10 @@
                                             </div>
 
                                             <!-- Section Lessons & Tests -->
-                                            <div class="divide-y divide-gray-50 dark:divide-gray-700/50">
+                                            <div class="divide-y divide-gray-50 divide-gray-700/50">
                                                 @foreach($section->lessons as $lesson)
                                                     <div
-                                                        class="px-6 py-4 hover:bg-gray-50/50 dark:hover:bg-gray-700/10 transition flex items-center justify-between group">
+                                                        class="px-6 py-4 hover:bg-gray-50/50 hover:bg-gray-700/10 transition flex items-center justify-between group">
                                                         <div class="flex items-center gap-4">
                                                             <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-500 transition-colors"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,20 +198,20 @@
                                                             </svg>
                                                             <div>
                                                                 <a href="{{ route('lessons.show', $lesson) }}"
-                                                                    class="text-sm font-medium text-gray-900 dark:text-white hover:text-indigo-600 transition-colors">
+                                                                    class="text-sm font-medium text-gray-900 hover:text-indigo-600 transition-colors">
                                                                     {{ $lesson->title }}
                                                                 </a>
                                                                 <div class="flex items-center gap-2 mt-1">
                                                                     @if($lesson->is_preview)
                                                                         <span
-                                                                            class="text-[10px] px-1.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold rounded">PREVIEW</span>
+                                                                            class="text-[10px] px-1.5 py-0.5 bg-green-100 bg-green-900/30 text-green-700 text-green-400 font-bold rounded">PREVIEW</span>
                                                                     @endif
                                                                     <span
                                                                         class="text-[10px] text-gray-400">{{ $lesson->duration_minutes ?? '10' }}
                                                                         mins</span>
                                                                     @if($lesson->tests->isNotEmpty())
                                                                         <span
-                                                                            class="text-[10px] bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-1 py-0.5 rounded">{{ $lesson->tests->count() }}
+                                                                            class="text-[10px] bg-yellow-100 bg-yellow-900/30 text-yellow-700 text-yellow-400 px-1 py-0.5 rounded">{{ $lesson->tests->count() }}
                                                                             Quiz</span>
                                                                     @endif
                                                                 </div>
@@ -231,7 +231,7 @@
 
                                                 @foreach($section->tests as $test)
                                                     <div
-                                                        class="px-6 py-4 bg-yellow-50/30 dark:bg-yellow-900/10 flex items-center justify-between">
+                                                        class="px-6 py-4 bg-yellow-50/30 bg-yellow-900/10 flex items-center justify-between">
                                                         <div class="flex items-center gap-4">
                                                             <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor"
                                                                 viewBox="0 0 24 24">
@@ -241,7 +241,7 @@
                                                             </svg>
                                                             <div>
                                                                 <span
-                                                                    class="text-sm font-bold text-gray-900 dark:text-white">{{ $test->title }}</span>
+                                                                    class="text-sm font-bold text-gray-900">{{ $test->title }}</span>
                                                                 <p class="text-[10px] text-gray-500">Section Test •
                                                                     {{ $test->questions->count() }} Questions
                                                                 </p>
@@ -259,16 +259,16 @@
                                         $orphanedLessons = $course->lessons->whereNull('course_section_id')->sortBy('order');
                                     @endphp
                                     @if($orphanedLessons->isNotEmpty())
-                                        <div class="bg-white dark:bg-gray-800">
+                                        <div class="bg-white">
                                             <div
-                                                class="px-6 py-3 bg-gray-100/50 dark:bg-gray-700/50 border-b dark:border-gray-700">
+                                                class="px-6 py-3 bg-gray-100/50 bg-gray-700/50 border-b border-gray-700">
                                                 <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider">Unassigned
                                                     Lessons</h3>
                                             </div>
-                                            <div class="divide-y dark:divide-gray-700">
+                                            <div class="divide-y divide-gray-700">
                                                 @foreach($orphanedLessons as $lesson)
                                                     <div
-                                                        class="px-6 py-4 hover:bg-gray-50/50 dark:hover:bg-gray-700/10 transition flex items-center justify-between group">
+                                                        class="px-6 py-4 hover:bg-gray-50/50 hover:bg-gray-700/10 transition flex items-center justify-between group">
                                                         <div class="flex items-center gap-4">
                                                             <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-500 transition-colors"
                                                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -280,13 +280,13 @@
                                                             </svg>
                                                             <div>
                                                                 <a href="{{ route('lessons.show', $lesson) }}"
-                                                                    class="text-sm font-medium text-gray-900 dark:text-white">
+                                                                    class="text-sm font-medium text-gray-900">
                                                                     {{ $lesson->title }}
                                                                 </a>
                                                                 <div class="flex items-center gap-2 mt-1">
                                                                     @if($lesson->is_preview)
                                                                         <span
-                                                                            class="text-[10px] px-1.5 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold rounded">PREVIEW</span>
+                                                                            class="text-[10px] px-1.5 py-0.5 bg-green-100 bg-green-900/30 text-green-700 text-green-400 font-bold rounded">PREVIEW</span>
                                                                     @endif
                                                                     <span
                                                                         class="text-[10px] text-gray-400">{{ $lesson->duration_minutes ?? '10' }}
@@ -308,18 +308,18 @@
                                     @endif
                                 </div>
                             @else
-                                <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                <div class="divide-y divide-gray-100 divide-gray-700">
                                     @forelse($course->lessons->sortBy('order') as $lesson)
                                         <div
-                                            class="px-6 py-5 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition flex items-center justify-between group">
+                                            class="px-6 py-5 hover:bg-gray-50 hover:bg-gray-700/30 transition flex items-center justify-between group">
                                             <div class="flex items-center gap-4">
                                                 <div
-                                                    class="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold">
+                                                    class="w-10 h-10 rounded-full bg-indigo-50 bg-indigo-900/20 flex items-center justify-center text-indigo-600 text-indigo-400 font-bold">
                                                     {{ $lesson->order }}
                                                 </div>
                                                 <div>
                                                     <a href="{{ route('lessons.show', $lesson) }}"
-                                                        class="text-base font-bold text-gray-900 dark:text-white hover:text-indigo-600 transition-colors">
+                                                        class="text-base font-bold text-gray-900 hover:text-indigo-600 transition-colors">
                                                         {{ $lesson->title }}
                                                     </a>
                                                     <div class="flex items-center gap-3 mt-1 text-sm text-gray-500">
@@ -331,12 +331,12 @@
                                                             </svg> {{ $lesson->duration_minutes ?? '10' }} min</span>
                                                         @if($lesson->is_preview)
                                                             <span
-                                                                class="text-[10px] px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-bold rounded">FREE
+                                                                class="text-[10px] px-2 py-0.5 bg-green-100 bg-green-900/30 text-green-700 text-green-400 font-bold rounded">FREE
                                                                 PREVIEW</span>
                                                         @endif
                                                         @if($lesson->tests->isNotEmpty())
                                                             <span
-                                                                class="flex items-center gap-1 text-yellow-600 dark:text-yellow-400 font-medium">
+                                                                class="flex items-center gap-1 text-yellow-600 text-yellow-400 font-medium">
                                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                                     viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -353,14 +353,14 @@
                                                 <div
                                                     class="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                                     <a href="{{ route('lessons.edit', $lesson) }}"
-                                                        class="px-3 py-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 transition-colors">Edit</a>
+                                                        class="px-3 py-1 bg-white border border-gray-300 rounded-md text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors">Edit</a>
                                                 </div>
                                             @endif
                                         </div>
                                     @empty
-                                        <div class="text-center py-20 text-gray-500 dark:text-gray-400">
+                                        <div class="text-center py-20 text-gray-500">
                                             <div
-                                                class="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                class="w-16 h-16 bg-gray-100 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
                                                 <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -383,10 +383,10 @@
                     <!-- Final Exams / Course Level Tests -->
                     @if($course->tests->whereNull('course_section_id')->whereNull('lesson_id')->isNotEmpty())
                         <div
-                            class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+                            class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                             <div class="flex items-center justify-between mb-6">
-                                <h2 class="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none"
+                                <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                                    <svg class="w-6 h-6 text-purple-600 text-purple-400" fill="none"
                                         stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -395,7 +395,7 @@
                                 </h2>
                                 @if(auth()->id() === $course->tutor_id)
                                     <a href="{{ route('tests.create', ['course' => $course->id]) }}"
-                                        class="text-sm font-medium text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300">+
+                                        class="text-sm font-medium text-indigo-600 hover:text-indigo-700 text-indigo-400 hover:text-indigo-300">+
                                         Add Final Exam</a>
                                 @endif
                             </div>
@@ -403,10 +403,10 @@
                             <div class="space-y-3">
                                 @foreach($course->tests->whereNull('course_section_id')->whereNull('lesson_id') as $test)
                                     <div
-                                        class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-transparent hover:border-indigo-200 dark:hover:border-indigo-800 transition-all group">
+                                        class="flex items-center justify-between p-4 bg-gray-50 bg-gray-700/30 rounded-xl border border-transparent hover:border-indigo-200 hover:border-indigo-800 transition-all group">
                                         <div class="flex items-center gap-4">
                                             <div
-                                                class="w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-sm flex items-center justify-center">
+                                                class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center">
                                                 <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -414,7 +414,7 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <h4 class="font-bold text-gray-900 dark:text-white">{{ $test->title }}</h4>
+                                                <h4 class="font-bold text-gray-900">{{ $test->title }}</h4>
                                                 <div class="flex items-center gap-3 mt-0.5 text-xs text-gray-500">
                                                     <span>{{ $test->questions->count() }} Questions</span>
                                                     <span>Passing Score: {{ $test->passing_score }}%</span>
@@ -422,7 +422,7 @@
                                             </div>
                                         </div>
                                         <a href="{{ route('tests.show', $test) }}"
-                                            class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-sm font-bold text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/40 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all shadow-sm">Manage</a>
+                                            class="px-4 py-2 bg-white border border-gray-200 border-gray-600 rounded-lg text-sm font-bold text-gray-700 hover:bg-indigo-50 hover:bg-indigo-900/40 hover:text-indigo-600 hover:text-indigo-400 transition-all shadow-sm">Manage</a>
                                     </div>
                                 @endforeach
                             </div>
@@ -436,7 +436,7 @@
 
                     <!-- Media -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                         <div class="aspect-video bg-gray-900 relative group">
                             @if($course->preview_video)
                                 @php
@@ -476,49 +476,49 @@
 
                     <!-- Course Details -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Course Details</h3>
+                        class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4">Course Details</h3>
                         <div class="space-y-3 text-sm">
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Duration</span>
+                                <span class="text-gray-600">Duration</span>
                                 <span
-                                    class="text-gray-900 dark:text-white font-medium">{{ $course->estimated_hours ?? 0 }}h</span>
+                                    class="text-gray-900 font-medium">{{ $course->estimated_hours ?? 0 }}h</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Level</span>
+                                <span class="text-gray-600">Level</span>
                                 <span
-                                    class="text-gray-900 dark:text-white font-medium">{{ $course->level ?? 'All Levels' }}</span>
+                                    class="text-gray-900 font-medium">{{ $course->level ?? 'All Levels' }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Language</span>
+                                <span class="text-gray-600">Language</span>
                                 <span
-                                    class="text-gray-900 dark:text-white font-medium">{{ $course->language ?? 'English' }}</span>
+                                    class="text-gray-900 font-medium">{{ $course->language ?? 'English' }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Certificate</span>
+                                <span class="text-gray-600">Certificate</span>
                                 <span
-                                    class="text-gray-900 dark:text-white font-medium">{{ $course->has_certificate ? 'Yes' : 'No' }}</span>
+                                    class="text-gray-900 font-medium">{{ $course->has_certificate ? 'Yes' : 'No' }}</span>
                             </div>
                             <div class="flex justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Updated</span>
+                                <span class="text-gray-600">Updated</span>
                                 <span
-                                    class="text-gray-900 dark:text-white font-medium">{{ $course->updated_at->diffForHumans() }}</span>
+                                    class="text-gray-900 font-medium">{{ $course->updated_at->diffForHumans() }}</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Instructor -->
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                        <h3 class="font-semibold text-gray-900 dark:text-white mb-4">Instructor</h3>
+                        class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4">Instructor</h3>
                         <div class="flex  items-start gap-4">
                             <div
-                                class="flex-shrink-0 w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                                class="flex-shrink-0 w-12 h-12 bg-indigo-100 bg-indigo-900/30 rounded-full flex items-center justify-center text-lg font-bold text-indigo-600 text-indigo-400">
                                 {{ substr($course->tutor->name, 0, 1) }}
                             </div>
                             <div>
-                                <div class="font-medium text-gray-900 dark:text-white">{{ $course->tutor->name }}</div>
-                                <div class="text-sm text-gray-600 dark:text-gray-400">
+                                <div class="font-medium text-gray-900">{{ $course->tutor->name }}</div>
+                                <div class="text-sm text-gray-600">
                                     {{ $course->tutor->courses->count() }} courses
                                 </div>
                             </div>
@@ -528,12 +528,12 @@
                     <!-- Tags -->
                     @if($course->tags && count($course->tags) > 0)
                         <div
-                            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                            <h3 class="font-semibold text-gray-900 dark:text-white mb-3">Tags</h3>
+                            class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                            <h3 class="font-semibold text-gray-900 mb-3">Tags</h3>
                             <div class="flex flex-wrap gap-2">
                                 @foreach($course->tags as $tag)
                                     <span
-                                        class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded">{{ $tag }}</span>
+                                        class="px-2 py-1 bg-gray-100 bg-gray-700 text-gray-700 text-xs rounded">{{ $tag }}</span>
                                 @endforeach
                             </div>
                         </div>
@@ -543,3 +543,4 @@
         </div>
     </div>
 </x-app-layout>
+

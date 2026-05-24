@@ -125,12 +125,12 @@
                     @if (Route::has('login'))
                         @auth
                             <a href="{{ url('/dashboard') }}"
-                                class="px-5 py-2.5 text-gray-700 hover:text-indigo-600 font-medium transition-all">
+                                class="px-5 py-2.5 text-hover:text-indigo-600 font-medium transition-all">
                                 Dashboard
                             </a>
                         @else
                             <a href="{{ route('login') }}"
-                                class="px-5 py-2.5 text-gray-700 hover:text-indigo-600 font-medium transition-all">
+                                class="px-5 py-2.5 text-hover:text-indigo-600 font-medium transition-all">
                                 Log in
                             </a>
                             @if (Route::has('register'))
@@ -173,7 +173,7 @@
                         {{ \App\Models\User::role('student')->count() }}+ Active Learners</span>
                 </div>
 
-                <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 mb-8 leading-tight">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-mb-8 leading-tight">
                     Master English with
                     <span
                         class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
@@ -199,7 +199,7 @@
                     </a>
                     @guest
                         <a href="{{ route('register') }}"
-                            class="px-8 py-4 bg-white border-2 border-gray-300 text-gray-900 font-bold rounded-xl hover:border-indigo-500 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 text-lg">
+                            class="px-8 py-4 bg-white border-2 border-gray-300 text-font-bold rounded-xl hover:border-indigo-500 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-200 text-lg">
                             Start Learning Free
                         </a>
                     @endguest
@@ -252,17 +252,17 @@
                     class="inline-block px-4 py-2 bg-indigo-100 text-indigo-600 rounded-full text-sm font-semibold mb-4">
                     FEATURED COURSES
                 </span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                <h2 class="text-4xl md:text-5xl font-bold text-mb-4">
                     Start Your Learning Journey
                 </h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
                     Choose from our most popular courses designed by expert tutors
                 </p>
             </div>
 
             @if ($featuredCourses->isEmpty())
                 <div
-                    class="text-center py-20 bg-gray-50 dark:bg-gray-800 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-700">
+                    class="text-center py-20 bg-gray-50 bg-rounded-2xl border-2 border-dashed border-gray-300 border->
                     <div
                         class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center">
                         <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -270,8 +270,8 @@
                                 d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Amazing Courses Coming Soon!</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">Our expert tutors are preparing
+                    <h3 class="text-2xl font-bold text-mb-3">Amazing Courses Coming Soon!</h3>
+                    <p class="text-gray-600 mb-8 max-w-md mx-auto">Our expert tutors are preparing
                         incredible courses for you.</p>
                     @auth
                         @if (auth()->user()->hasRole('tutor'))
@@ -295,7 +295,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach ($featuredCourses as $course)
                         <div
-                            class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover-lift">
+                            class="group bg-white rounded-2xl shadow-lg hover:shadow-2xl border border-gray-200 overflow-hidden hover-lift">
                             {{-- Course Image --}}
                             <div
                                 class="relative aspect-video bg-gradient-to-br from-indigo-500 to-purple-600 overflow-hidden">
@@ -315,12 +315,12 @@
                                 {{-- Badges --}}
                                 <div class="absolute top-3 left-3 flex gap-2">
                                     <span
-                                        class="px-3 py-1 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-indigo-600 dark:text-indigo-400 text-xs font-bold rounded-full">
+                                        class="px-3 py-1 bg-white/90 bg-gray-900/90 backdrop-blur-sm text-indigo-600 text-xs font-bold rounded-full">
                                         {{ ucfirst($course->type) }}
                                     </span>
                                     @if ($course->level)
                                         <span
-                                            class="px-3 py-1 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm text-green-600 dark:text-green-400 text-xs font-bold rounded-full">
+                                            class="px-3 py-1 bg-white/90 bg-gray-900/90 backdrop-blur-sm text-green-600 text-xs font-bold rounded-full">
                                             {{ ucfirst($course->level) }}
                                         </span>
                                     @endif
@@ -328,9 +328,9 @@
 
                                 {{-- Price --}}
                                 <div class="absolute top-3 right-3">
-                                    @if ($course->price > 0)
+                                    @if ($course->price> 0)
                                         <span
-                                            class="px-4 py-2 bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-bold text-lg rounded-full shadow-lg">
+                                            class="px-4 py-2 bg-white bg-text-font-bold text-lg rounded-full shadow-lg">
                                             ${{ number_format($course->price, 2) }}
                                         </span>
                                     @else
@@ -345,31 +345,31 @@
                             {{-- Course Content --}}
                             <div class="p-6">
                                 <h3
-                                    class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                    class="text-xl font-bold text-mb-3 line-clamp-2 group-hover:text-indigo-600 group-hover:transition-colors">
                                     {{ $course->title }}
                                 </h3>
 
-                                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                                <p class="text-gray-600 text-sm mb-4 line-clamp-2">
                                     {{ $course->description }}
                                 </p>
 
                                 {{-- Tutor Info --}}
                                 <div
-                                    class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+                                    class="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200">
                                     <div
                                         class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-md">
                                         {{ strtoupper(substr($course->tutor->name, 0, 1)) }}
                                     </div>
                                     <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Instructor</p>
-                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                        <p class="text-xs text-gray-500">Instructor</p>
+                                        <p class="text-sm font-semibold text->
                                             {{ $course->tutor->name }}</p>
                                     </div>
                                 </div>
 
                                 {{-- Course Stats --}}
                                 <div
-                                    class="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-5">
+                                    class="flex items-center justify-between text-sm text-gray-600 mb-5">
                                     <span class="flex items-center gap-1">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -402,7 +402,7 @@
                 <div class="text-center mt-12">
                     @auth
                         <a href="{{ route('courses.browse') }}"
-                            class="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl hover:shadow-xl transition-all">
+                            class="inline-flex items-center gap-2 px-8 py-4 bg-bg-white text-white text-font-bold rounded-xl hover:shadow-xl transition-all">
                             View All Courses
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -411,7 +411,7 @@
                         </a>
                     @else
                         <a href="{{ route('register') }}"
-                            class="inline-flex items-center gap-2 px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl hover:shadow-xl transition-all">
+                            class="inline-flex items-center gap-2 px-8 py-4 bg-bg-white text-white text-font-bold rounded-xl hover:shadow-xl transition-all">
                             Sign Up to Browse All Courses
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -427,24 +427,24 @@
 
 
     {{-- Features Section --}}
-    <section class="py-20 bg-white dark:bg-gray-900">
+    <section class="py-20 bg-white bg->
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <span
-                    class="inline-block px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full text-sm font-semibold mb-4">
+                    class="inline-block px-4 py-2 bg-green-100 bg-text-green-600 rounded-full text-sm font-semibold mb-4">
                     WHY CHOOSE US
                 </span>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                <h2 class="text-4xl md:text-5xl font-bold text-mb-4">
                     Everything You Need to Succeed
                 </h2>
-                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
                     The most comprehensive platform for learning English online
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div
-                    class="group p-8 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl hover:shadow-xl transition-all hover-lift">
+                    class="group p-8 bg-gradient-to-br from-blue-50 to-indigo-50 from-to-rounded-2xl hover:shadow-xl transition-all hover-lift">
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -452,13 +452,13 @@
                                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Expert Tutors</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Learn from certified English teachers with years of
+                    <h3 class="text-2xl font-bold text-mb-3">Expert Tutors</h3>
+                    <p class="text-gray-600">Learn from certified English teachers with years of
                         experience and proven teaching methods.</p>
                 </div>
 
                 <div
-                    class="group p-8 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-2xl hover:shadow-xl transition-all hover-lift">
+                    class="group p-8 bg-gradient-to-br from-purple-50 to-pink-50 from-to-pink-900/20 rounded-2xl hover:shadow-xl transition-all hover-lift">
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -466,13 +466,13 @@
                                 d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Interactive Learning</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Engage with dynamic lessons, quizzes, and multimedia
+                    <h3 class="text-2xl font-bold text-mb-3">Interactive Learning</h3>
+                    <p class="text-gray-600">Engage with dynamic lessons, quizzes, and multimedia
                         content to master English effectively.</p>
                 </div>
 
                 <div
-                    class="group p-8 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl hover:shadow-xl transition-all hover-lift">
+                    class="group p-8 bg-gradient-to-br from-green-50 to-emerald-50 from-green-900/20 to-emerald-900/20 rounded-2xl hover:shadow-xl transition-all hover-lift">
                     <div
                         class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -480,8 +480,8 @@
                                 d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Get Certified</h3>
-                    <p class="text-gray-600 dark:text-gray-400">Earn certificates upon course completion to showcase
+                    <h3 class="text-2xl font-bold text-mb-3">Get Certified</h3>
+                    <p class="text-gray-600">Earn certificates upon course completion to showcase
                         your skills and boost your career.</p>
                 </div>
             </div>
@@ -527,7 +527,7 @@
     </section>
 
     {{-- Footer --}}
-    <footer class="bg-gray-900 text-gray-300 py-12">
+    <footer class="bg-py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <div class="flex items-center justify-center gap-3 mb-6">
@@ -540,15 +540,15 @@
                     </div>
                     <span class="text-3xl font-bold text-white">English LMS</span>
                 </div>
-                <p class="text-gray-400 mb-6 max-w-md mx-auto">
+                <p class= mb-6 max-w-md mx-auto">
                     Your premier online destination for mastering the English language with expert tutors and
                     interactive learning.
                 </p>
                 <div class="flex items-center justify-center gap-6 mb-6">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">About</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Contact</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms</a>
+                    <a href="#" class= hover:text-white transition-colors">About</a>
+                    <a href="#" class= hover:text-white transition-colors">Contact</a>
+                    <a href="#" class= hover:text-white transition-colors">Privacy</a>
+                    <a href="#" class= hover:text-white transition-colors">Terms</a>
                 </div>
                 <p class="text-gray-500 text-sm">
                     © {{ date('Y') }} English LMS. All rights reserved.
@@ -559,3 +559,4 @@
 </body>
 
 </html>
+

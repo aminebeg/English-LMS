@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-text-gray-200 leading-tight">
             {{ __('Edit Material') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-text-gray-100">
                     <form method="POST" action="{{ route('materials.update', $material) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -23,7 +23,7 @@
                         <div class="mb-4">
                             <x-input-label for="type" :value="__('Type')" />
                             <select id="type" name="type"
-                                class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                class="block mt-1 w-full border-gray-300 border-bg-focus:border-indigo-500 focus:focus:ring-indigo-500 focus:ring-indigo-600 rounded-md shadow-sm"
                                 required>
                                 <option value="video" {{ old('type', $material->type) === 'video' ? 'selected' : '' }}>
                                     Video</option>
@@ -40,7 +40,7 @@
                         <div class="mb-4">
                             <x-input-label for="content" :value="__('Content (URL or Text)')" />
                             <textarea id="content" name="content" rows="6"
-                                class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                class="block mt-1 w-full border-gray-300 border-bg-focus:border-indigo-500 focus:focus:ring-indigo-500 focus:ring-indigo-600 rounded-md shadow-sm"
                                 {{ old('type', $material->type) === 'file' ? 'disabled' : '' }}>{{ old('content', $material->content) }}</textarea>
                             <p class="text-xs text-gray-500 mt-1">For video/audio, enter the URL. For text, enter the
                                 content. Leave blank for file uploads.</p>
@@ -50,12 +50,12 @@
                         @if ($material->type === 'file')
                             <div class="mb-4">
                                 <x-input-label for="current-file" :value="__('Current File')" />
-                                <div class="mt-2 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div class="mt-2 p-4 bg-gray-50 bg-rounded-lg">
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900 dark:text-white">
+                                            <p class="text-sm font-medium text->
                                                 {{ $material->file_name }}</p>
-                                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                            <p class="text-xs text-gray-500">
                                                 {{ number_format($material->file_size / 1024, 1) }} KB</p>
                                         </div>
                                         <a href="{{ route('materials.download', $material) }}"
@@ -67,7 +67,7 @@
                             <div class="mb-4">
                                 <x-input-label for="file" :value="__('Replace File (Optional)')" />
                                 <input id="file"
-                                    class="block mt-1 w-full text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-indigo-900 dark:file:text-indigo-100"
+                                    class="block mt-1 w-full text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 file:bg-file:text-indigo-100"
                                     type="file" name="file" />
                                 <p class="text-xs text-gray-500 mt-1">Leave blank to keep current file. Max size: 10MB
                                 </p>
@@ -77,7 +77,7 @@
                             <div class="mb-4">
                                 <x-input-label for="file" :value="__('Upload File')" />
                                 <input id="file"
-                                    class="block mt-1 w-full text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-indigo-900 dark:file:text-indigo-100"
+                                    class="block mt-1 w-full text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 file:bg-file:text-indigo-100"
                                     type="file" name="file"
                                     {{ old('type', $material->type) === 'file' ? 'required' : '' }} />
                                 <p class="text-xs text-gray-500 mt-1">Max size: 10MB</p>
@@ -87,7 +87,7 @@
 
                         <div class="flex items-center justify-between mt-6">
                             <a href="{{ route('lessons.edit', $material->lesson) }}"
-                                class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                                class="underline text-sm text-gray-600 hover:text-hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset->
                                 Cancel
                             </a>
                             <x-primary-button>
@@ -117,3 +117,4 @@
         });
     </script>
 </x-app-layout>
+

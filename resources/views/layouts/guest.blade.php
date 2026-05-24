@@ -81,11 +81,11 @@
             </div>
 
             <!-- Form Side (Right) -->
-            <div class="flex flex-col justify-center bg-white dark:bg-gray-900 px-6 py-12 sm:px-12 lg:px-16 xl:px-24">
+            <div class="flex flex-col justify-center bg-white bg-gray-900 px-6 py-12 sm:px-12 lg:px-16 xl:px-24">
                 <!-- Mobile Logo -->
                 <div class="lg:hidden mb-8 text-center">
                     <a href="/" class="inline-block">
-                        <h1 class="text-3xl font-extrabold text-indigo-600 dark:text-indigo-400">English LMS</h1>
+                        <h1 class="text-3xl font-extrabold text-indigo-600 text-indigo-400">English LMS</h1>
                     </a>
                 </div>
 
@@ -115,3 +115,4 @@
         </style>
     </body>
 </html>
+

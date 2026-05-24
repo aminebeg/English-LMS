@@ -2,21 +2,21 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <div>
-                <h2 class="font-bold text-xl text-gray-900 dark:text-white leading-tight">
+                <h2 class="font-bold text-xl text-leading-tight">
                     {{ $lesson->title }}
                 </h2>
-                <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <div class="text-sm text-gray-600 mt-1">
                     {{ $course->title }} • Lesson {{ $lesson->order }}
                 </div>
             </div>
             <a href="{{ route('enrollments.show', $course) }}"
-                class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition ease-in-out duration-150">
+                class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md font-semibold text-xs text-uppercase tracking-widest shadow-sm hover:bg-gray-50 hover:bg-transition ease-in-out duration-150">
                 Back to Course
             </a>
         </div>
     </x-slot>
 
-    <div class="py-12 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Content -->
@@ -24,10 +24,10 @@
                     <!-- Lesson Video (if available) -->
                     @if ($lesson->video_url)
                         <div
-                            class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
                             <div class="p-6">
                                 <h3
-                                    class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                    class="text-lg font-bold text-mb-4 flex items-center gap-2">
                                     <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -47,11 +47,11 @@
                                             $matches,
                                         )
                                     ) {
-                                        $embedUrl = "https://www.youtube.com/embed/{$matches[1]}";
+                                        $embedUrl ="https://www.youtube.com/embed/{$matches[1]}";
                                     }
                                     // Vimeo
                                     elseif (preg_match('/vimeo\.com\/(?:video\/)?(\d+)/', $videoUrl, $matches)) {
-                                        $embedUrl = "https://player.vimeo.com/video/{$matches[1]}";
+                                        $embedUrl ="https://player.vimeo.com/video/{$matches[1]}";
                                     }
                                 @endphp
 
@@ -64,7 +64,7 @@
                                             allowfullscreen></iframe>
                                     </div>
                                 @else
-                                    <video controls class="w-full rounded-lg bg-gray-900">
+                                    <video controls class="w-full rounded-lg bg->
                                         <source src="{{ $videoUrl }}" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
@@ -76,18 +76,18 @@
                     <!-- Lesson Summary (if available) -->
                     @if ($lesson->summary)
                         <div
-                            class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+                            class="bg-blue-50 bg-border border-blue-200 border-blue-800 rounded-lg p-6">
                             <h3
-                                class="text-sm font-bold text-blue-900 dark:text-blue-100 uppercase tracking-wider mb-2">
+                                class="text-sm font-bold text-text-blue-100 uppercase tracking-wider mb-2">
                                 Lesson Summary</h3>
-                            <p class="text-blue-800 dark:text-blue-200">{{ $lesson->summary }}</p>
+                            <p class="text-blue-800">{{ $lesson->summary }}</p>
                         </div>
                     @endif
 
                     <!-- Lesson Content -->
                     <div
-                        class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
-                        <div class="p-8 text-gray-900 dark:text-gray-100 prose dark:prose-invert max-w-none">
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
+                        <div class="p-8 text-text-gray-100 prose prose-invert max-w-none">
                             @php
                                 $content = $lesson->content;
                                 $blocks = [];
@@ -101,7 +101,7 @@
                                 }
                             @endphp
 
-                            @if (count($blocks) > 0)
+                            @if (count($blocks)> 0)
                                 @foreach ($blocks as $block)
                                     @php
                                         $type = $block['type'] ?? 'text';
@@ -115,19 +115,19 @@
                                                 $text = $data['content'] ?? '';
                                             @endphp
                                             @if ($level === 'h2')
-                                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-6 mb-4">
+                                                <h2 class="text-2xl font-bold text-mt-6 mb-4">
                                                     {{ $text }}</h2>
                                             @elseif($level === 'h3')
-                                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-4 mb-3">
+                                                <h3 class="text-xl font-bold text-mt-4 mb-3">
                                                     {{ $text }}</h3>
                                             @else
-                                                <h4 class="text-lg font-bold text-gray-900 dark:text-white mt-3 mb-2">
+                                                <h4 class="text-lg font-bold text-mt-3 mb-2">
                                                     {{ $text }}</h4>
                                             @endif
                                         @break
 
                                         @case('text')
-                                            <div class="prose dark:prose-invert max-w-none mb-4">
+                                            <div class="prose prose-invert max-w-none mb-4">
                                                 {!! $data['content'] ?? '' !!}
                                             </div>
                                         @break
@@ -139,7 +139,7 @@
                                                         class="rounded-lg shadow-md w-full">
                                                     @if (!empty($data['caption']))
                                                         <figcaption
-                                                            class="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center">
+                                                            class="text-sm text-gray-500 mt-2 text-center">
                                                             {{ $data['caption'] }}</figcaption>
                                                     @endif
                                                 </figure>
@@ -161,7 +161,7 @@
                                                                 $matches,
                                                             )
                                                         ) {
-                                                            $embedUrl = "https://www.youtube.com/embed/{$matches[1]}";
+                                                            $embedUrl ="https://www.youtube.com/embed/{$matches[1]}";
                                                         }
                                                         // Vimeo
                                                         elseif (
@@ -171,7 +171,7 @@
                                                                 $matches,
                                                             )
                                                         ) {
-                                                            $embedUrl = "https://player.vimeo.com/video/{$matches[1]}";
+                                                            $embedUrl ="https://player.vimeo.com/video/{$matches[1]}";
                                                         }
                                                     @endphp
 
@@ -195,7 +195,7 @@
                                         @case('audio')
                                             @if (!empty($data['src']))
                                                 <div class="my-6">
-                                                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                                                    <div class="bg-gray-50 bg-rounded-lg p-4">
                                                         <div class="flex items-center gap-3 mb-2">
                                                             <svg class="w-5 h-5 text-indigo-500" fill="none"
                                                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -204,7 +204,7 @@
                                                                     d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
                                                             </svg>
                                                             <span
-                                                                class="text-sm font-medium text-gray-700 dark:text-gray-300">Audio
+                                                                class="text-sm font-medium text->Audio
                                                                 Content</span>
                                                         </div>
                                                         <audio controls class="w-full">
@@ -219,12 +219,12 @@
                                         @break
 
                                         @case('code')
-                                            <pre class="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code class="language-{{ $data['language'] ?? 'text' }}">{{ $data['code'] ?? '' }}</code></pre>
+                                            <pre class="bg-text-gray-100 p-4 rounded-lg overflow-x-auto my-4"><code class="language-{{ $data['language'] ?? 'text' }}">{{ $data['code'] ?? '' }}</code></pre>
                                         @break
 
                                         @case('note')
                                             <div
-                                                class="flex gap-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 rounded-r-md my-4">
+                                                class="flex gap-3 p-4 bg-yellow-50 bg-border-l-4 border-yellow-400 rounded-r-md my-4">
                                                 <div class="flex-shrink-0">
                                                     <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20"
                                                         fill="currentColor">
@@ -233,7 +233,7 @@
                                                             clip-rule="evenodd" />
                                                     </svg>
                                                 </div>
-                                                <div class="text-yellow-800 dark:text-yellow-200">
+                                                <div class="text-yellow-800">
                                                     {{ $data['content'] ?? '' }}
                                                 </div>
                                             </div>
@@ -262,11 +262,11 @@
                     @if ($textMaterials->isNotEmpty())
                         @foreach ($textMaterials as $material)
                             <div
-                                class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                                class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
                                 <div class="p-6">
-                                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">
+                                    <h3 class="text-lg font-bold text-mb-4">
                                         {{ $material->title }}</h3>
-                                    <div class="prose dark:prose-invert max-w-none">
+                                    <div class="prose prose-invert max-w-none">
                                         {!! $material->content !!}
                                     </div>
                                 </div>
@@ -278,10 +278,10 @@
                     @if ($videoMaterials->isNotEmpty())
                         @foreach ($videoMaterials as $material)
                             <div
-                                class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                                class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
                                 <div class="p-6">
                                     <h3
-                                        class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                        class="text-lg font-bold text-mb-4 flex items-center gap-2">
                                         <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -301,11 +301,11 @@
                                                 $matches,
                                             )
                                         ) {
-                                            $embedUrl = "https://www.youtube.com/embed/{$matches[1]}";
+                                            $embedUrl ="https://www.youtube.com/embed/{$matches[1]}";
                                         }
                                         // Vimeo
                                         elseif (preg_match('/vimeo\.com\/(?:video\/)?(\d+)/', $videoUrl, $matches)) {
-                                            $embedUrl = "https://player.vimeo.com/video/{$matches[1]}";
+                                            $embedUrl ="https://player.vimeo.com/video/{$matches[1]}";
                                         }
                                     @endphp
 
@@ -318,7 +318,7 @@
                                                 allowfullscreen></iframe>
                                         </div>
                                     @else
-                                        <video controls class="w-full rounded-lg bg-gray-900">
+                                        <video controls class="w-full rounded-lg bg->
                                             <source src="{{ $videoUrl }}" type="video/mp4">
                                             Your browser does not support the video tag.
                                         </video>
@@ -332,10 +332,10 @@
                     @if ($audioMaterials->isNotEmpty())
                         @foreach ($audioMaterials as $material)
                             <div
-                                class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                                class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
                                 <div class="p-6">
                                     <h3
-                                        class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                        class="text-lg font-bold text-mb-4 flex items-center gap-2">
                                         <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -343,7 +343,7 @@
                                         </svg>
                                         {{ $material->title }}
                                     </h3>
-                                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                                    <div class="bg-gray-50 bg-rounded-lg p-4">
                                         <audio controls class="w-full">
                                             <source src="{{ $material->content }}" type="audio/mpeg">
                                             <source src="{{ $material->content }}" type="audio/wav">
@@ -359,10 +359,10 @@
                     <!-- File Attachments -->
                     @if ($fileMaterials->isNotEmpty())
                         <div
-                            class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                            class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
                             <div class="p-6">
                                 <h3
-                                    class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                    class="text-lg font-bold text-mb-4 flex items-center gap-2">
                                     <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -373,10 +373,10 @@
                                 <div class="space-y-2">
                                     @foreach ($fileMaterials as $material)
                                         <div
-                                            class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group">
+                                            class="flex items-center justify-between p-4 bg-gray-50 bg-rounded-lg hover:bg-gray-100 hover:bg-transition-colors group">
                                             <div class="flex items-center gap-3 flex-grow min-w-0">
                                                 <div class="flex-shrink-0">
-                                                    <svg class="w-6 h-6 text-gray-400" fill="none"
+                                                    <svg class="w-6 h-6" fill="none"
                                                         stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2"
@@ -385,9 +385,9 @@
                                                 </div>
                                                 <div class="min-w-0 flex-grow">
                                                     <p
-                                                        class="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                                        class="text-sm font-medium text-truncate">
                                                         {{ $material->title }}</p>
-                                                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                    <p class="text-xs text-gray-500">
                                                         {{ $material->file_name }} •
                                                         {{ number_format($material->file_size / 1024, 1) }} KB</p>
                                                 </div>
@@ -405,7 +405,7 @@
 
                     <!-- Navigation & Completion -->
                     <div
-                        class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700">
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200">
                         <div class="p-6 flex items-center justify-between">
                             <!-- Previous Lesson -->
                             @php
@@ -422,7 +422,7 @@
                             <div class="w-1/3">
                                 @if ($prevLesson)
                                     <a href="{{ route('learn.lessons.show', $prevLesson) }}"
-                                        class="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-medium">
+                                        class="inline-flex items-center text-gray-600 hover:text-indigo-600 hover:transition-colors font-medium">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -458,7 +458,7 @@
                             <div class="w-1/3 flex justify-end">
                                 @if ($nextLesson)
                                     <a href="{{ route('learn.lessons.show', $nextLesson) }}"
-                                        class="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-medium">
+                                        class="inline-flex items-center text-gray-600 hover:text-indigo-600 hover:transition-colors font-medium">
                                         Next
                                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
@@ -476,9 +476,9 @@
                 <div class="space-y-6">
                     <!-- Course Progress -->
                     <div
-                        class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm rounded-lg border border-gray-200 dark:border-gray-700 sticky top-24">
+                        class="bg-white overflow-hidden shadow-sm rounded-lg border border-gray-200 sticky top-24">
                         <div class="p-6">
-                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Course Content</h3>
+                            <h3 class="text-lg font-bold text-mb-4">Course Content</h3>
                             <div class="space-y-1 max-h-[calc(100vh-300px)] overflow-y-auto pr-2 custom-scrollbar">
                                 @foreach ($course->lessons->sortBy('order') as $l)
                                     @php
@@ -489,11 +489,11 @@
                                     @endphp
 
                                     <a href="{{ route('learn.lessons.show', $l) }}"
-                                        class="flex items-center p-3 rounded-md transition-colors {{ $isActive ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 font-medium' : 'hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300' }}">
+                                        class="flex items-center p-3 rounded-md transition-colors {{ $isActive ? 'bg-indigo-50 bg-text-indigo-700 font-medium' : 'hover:bg-gray-50 hover:bg-text-gray-700' }}">
                                         <div class="flex-shrink-0 mr-3">
                                             @if ($lCompleted)
                                                 <div
-                                                    class="w-5 h-5 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center">
+                                                    class="w-5 h-5 bg-green-100 bg-text-green-600 rounded-full flex items-center justify-center">
                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -502,7 +502,7 @@
                                                 </div>
                                             @else
                                                 <div
-                                                    class="w-5 h-5 border-2 border-gray-300 dark:border-gray-600 rounded-full">
+                                                    class="w-5 h-5 border-2 border-gray-300 rounded-full">
                                                 </div>
                                             @endif
                                         </div>
@@ -518,3 +518,4 @@
         </div>
     </div>
 </x-app-layout>
+

@@ -2,8 +2,8 @@
     <div class="space-y-6">
         <!-- Header -->
         <div class="text-center">
-            <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Forgot Password?</h2>
-            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+            <h2 class="text-3xl font-extrabold text-gray-900">Forgot Password?</h2>
+            <p class="mt-2 text-sm text-gray-600">
                 No worries! Just enter your email and we'll send you a reset link.
             </p>
         </div>
@@ -16,7 +16,7 @@
 
             <!-- Email Address -->
             <div>
-                <x-input-label for="email" :value="__('Email')" class="text-sm font-semibold text-gray-700 dark:text-gray-300" />
+                <x-input-label for="email" :value="__('Email')" class="text-sm font-semibold text-gray-700" />
                 <x-text-input id="email" class="block mt-2 w-full h-12 text-base" type="email" name="email" :value="old('email')" required autofocus placeholder="your.email@example.com" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
@@ -29,11 +29,12 @@
             </div>
             
             <!-- Back to Login -->
-            <div class="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
-                <a href="{{ route('login') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 transition">
+            <div class="text-center pt-4 border-t border-gray-200">
+                <a href="{{ route('login') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500 text-indigo-400 hover:text-indigo-300 transition">
                     ← Back to Login
                 </a>
             </div>
         </form>
     </div>
 </x-guest-layout>
+

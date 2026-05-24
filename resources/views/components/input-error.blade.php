@@ -1,7 +1,7 @@
 @props(['messages'])
 
 @if ($messages)
-    <ul {{ $attributes->merge(['class' => 'mt-2 text-sm text-red-600 dark:text-red-400 space-y-1']) }}>
+    <ul {{ $attributes->merge(['class' => 'mt-2 text-sm text-red-600 text-red-400 space-y-1']) }}>
         @foreach ((array) $messages as $message)
             <li class="flex items-start gap-2">
                 <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -12,3 +12,4 @@
         @endforeach
     </ul>
 @endif
+

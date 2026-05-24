@@ -60,7 +60,7 @@
                     @if($progress == 100)
                         <div class="mt-4 p-4 bg-green-500/20 backdrop-blur-sm rounded-xl border border-green-400/30">
                             <div class="flex items-center gap-2 mb-2">
-                                <svg class="w-6 h-6 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                                 <h4 class="font-bold text-green-100">Course Completed!</h4>
@@ -90,14 +90,14 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="bg-gray-50 dark:bg-gray-900 min-h-screen py-12">
+    <div class="bg-gray-50 min-h-screen py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Left Column: Course Content -->
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Course Curriculum -->
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-800 px-8 py-6 border-b border-gray-200 dark:border-gray-700">
+                    <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+                        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 from-to-px-8 py-6 border-b border-gray-200">
                             <div class="flex items-center gap-3">
                                 <div class="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
                                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,8 +105,8 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white">Course Curriculum</h2>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ $course->lessons->count() }} lessons to complete</p>
+                                    <h2 class="text-2xl font-extrabold text->Course Curriculum</h2>
+                                    <p class="text-sm text-gray-600">{{ $course->lessons->count() }} lessons to complete</p>
                                 </div>
                             </div>
                         </div>
@@ -115,38 +115,38 @@
                             @if($course->sections->isNotEmpty())
                                 <div class="space-y-6">
                                     @foreach($course->sections as $section)
-                                        <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                                        <div class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
                                             <!-- Section Header -->
-                                            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                                            <div class="bg-gradient-to-r from-gray-50 to-gray-100 from-to-px-6 py-4 border-b border-gray-200">
                                                 <div class="flex items-center justify-between">
                                                     <div class="flex items-center gap-3">
-                                                        <div class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
-                                                            <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <div class="w-10 h-10 bg-indigo-100 bg-rounded-lg flex items-center justify-center">
+                                                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
                                                             </svg>
                                                         </div>
                                                         <div>
-                                                            <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ $section->title }}</h3>
+                                                            <h3 class="text-lg font-bold text->{{ $section->title }}</h3>
                                                             @if($section->description)
-                                                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-0.5">{{ $section->description }}</p>
+                                                                <p class="text-sm text-gray-600 mt-0.5">{{ $section->description }}</p>
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <span class="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg text-xs font-bold">
+                                                    <span class="px-3 py-1.5 bg-indigo-50 bg-text-indigo-700 rounded-lg text-xs font-bold">
                                                         {{ $section->lessons->count() }} Lessons
                                                     </span>
                                                 </div>
                                             </div>
 
                                             <!-- Lessons in Section -->
-                                            <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                            <div class="divide-y divide-gray-100 divide->
                                                 @foreach($section->lessons as $lesson)
                                                     @php
                                                         $progress = $enrollment->progress ?? [];
                                                         $completedLessons = $progress['completed_lessons'] ?? [];
                                                         $isCompleted = in_array($lesson->id, $completedLessons);
                                                     @endphp
-                                                    <div class="group hover:bg-gradient-to-r hover:from-indigo-50/50 hover:to-purple-50/50 dark:hover:from-gray-700/50 dark:hover:to-gray-700/50 transition-all duration-200">
+                                                    <div class="group hover:bg-gradient-to-r hover:from-indigo-50/50 hover:to-purple-50/50 hover:from-hover:to-transition-all duration-200">
                                                         <div class="flex items-center justify-between p-5">
                                                             <div class="flex items-center gap-4 flex-1">
                                                                 <!-- Status Icon -->
@@ -158,25 +158,25 @@
                                                                             </svg>
                                                                         </div>
                                                                     @else
-                                                                        <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center group-hover:from-indigo-100 group-hover:to-purple-100 dark:group-hover:from-indigo-900/50 dark:group-hover:to-purple-900/50 transition-all shadow-md">
-                                                                            <span class="text-lg font-bold text-gray-600 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">{{ $loop->iteration }}</span>
+                                                                        <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 from-to-gray-600 rounded-xl flex items-center justify-center group-hover:from-indigo-100 group-hover:to-purple-100 group-hover:from-group-hover:to-transition-all shadow-md">
+                                                                            <span class="text-lg font-bold text-gray-600 group-hover:text-indigo-600 group-hover:>{{ $loop->iteration }}</span>
                                                                         </div>
                                                                     @endif
                                                                 </div>
 
                                                                 <!-- Lesson Info -->
                                                                 <div class="flex-1 min-w-0">
-                                                                    <h4 class="font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1">
+                                                                    <h4 class="font-bold text-group-hover:text-indigo-600 group-hover:transition-colors mb-1">
                                                                         {{ $lesson->title }}
                                                                     </h4>
                                                                     @if($lesson->duration_minutes)
-                                                                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                                                        <div class="flex items-center gap-2 text-xs text-gray-500">
                                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                                             </svg>
                                                                             <span>{{ $lesson->formatted_duration }}</span>
                                                                             @if($isCompleted)
-                                                                                <span class="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-xs font-semibold">Completed</span>
+                                                                                <span class="px-2 py-0.5 bg-green-100 bg-text-green-700 rounded-full text-xs font-semibold">Completed</span>
                                                                             @endif
                                                                         </div>
                                                                     @endif
@@ -184,7 +184,7 @@
                                                             </div>
 
                                                             <!-- Action Button -->
-                                                            <a href="{{ route('learn.lessons.show', $lesson) }}" class="flex-shrink-0 ml-4 px-6 py-3 {{ $isCompleted ? 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 hover:border-indigo-400 dark:hover:border-indigo-500' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700' }} rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-xl transform hover:scale-105">
+                                                            <a href="{{ route('learn.lessons.show', $lesson) }}" class="flex-shrink-0 ml-4 px-6 py-3 {{ $isCompleted ? 'bg-white bg-text-text-gray-200 border border-gray-300 hover:border-indigo-400 hover:border-indigo-500' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:from-indigo-700 hover:to-purple-700' }} rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-xl transform hover:scale-105">
                                                                 @if($isCompleted)
                                                                     <span class="flex items-center gap-2">
                                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -214,11 +214,11 @@
                                         $orphanedLessons = $course->lessons->whereNull('course_section_id')->sortBy('order');
                                     @endphp
                                     @if($orphanedLessons->isNotEmpty())
-                                        <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-                                            <div class="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                                                <h3 class="text-lg font-bold text-gray-900 dark:text-white">Additional Lessons</h3>
+                                        <div class="border border-gray-200 rounded-xl overflow-hidden">
+                                            <div class="bg-gray-50 bg-px-6 py-4 border-b border-gray-200">
+                                                <h3 class="text-lg font-bold text->Additional Lessons</h3>
                                             </div>
-                                            <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                            <div class="divide-y divide-gray-100 divide->
                                                 @foreach($orphanedLessons as $lesson)
                                                     @php
                                                         $progress = $enrollment->progress ?? [];
@@ -226,7 +226,7 @@
                                                         $isCompleted = in_array($lesson->id, $completedLessons);
                                                     @endphp
                                                     <!-- Same lesson card structure as above -->
-                                                    <div class="group hover:bg-gradient-to-r hover:from-indigo-50/50 hover:to-purple-50/50 dark:hover:from-gray-700/50 dark:hover:to-gray-700/50 transition-all duration-200">
+                                                    <div class="group hover:bg-gradient-to-r hover:from-indigo-50/50 hover:to-purple-50/50 hover:from-hover:to-transition-all duration-200">
                                                         <div class="flex items-center justify-between p-5">
                                                             <div class="flex items-center gap-4 flex-1">
                                                                 <div class="flex-shrink-0">
@@ -237,15 +237,15 @@
                                                                             </svg>
                                                                         </div>
                                                                     @else
-                                                                        <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center shadow-md">
-                                                                            <span class="text-lg font-bold text-gray-600 dark:text-gray-300">{{ $loop->iteration }}</span>
+                                                                        <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 from-to-gray-600 rounded-xl flex items-center justify-center shadow-md">
+                                                                            <span class="text-lg font-bold text-gray-600">{{ $loop->iteration }}</span>
                                                                         </div>
                                                                     @endif
                                                                 </div>
                                                                 <div class="flex-1">
-                                                                    <h4 class="font-bold text-gray-900 dark:text-white">{{ $lesson->title }}</h4>
+                                                                    <h4 class="font-bold text->{{ $lesson->title }}</h4>
                                                                     @if($lesson->duration_minutes)
-                                                                        <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                                        <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
                                                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                                             </svg>
@@ -254,7 +254,7 @@
                                                                     @endif
                                                                 </div>
                                                             </div>
-                                                            <a href="{{ route('learn.lessons.show', $lesson) }}" class="ml-4 px-6 py-3 {{ $isCompleted ? 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' }} rounded-xl font-semibold transition-all">
+                                                            <a href="{{ route('learn.lessons.show', $lesson) }}" class="ml-4 px-6 py-3 {{ $isCompleted ? 'bg-white bg-text-text-gray-200' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' }} rounded-xl font-semibold transition-all">
                                                                 {{ $isCompleted ? 'Review' : 'Start Lesson' }}
                                                             </a>
                                                         </div>
@@ -266,15 +266,15 @@
                                 </div>
                             @else
                                 <!-- Flat List (No Sections) -->
-                                <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
-                                    <div class="divide-y divide-gray-100 dark:divide-gray-700">
+                                <div class="border border-gray-200 rounded-xl overflow-hidden">
+                                    <div class="divide-y divide-gray-100 divide->
                                         @foreach($course->lessons->sortBy('order') as $lesson)
                                             @php
                                                 $progress = $enrollment->progress ?? [];
                                                 $completedLessons = $progress['completed_lessons'] ?? [];
                                                 $isCompleted = in_array($lesson->id, $completedLessons);
                                             @endphp
-                                            <div class="group hover:bg-gradient-to-r hover:from-indigo-50/50 hover:to-purple-50/50 dark:hover:from-gray-700/50 dark:hover:to-gray-700/50 transition-all duration-200">
+                                            <div class="group hover:bg-gradient-to-r hover:from-indigo-50/50 hover:to-purple-50/50 hover:from-hover:to-transition-all duration-200">
                                                 <div class="flex items-center justify-between p-5">
                                                     <div class="flex items-center gap-4 flex-1">
                                                         <div class="flex-shrink-0">
@@ -285,29 +285,29 @@
                                                                     </svg>
                                                                 </div>
                                                             @else
-                                                                <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center group-hover:from-indigo-100 group-hover:to-purple-100 dark:group-hover:from-indigo-900/50 dark:group-hover:to-purple-900/50 transition-all shadow-md">
-                                                                    <span class="text-lg font-bold text-gray-600 dark:text-gray-300 group-hover:text-indigo-600">{{ $loop->iteration }}</span>
+                                                                <div class="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 from-to-gray-600 rounded-xl flex items-center justify-center group-hover:from-indigo-100 group-hover:to-purple-100 group-hover:from-group-hover:to-transition-all shadow-md">
+                                                                    <span class="text-lg font-bold text-gray-600 group-hover:text-indigo-600">{{ $loop->iteration }}</span>
                                                                 </div>
                                                             @endif
                                                         </div>
                                                         <div class="flex-1 min-w-0">
-                                                            <h4 class="font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors mb-1">
+                                                            <h4 class="font-bold text-group-hover:text-indigo-600 group-hover:transition-colors mb-1">
                                                                 {{ $lesson->title }}
                                                             </h4>
                                                             @if($lesson->duration_minutes)
-                                                                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                                                <div class="flex items-center gap-2 text-xs text-gray-500">
                                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                                     </svg>
                                                                     <span>{{ $lesson->formatted_duration }}</span>
                                                                     @if($isCompleted)
-                                                                        <span class="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-xs font-semibold">Completed</span>
+                                                                        <span class="px-2 py-0.5 bg-green-100 bg-text-green-700 rounded-full text-xs font-semibold">Completed</span>
                                                                     @endif
                                                                 </div>
                                                             @endif
                                                         </div>
                                                     </div>
-                                                    <a href="{{ route('learn.lessons.show', $lesson) }}" class="flex-shrink-0 ml-4 px-6 py-3 {{ $isCompleted ? 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' }} rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-xl transform hover:scale-105">
+                                                    <a href="{{ route('learn.lessons.show', $lesson) }}" class="flex-shrink-0 ml-4 px-6 py-3 {{ $isCompleted ? 'bg-white bg-text-text-gray-200 border border-gray-300' : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white' }} rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-xl transform hover:scale-105">
                                                         @if($isCompleted)
                                                             <span class="flex items-center gap-2">
                                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -339,8 +339,8 @@
                 <div class="space-y-6">
                     <!-- Tests Card -->
                     @if($course->tests->isNotEmpty())
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden sticky top-24">
-                            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-gray-800 dark:to-gray-800 px-6 py-5 border-b border-gray-200 dark:border-gray-700">
+                        <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden sticky top-24">
+                            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 from-to-px-6 py-5 border-b border-gray-200">
                                 <div class="flex items-center gap-3">
                                     <div class="w-10 h-10 bg-yellow-500 rounded-xl flex items-center justify-center shadow-lg">
                                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -348,8 +348,8 @@
                                         </svg>
                                     </div>
                                     <div>
-                                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Course Tests</h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ $course->tests->count() }} test{{ $course->tests->count() > 1 ? 's' : '' }} available</p>
+                                        <h3 class="text-lg font-bold text->Course Tests</h3>
+                                        <p class="text-sm text-gray-600">{{ $course->tests->count() }} test{{ $course->tests->count()> 1 ? 's' : '' }} available</p>
                                     </div>
                                 </div>
                             </div>
@@ -361,7 +361,7 @@
                                         $completedTests = $progress['completed_tests'] ?? [];
                                         $isCompleted = in_array($test->id, $completedTests);
                                     @endphp
-                                    <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:shadow-lg transition-all duration-200 hover:border-yellow-400 dark:hover:border-yellow-500">
+                                    <div class="border border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-200 hover:border-yellow-400 hover:border-yellow-500">
                                         <div class="flex items-start gap-3 mb-3">
                                             <div class="flex-shrink-0 w-10 h-10 {{ $isCompleted ? 'bg-green-500' : 'bg-yellow-500' }} rounded-lg flex items-center justify-center shadow-md">
                                                 @if($isCompleted)
@@ -375,8 +375,8 @@
                                                 @endif
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <h4 class="font-bold text-gray-900 dark:text-white mb-1">{{ $test->title }}</h4>
-                                                <div class="space-y-1 text-xs text-gray-600 dark:text-gray-400">
+                                                <h4 class="font-bold text-mb-1">{{ $test->title }}</h4>
+                                                <div class="space-y-1 text-xs text-gray-600">
                                                     <div class="flex items-center gap-1.5">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -392,7 +392,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="{{ route('tests.start', $test) }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 {{ $isCompleted ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200' : 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:from-yellow-600 hover:to-orange-600' }} rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
+                                        <a href="{{ route('tests.start', $test) }}" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 {{ $isCompleted ? 'bg-gray-100 bg-text-text-gray-200 hover:bg-gray-200' : 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:from-yellow-600 hover:to-orange-600' }} rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg">
                                             {{ $isCompleted ? 'Retake Test' : 'Start Test' }}
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
@@ -405,30 +405,30 @@
                     @endif
 
                     <!-- Course Info Card -->
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-6">
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-bold text-mb-4 flex items-center gap-2">
                             <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             Quick Stats
                         </h3>
                         <div class="space-y-3 text-sm">
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
-                                <span class="text-gray-600 dark:text-gray-400 font-medium">Total Lessons</span>
-                                <span class="font-bold text-gray-900 dark:text-white">{{ $course->lessons->count() }}</span>
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100 border->
+                                <span class="text-gray-600 font-medium">Total Lessons</span>
+                                <span class="font-bold text->{{ $course->lessons->count() }}</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
-                                <span class="text-gray-600 dark:text-gray-400 font-medium">Completed</span>
-                                <span class="font-bold text-green-600 dark:text-green-400">{{ count($enrollment->progress['completed_lessons'] ?? []) }}</span>
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100 border->
+                                <span class="text-gray-600 font-medium">Completed</span>
+                                <span class="font-bold text-green-600">{{ count($enrollment->progress['completed_lessons'] ?? []) }}</span>
                             </div>
-                            <div class="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700">
-                                <span class="text-gray-600 dark:text-gray-400 font-medium">Tests</span>
-                                <span class="font-bold text-gray-900 dark:text-white">{{ $course->tests->count() }}</span>
+                            <div class="flex justify-between items-center py-2 border-b border-gray-100 border->
+                                <span class="text-gray-600 font-medium">Tests</span>
+                                <span class="font-bold text->{{ $course->tests->count() }}</span>
                             </div>
                             @if($course->category)
                                 <div class="flex justify-between items-center py-2">
-                                    <span class="text-gray-600 dark:text-gray-400 font-medium">Category</span>
-                                    <span class="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded text-xs font-semibold">{{ $course->category }}</span>
+                                    <span class="text-gray-600 font-medium">Category</span>
+                                    <span class="px-2 py-1 bg-indigo-50 bg-text-indigo-700 rounded text-xs font-semibold">{{ $course->category }}</span>
                                 </div>
                             @endif
                         </div>
@@ -438,3 +438,4 @@
         </div>
     </div>
 </x-app-layout>
+
