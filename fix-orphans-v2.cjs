@@ -215,7 +215,7 @@ function fixFile(fullPath) {
   if (content !== before) {
     fs.writeFileSync(fullPath, content, 'utf-8');
     console.log(`✓ ${path.relative(PROJECT, fullPath)}  (${clipboard} fixes)`);
-    return clip;
+    return clipboard;
   }
   return 0;
 }
