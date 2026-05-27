@@ -15,7 +15,9 @@ class EnsureRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-        if (! $request->user() || ! $request->user()->hasRole($role)) {
+        $roles = explode('|', $role);
+
+        if (! $request->user() || ! $request->user()->hasAnyRole($roles)) {
             abort(403);
         }
 

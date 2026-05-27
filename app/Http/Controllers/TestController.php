@@ -38,7 +38,7 @@ class TestController extends Controller
 
         $course->tests()->create($validated);
 
-        return redirect()->route('courses.edit', $course)->with('status', 'Test created! 🎉');
+        return redirect()->route('courses.show', $course)->with('status', 'Test created! 🎉');
     }
 
     public function show(Test $test)
@@ -69,7 +69,7 @@ class TestController extends Controller
 
         $test->update($validated);
 
-        return redirect()->route('courses.edit', $test->course)->with('status', 'Test updated! ✅');
+        return redirect()->route('tests.show', $test)->with('status', 'Test updated! ✅');
     }
 
     public function destroy(Test $test)
@@ -78,7 +78,7 @@ class TestController extends Controller
         $course = $test->course;
         $test->delete();
 
-        return redirect()->route('courses.edit', $course)->with('status', 'Test deleted!');
+        return redirect()->route('courses.show', $course)->with('status', 'Test deleted!');
     }
 
     public function duplicate(Test $test)
@@ -98,7 +98,7 @@ class TestController extends Controller
             $newQuestion->save();
         }
         
-        return redirect()->route('courses.edit', $test->course)->with('status', 'Test duplicated successfully! 📋');
+        return redirect()->route('courses.show', $test->course)->with('status', 'Test duplicated successfully! 📋');
     }
 
     public function reorder(Request $request, Course $course)

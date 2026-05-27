@@ -96,14 +96,35 @@ class Course extends Model
     public function isEnrolledBy($user)
     {
         if (!$user) return false;
-        return $this->students()->where('user_id', $user->id)->exists();
+        
+        $enrolled = $this->students()->where('user_id', $user->id)->exists();
+        if (!$enrolled && $user->hasRole('tutor') && $this->tutor_id === $user->id) {
+            $this->getEnrollmentFor($user); // This will auto-enroll
+            return true;
+        }
+        
+        return $enrolled;
     }
 
     // Get enrollment for specific user
     public function getEnrollmentFor($user)
     {
         if (!$user) return null;
-        return $this->enrollments()->where('user_id', $user->id)->first();
+        $enrollment = $this->enrollments()->where('user_id', $user->id)->first();
+        
+        if (!$enrollment && $user->hasRole('tutor') && $this->tutor_id === $user->id) {
+            $enrollment = Enrollment::create([
+                'user_id' => $user->id,
+                'course_id' => $this->id,
+                'status' => 'active',
+                'progress' => [
+                    'completed_lessons' => [],
+                    'completed_tests' => [],
+                ],
+            ]);
+        }
+        
+        return $enrollment;
     }
 
     // Calculate progress percentage for a user

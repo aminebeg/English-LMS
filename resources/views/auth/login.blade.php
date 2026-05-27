@@ -35,7 +35,7 @@
                 </label>
 
                 @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 text-indigo-400 hover:text-indigo-300 transition">
+                    <a href="{{ route('password.request') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-500 hover:text-indigo-300 transition">
                         Forgot password?
                     </a>
                 @endif
@@ -52,7 +52,7 @@
             <div class="text-center pt-4 border-t border-gray-200">
                 <p class="text-sm text-gray-600">
                     Don't have an account?
-                    <a href="{{ route('register') }}" class="font-semibold text-indigo-600 hover:text-indigo-500 text-indigo-400 hover:text-indigo-300 transition">
+                    <a href="{{ route('register') }}" class="font-semibold text-indigo-600 hover:text-indigo-500 hover:text-indigo-300 transition">
                         Register
                     </a>
                 </p>

@@ -38,7 +38,7 @@ Route::middleware(['auth', 'approved'])->group(function () {
     });
 
     // Student routes for course browsing and enrollment
-    Route::middleware('role:student')->group(function () {
+    Route::middleware('role:student|tutor')->group(function () {
         Route::get('/courses/browse', [EnrollmentController::class, 'browse'])->name('courses.browse');
         Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
         Route::get('/my-courses', [EnrollmentController::class, 'index'])->name('enrollments.index');

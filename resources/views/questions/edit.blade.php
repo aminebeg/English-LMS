@@ -3,7 +3,7 @@
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header -->
             <div class="mb-8">
-                <a href="{{ route('tests.show', $question->test) }}" class="inline-flex items-center text-sm text-gray-500 hover:text-indigo-600 text-gray-400 hover:text-indigo-400 mb-4 transition-colors">
+                <a href="{{ route('tests.show', $question->test) }}" class="inline-flex items-center text-sm text-gray-500 hover:text-indigo-600 hover:text-indigo-400 mb-4 transition-colors">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
@@ -61,7 +61,7 @@
                             Question Text <span class="text-red-500">*</span>
                         </label>
                         <textarea id="content" name="content" rows="3" required
-                            class="w-full rounded-md border-gray-300 border-gray-700 bg-gray-900 text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-base"
+                            class="w-full rounded-md border-gray-300 bg-white text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm text-base"
                             placeholder="e.g., What is the past participle of 'go'?">{{ old('content', $question->content) }}</textarea>
                         <x-input-error :messages="$errors->get('content')" class="mt-2" />
                     </div>
@@ -71,7 +71,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Answer Options
                         </label>
-                        <div class="bg-gray-50 bg-gray-700/50 rounded-lg p-6 space-y-4 border border-gray-100 border-gray-700">
+                        <div class="bg-gray-50 rounded-lg p-6 space-y-4 border border-gray-100">
                             <div id="optionsContainer" class="space-y-3">
                                 @php
                                     $options = old('options', $question->options ?? ['', '', '', '']);
@@ -81,11 +81,11 @@
                                 
                                 @foreach($options as $index => $option)
                                     <div class="flex items-center gap-3 option-row">
-                                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 bg-indigo-900 text-indigo-600 text-indigo-400 flex items-center justify-center font-bold text-sm">
+                                        <div class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
                                             {{ chr(65 + $index) }}
                                         </div>
                                         <input type="text" name="options[]" value="{{ $option }}" placeholder="Option {{ $index + 1 }}"
-                                            class="flex-1 rounded-md border-gray-300 border-gray-700 bg-gray-900 text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                                            class="flex-1 rounded-md border-gray-300 bg-white text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
                                         <input type="radio" name="correct_option_radio" value="{{ $index }}" 
                                             class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 cursor-pointer"
                                             onclick="setCorrectAnswer(this)"
@@ -94,7 +94,7 @@
                                 @endforeach
                             </div>
                             
-                            <button type="button" onclick="addOption()" class="flex items-center gap-2 text-sm font-medium text-indigo-600 text-indigo-400 hover:text-indigo-800 transition-colors">
+                            <button type="button" onclick="addOption()" class="flex items-center gap-2 text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                 </svg>
@@ -113,13 +113,13 @@
                             <label class="flex-1 cursor-pointer">
                                 <input type="radio" name="tf_radio" value="True" class="peer sr-only" onchange="setTFAnswer('True')">
                                 <div class="p-4 rounded-lg border border-gray-200 hover:border-green-500 peer-checked:border-green-600 peer-checked:bg-green-50 peer-checked:bg-green-900/20 transition-all text-center">
-                                    <span class="font-bold text-lg text-green-700 text-green-400">True</span>
+                                    <span class="font-bold text-lg text-green-700">True</span>
                                 </div>
                             </label>
                             <label class="flex-1 cursor-pointer">
                                 <input type="radio" name="tf_radio" value="False" class="peer sr-only" onchange="setTFAnswer('False')">
                                 <div class="p-4 rounded-lg border border-gray-200 hover:border-red-500 peer-checked:border-red-600 peer-checked:bg-red-50 peer-checked:bg-red-900/20 transition-all text-center">
-                                    <span class="font-bold text-lg text-red-700 text-red-400">False</span>
+                                    <span class="font-bold text-lg text-red-700">False</span>
                                 </div>
                             </label>
                         </div>
@@ -131,7 +131,7 @@
                             Correct Answer / Keywords
                         </label>
                         <input type="text" id="short_answer_input" 
-                            class="w-full rounded-md border-gray-300 border-gray-700 bg-gray-900 text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
+                            class="w-full rounded-md border-gray-300 bg-white text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm"
                             placeholder="Enter the expected answer..."
                             oninput="document.getElementById('correct_answer').value = this.value">
                         <p class="mt-2 text-xs text-gray-500">Students must match this answer exactly (case-insensitive).</p>
@@ -146,12 +146,12 @@
                             Question Order
                         </label>
                         <input type="number" id="order" name="order" value="{{ old('order', $question->order) }}" required min="1"
-                            class="w-32 rounded-md border-gray-300 border-gray-700 bg-gray-900 text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                            class="w-32 rounded-md border-gray-300 bg-white text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                        <a href="{{ route('tests.show', $question->test) }}" class="text-sm font-medium text-gray-600 hover:text-gray-900 hover:text-white transition-colors">
+                        <a href="{{ route('tests.show', $question->test) }}" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
                             Cancel
                         </a>
 
@@ -197,11 +197,11 @@
             const div = document.createElement('div');
             div.className = 'flex items-center gap-3 option-row';
             div.innerHTML = `
-                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 bg-indigo-900 text-indigo-600 text-indigo-400 flex items-center justify-center font-bold text-sm">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
                     ${letter}
                 </div>
                 <input type="text" name="options[]" placeholder="Option ${index + 1}"
-                    class="flex-1 rounded-md border-gray-300 border-gray-700 bg-gray-900 text-white focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
+                    class="flex-1 rounded-md border-gray-300 bg-white text-gray-900 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm">
                 <input type="radio" name="correct_option_radio" value="${index}" 
                     class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 cursor-pointer"
                     onclick="setCorrectAnswer(this)"
