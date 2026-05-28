@@ -170,20 +170,27 @@
                                 </div>
 
                                 <!-- Action -->
-                                @if ($course->isEnrolledBy(auth()->user()))
-                                    <a href="{{ route('enrollments.show', $course) }}"
-                                        class="block w-full text-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors text-sm shadow-sm">
-                                        Continue Learning →
-                                    </a>
+                                @auth
+                                    @if ($course->isEnrolledBy(auth()->user()))
+                                        <a href="{{ route('enrollments.show', $course) }}"
+                                            class="block w-full text-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors text-sm shadow-sm">
+                                            Continue Learning →
+                                        </a>
+                                    @else
+                                        <form method="POST" action="{{ route('courses.enroll', $course) }}">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors text-sm shadow-sm">
+                                                Enroll Now
+                                            </button>
+                                        </form>
+                                    @endif
                                 @else
-                                    <form method="POST" action="{{ route('courses.enroll', $course) }}">
-                                        @csrf
-                                        <button type="submit"
-                                            class="w-full px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors text-sm shadow-sm">
-                                            Enroll Now
-                                        </button>
-                                    </form>
-                                @endif
+                                    <a href="{{ route('login') }}"
+                                        class="block w-full text-center px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition-colors text-sm shadow-sm">
+                                        Login to Enroll
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     @endforeach

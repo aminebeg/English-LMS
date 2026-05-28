@@ -24,8 +24,9 @@ Route::get('/', function () {
 Route::get('/become-tutor', [TutorRegistrationController::class, 'create'])->name('tutor.register.form');
 Route::post('/become-tutor', [TutorRegistrationController::class, 'store'])->name('tutor.register');
 
-// Public course preview
+// Public course preview and browsing
 Route::get('/courses/{course}/preview', [\App\Http\Controllers\CoursePreviewController::class, 'show'])->name('courses.preview');
+Route::get('/courses/browse', [EnrollmentController::class, 'browse'])->name('courses.browse');
 
 Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/dashboard', function () {
@@ -39,7 +40,6 @@ Route::middleware(['auth', 'approved'])->group(function () {
 
     // Student routes for course browsing and enrollment
     Route::middleware('role:student|tutor')->group(function () {
-        Route::get('/courses/browse', [EnrollmentController::class, 'browse'])->name('courses.browse');
         Route::post('/courses/{course}/enroll', [EnrollmentController::class, 'enroll'])->name('courses.enroll');
         Route::get('/my-courses', [EnrollmentController::class, 'index'])->name('enrollments.index');
         Route::get('/my-courses/{course}', [EnrollmentController::class, 'show'])->name('enrollments.show');
@@ -90,6 +90,17 @@ Route::middleware(['auth', 'approved'])->group(function () {
     // Media uploads
     Route::post('/media/upload', [\App\Http\Controllers\MediaController::class, 'upload'])->name('media.upload');
     Route::delete('/media/delete', [\App\Http\Controllers\MediaController::class, 'delete'])->name('media.delete');
+});
+
+// Setup route for cPanel (run migrations without SSH)
+Route::get('/cpanel-setup', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return "Database migrated and storage linked successfully!";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
 });
 
 require __DIR__ . '/auth.php';
